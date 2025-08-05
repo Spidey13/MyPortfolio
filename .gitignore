@@ -1,0 +1,215 @@
+# ===== LOGS =====
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+dev-debug.log
+
+# ===== DEPENDENCIES =====
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ===== BUILD OUTPUTS =====
+# Frontend
+dist/
+dist-ssr/
+*.local
+build/
+
+# Backend
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# ===== ENVIRONMENT & CONFIGURATION =====
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# API Keys and secrets
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+config.json
+
+# ===== EDITOR & IDE =====
+# VSCode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ===== OS SPECIFIC =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===== AI ASSISTANT DIRECTORIES =====
+# Cursor AI
+.cursor/
+
+# Claude AI
+.claude/
+
+# GitHub Copilot
+.copilot/
+
+# Trae AI
+.trae/
+
+# Roo AI
+.roo/
+
+# Windsurf AI
+.windsurf/
+
+# Clinerules
+.clinerules/
+
+# Taskmaster AI
+.taskmaster/
+
+# ===== TESTING =====
+# Coverage reports
+coverage/
+*.lcov
+.nyc_output
+
+# Jest
+.jest/
+
+# ===== TEMPORARY FILES =====
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ===== BACKUP FILES =====
+*.bak
+*.backup
+*.old
+
+# ===== DATABASE =====
+*.db
+*.sqlite
+*.sqlite3
+
+# ===== CACHE =====
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# ===== MISC =====
+# Task files (uncomment if you want to ignore task management files)
+# tasks.json
+# tasks/
+
+# Local development
+.local 

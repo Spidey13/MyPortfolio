@@ -1,0 +1,564 @@
+"""
+LangChain Multi-Agent System for AI Portfolio Backend
+Enhanced with better error handling, performance, and robustness
+"""
+
+import logging
+import json
+import time
+from typing import Dict, Any, Optional
+from langchain.schema import SystemMessage, HumanMessage
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_community.callbacks.manager import get_openai_callback
+
+from .config import get_settings
+
+logger = logging.getLogger(__name__)
+settings = get_settings()
+
+
+class PortfolioAgent:
+    """Base class for portfolio agents with enhanced error handling"""
+
+    def __init__(self, name: str, description: str, system_prompt: str):
+        self.name = name
+        self.description = description
+        self.system_prompt = system_prompt
+        self.llm = None
+        self._initialize_llm()
+
+    def _initialize_llm(self):
+        """Initialize the language model with error handling"""
+        try:
+            if not settings.has_google_api:
+                logger.warning(f"[FAIL] {self.name}: No API key")
+                return
+
+            self.llm = ChatGoogleGenerativeAI(
+                model=settings.google_model,
+                temperature=0.3,
+                google_api_key=settings.google_api_key,
+                max_retries=3,
+                timeout=30,
+            )
+            logger.info(f"[AI] {self.name}: Ready")
+        except Exception as e:
+            logger.error(f"{self.name}: Failed to initialize LLM: {str(e)}")
+            self.llm = None
+
+    def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Process a query and return structured response with enhanced error handling"""
+        start_time = time.time()
+
+        if not self.llm:
+            return {
+                "response": "Google API key not configured. Please set GOOGLE_API_KEY environment variable.",
+                "viewport_content": {
+                    "type": "error",
+                    "message": "Configuration required",
+                },
+                "agent_used": self.name,
+                "processing_time": time.time() - start_time,
+            }
+
+        try:
+            # Prepare messages
+            messages = [
+                SystemMessage(content=self.system_prompt),
+                HumanMessage(
+                    content=f"User Query: {query}\nContext: {json.dumps(context or {}, indent=2)}"
+                ),
+            ]
+
+            logger.info(f"{self.name}: Processing query: {query[:100]}...")
+
+            # Process with timing and error handling
+            with get_openai_callback() as cb:
+                response = self.llm(messages)
+
+            processing_time = time.time() - start_time
+
+            logger.info(
+                f"{self.name}: Query processed successfully in {processing_time:.3f}s"
+            )
+
+            return self._parse_response(response.content, query, processing_time)
+
+        except Exception as e:
+            processing_time = time.time() - start_time
+            logger.error(
+                f"{self.name}: Error processing request: {str(e)}", exc_info=True
+            )
+
+            return {
+                "response": f"I encountered an error while processing your request. Please try again or contact support if the issue persists.",
+                "viewport_content": {
+                    "type": "error",
+                    "message": f"Processing error: {str(e)}",
+                    "agent": self.name,
+                },
+                "agent_used": self.name,
+                "processing_time": processing_time,
+                "error": str(e),
+            }
+
+    def _parse_response(
+        self, response: str, query: str, processing_time: float
+    ) -> Dict[str, Any]:
+        """Parse agent response into structured format with enhanced validation"""
+        try:
+            # Basic response validation
+            if not response or not response.strip():
+                logger.warning(f"{self.name}: Empty response received")
+                return {
+                    "response": "I apologize, but I couldn't generate a proper response. Please try rephrasing your question.",
+                    "viewport_content": {
+                        "type": "error",
+                        "message": "Empty response from AI",
+                        "agent": self.name,
+                    },
+                    "agent_used": self.name,
+                    "processing_time": processing_time,
+                }
+
+            # Clean and validate response
+            response = response.strip()
+
+            return {
+                "response": response,
+                "viewport_content": {
+                    "type": "text",
+                    "agent": self.name,
+                    "content": response,
+                },
+                "agent_used": self.name,
+                "processing_time": processing_time,
+            }
+
+        except Exception as e:
+            logger.error(f"{self.name}: Error parsing response: {str(e)}")
+            return {
+                "response": "I apologize, but there was an error processing the response. Please try again.",
+                "viewport_content": {
+                    "type": "error",
+                    "message": f"Response parsing error: {str(e)}",
+                    "agent": self.name,
+                },
+                "agent_used": self.name,
+                "processing_time": processing_time,
+            }
+
+
+class ProfileAgent(PortfolioAgent):
+    """Agent specialized in handling profile and about me queries"""
+
+    def __init__(self):
+        system_prompt = f"""
+You are the Profile Agent for {settings.portfolio_owner}'s AI portfolio.
+Your role is to provide information about personal background, education, skills, and professional summary.
+
+Key Information:
+- Name: {settings.portfolio_owner}
+- Title: {settings.portfolio_title}
+- Location: Currently seeking full-time opportunities
+- Education: MS in Data Science from Indiana University
+
+Core Competencies:
+- Full-Stack Development
+- End-to-End Project Ownership
+- AI/ML Systems Engineering
+- Cross-functional Communication
+- API Development & MLOps
+
+When users ask about profile, background, or "about me" information, provide engaging, professional responses that highlight expertise and personality.
+
+Always respond in a conversational, professional tone. If asked about specific skills or achievements, reference concrete examples.
+
+Keep responses concise but informative, typically 2-4 sentences unless more detail is specifically requested.
+"""
+        super().__init__(
+            "Profile Agent", "Handles profile and background queries", system_prompt
+        )
+
+
+class ProjectAgent(PortfolioAgent):
+    """Agent specialized in handling project-related queries"""
+
+    def __init__(self):
+        system_prompt = f"""
+You are the Project Agent for {settings.portfolio_owner}'s AI portfolio.
+Your role is to provide detailed information about projects, technologies used, and technical achievements.
+
+Key Project Areas:
+- Machine Learning & AI
+- Full-Stack Development
+- Data Science & Analytics
+- MLOps & Cloud Computing
+- Natural Language Processing
+
+When users ask about projects, provide:
+1. Clear explanations of technical implementations
+2. Specific technologies and frameworks used
+3. Quantifiable achievements and metrics
+4. Links to relevant project details
+
+Always respond in a technical but accessible tone. Focus on the user's specific interests and provide actionable insights.
+
+Keep responses focused and relevant to the user's query.
+"""
+        super().__init__(
+            "Project Agent", "Handles project and technical queries", system_prompt
+        )
+
+    def _parse_response(
+        self, response: str, query: str, processing_time: float
+    ) -> Dict[str, Any]:
+        """Enhanced parsing for project-specific responses"""
+        try:
+            base_response = super()._parse_response(response, query, processing_time)
+
+            # Add project-specific viewport content
+            base_response["viewport_content"]["type"] = "project_info"
+            base_response["viewport_content"]["agent"] = self.name
+
+            return base_response
+
+        except Exception as e:
+            logger.error(f"{self.name}: Error in project response parsing: {str(e)}")
+            return super()._parse_response(response, query, processing_time)
+
+
+class CareerAgent(PortfolioAgent):
+    """Agent specialized in career advice and professional development"""
+
+    def __init__(self):
+        system_prompt = f"""
+You are the Career Agent for {settings.portfolio_owner}'s AI portfolio.
+Your role is to provide career advice, professional development guidance, and industry insights.
+
+Expertise Areas:
+- AI/ML Career Development
+- Data Science Industry Trends
+- Technical Interview Preparation
+- Professional Networking
+- Skill Development Roadmaps
+
+When users ask about career advice, provide:
+1. Practical, actionable guidance
+2. Industry-relevant insights
+3. Personal experience when applicable
+4. Resource recommendations
+
+Always respond in a supportive, professional tone. Focus on helping users achieve their career goals.
+
+Keep responses encouraging and practical.
+"""
+        super().__init__(
+            "Career Agent",
+            "Handles career and professional development queries",
+            system_prompt,
+        )
+
+
+class DemoAgent(PortfolioAgent):
+    """Agent specialized in handling demo and interactive project queries"""
+
+    def __init__(self):
+        system_prompt = f"""
+You are the Demo Agent for {settings.portfolio_owner}'s AI portfolio.
+Your role is to guide users through interactive project demonstrations and technical walkthroughs.
+
+Demo Capabilities:
+- Live project demonstrations
+- Code walkthroughs
+- Technical explanations
+- Interactive Q&A about implementations
+
+When users ask about demos, provide:
+1. Clear instructions for accessing demos
+2. Technical context and background
+3. Key features to explore
+4. Interactive guidance
+
+Always respond in an engaging, technical tone. Encourage exploration and experimentation.
+
+Keep responses focused on the interactive aspects and user engagement.
+"""
+        super().__init__(
+            "Demo Agent", "Handles demo and interactive project queries", system_prompt
+        )
+
+
+class StrategicFitAgent(PortfolioAgent):
+    """Agent specialized in strategic fit analysis and job matching"""
+
+    def __init__(self):
+        system_prompt = f"""
+You are the Strategic Fit Agent for {settings.portfolio_owner}'s AI portfolio.
+Your role is to analyze job requirements against qualifications and provide strategic fit assessments.
+
+When users provide job descriptions or ask for strategic fit analysis, you must:
+
+1. Analyze the job requirements against the portfolio projects and experience
+2. Generate relevance scores (0-100%) for each project based on how well it matches the job requirements
+3. Create a professional cover letter snippet tailored to the job
+4. Provide specific insights about skill alignments and recommendations
+
+IMPORTANT: For job description analysis, you must include JSON data in your response in this exact format:
+
+{{
+  "relevance_scores": {{
+    "1": 85,
+    "2": 92,
+    "3": 78
+  }},
+  "cover_letter_snippet": "My experience in [specific area] aligns directly with your requirements for [job requirement]. For example, my work on [specific project] demonstrates [specific skill/achievement].",
+  "key_matches": [
+    "Machine Learning expertise with 94% model accuracy",
+    "MLOps pipeline experience with 99.5% uptime",
+    "Full-stack development with React and Python"
+  ]
+}}
+
+Provide a conversational analysis followed by the JSON data. The relevance scores should reflect how well each project (by ID) matches the job requirements. The cover letter snippet should be professional and specific to the job description provided.
+
+Always respond in a professional, analytical tone focused on demonstrating clear value alignment between qualifications and job requirements.
+"""
+        super().__init__(
+            "Strategic Fit Agent",
+            "Handles job analysis and strategic fit queries",
+            system_prompt,
+        )
+
+    def _parse_response(
+        self, response: str, query: str, processing_time: float
+    ) -> Dict[str, Any]:
+        """Enhanced parsing for strategic fit responses"""
+        try:
+            base_response = super()._parse_response(response, query, processing_time)
+
+            # Check if this is a job description analysis query
+            is_job_analysis = any(
+                keyword in query.lower()
+                for keyword in [
+                    "job description",
+                    "requirements",
+                    "position",
+                    "role",
+                    "hiring",
+                    "job posting",
+                    "analyze this",
+                    "fit analysis",
+                ]
+            )
+
+            if is_job_analysis:
+                # Set strategic fit analysis type
+                base_response["viewport_content"]["type"] = "strategic_fit_analysis"
+
+                # Try to extract JSON data from response
+                try:
+                    if "{" in response and "}" in response:
+                        start = response.find("{")
+                        end = response.rfind("}") + 1
+                        json_str = response[start:end]
+                        structured_data = json.loads(json_str)
+
+                        # Add expected fields to viewport_content
+                        base_response["viewport_content"]["relevance_scores"] = (
+                            structured_data.get("relevance_scores", {})
+                        )
+                        base_response["viewport_content"]["cover_letter_snippet"] = (
+                            structured_data.get("cover_letter_snippet", "")
+                        )
+                        base_response["viewport_content"]["key_matches"] = (
+                            structured_data.get("key_matches", [])
+                        )
+
+                        logger.info(
+                            f"Strategic fit analysis parsed: {len(structured_data.get('relevance_scores', {}))} scores"
+                        )
+
+                except Exception as json_error:
+                    logger.warning(
+                        f"Could not parse JSON from strategic fit response: {json_error}"
+                    )
+                    # Provide default structure if JSON parsing fails
+                    base_response["viewport_content"]["relevance_scores"] = {}
+                    base_response["viewport_content"]["cover_letter_snippet"] = ""
+                    base_response["viewport_content"]["key_matches"] = []
+            else:
+                # Regular strategic analysis response
+                base_response["viewport_content"]["type"] = "strategic_analysis"
+
+            base_response["viewport_content"]["agent"] = self.name
+            return base_response
+
+        except Exception as e:
+            logger.error(
+                f"{self.name}: Error in strategic fit response parsing: {str(e)}"
+            )
+            return super()._parse_response(response, query, processing_time)
+
+
+class RouterAgent:
+    """Enhanced router agent with better query classification and error handling"""
+
+    def __init__(self):
+        self.agents = {
+            "profile": ProfileAgent(),
+            "project": ProjectAgent(),
+            "career": CareerAgent(),
+            "demo": DemoAgent(),
+            "strategic_fit": StrategicFitAgent(),
+        }
+        self.router_llm = None
+        self._initialize_router()
+
+    def _initialize_router(self):
+        """Initialize the router's language model"""
+        try:
+            if settings.has_google_api:
+                self.router_llm = ChatGoogleGenerativeAI(
+                    model=settings.google_model,
+                    temperature=0.1,  # Lower temperature for routing
+                    google_api_key=settings.google_api_key,
+                    max_retries=2,
+                    timeout=15,
+                )
+                logger.info("[ROUTER] Ready")
+            else:
+                logger.warning("[FAIL] Router: No API key")
+        except Exception as e:
+            logger.error(f"Failed to initialize router LLM: {str(e)}")
+
+    def route_query(self, query: str) -> str:
+        """Enhanced query routing with fallback logic"""
+        if not self.router_llm:
+            # Fallback routing logic
+            query_lower = query.lower()
+
+            if any(
+                word in query_lower
+                for word in ["profile", "about", "background", "education", "skills"]
+            ):
+                return "profile"
+            elif any(
+                word in query_lower
+                for word in ["project", "github", "code", "implementation", "technical"]
+            ):
+                return "project"
+            elif any(
+                word in query_lower
+                for word in ["career", "job", "interview", "advice", "development"]
+            ):
+                return "career"
+            elif any(
+                word in query_lower
+                for word in ["demo", "live", "interactive", "show", "walkthrough"]
+            ):
+                return "demo"
+            elif any(
+                word in query_lower
+                for word in [
+                    "job description",
+                    "requirements",
+                    "fit",
+                    "match",
+                    "analysis",
+                    "position",
+                    "role",
+                    "hiring",
+                    "job posting",
+                    "analyze this",
+                    "strategic",
+                ]
+            ):
+                return "strategic_fit"
+            else:
+                return "profile"  # Default fallback
+
+        try:
+            routing_prompt = f"""
+            Route the following user query to the most appropriate agent:
+            
+            Query: "{query}"
+            
+            Available agents:
+            - profile: For questions about personal background, education, skills, "about me"
+            - project: For questions about projects, technical implementations, code
+            - career: For career advice, professional development, industry insights
+            - demo: For interactive demonstrations, live projects, walkthroughs
+            - strategic_fit: For job analysis, requirements matching, strategic fit assessment
+            
+            Respond with only the agent name (profile, project, career, demo, or strategic_fit).
+            """
+
+            messages = [
+                SystemMessage(content=routing_prompt),
+                HumanMessage(content=query),
+            ]
+            response = self.router_llm.invoke(messages)
+
+            agent_name = response.content.strip().lower()
+
+            if agent_name in self.agents:
+                logger.info(f"Query routed to {agent_name} agent")
+                return agent_name
+            else:
+                logger.warning(
+                    f"Invalid agent name returned: {agent_name}, using fallback"
+                )
+                return self.route_query(query)  # Recursive fallback
+
+        except Exception as e:
+            logger.error(f"Error in query routing: {str(e)}")
+            return self.route_query(query)  # Recursive fallback
+
+    def process_query(
+        self, query: str, context: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
+        """Process query with enhanced error handling and monitoring"""
+        start_time = time.time()
+
+        try:
+            # Route the query
+            agent_name = self.route_query(query)
+            agent = self.agents.get(agent_name)
+
+            if not agent:
+                logger.error(f"Agent not found: {agent_name}")
+                return {
+                    "response": "I apologize, but I couldn't determine the best way to handle your request. Please try rephrasing your question.",
+                    "viewport_content": {"type": "error", "message": "Routing error"},
+                    "agent_used": "router_error",
+                    "processing_time": time.time() - start_time,
+                }
+
+            # Process with the selected agent
+            result = agent.process(query, context)
+
+            # Add routing information
+            result["routed_to"] = agent_name
+            result["total_processing_time"] = time.time() - start_time
+
+            logger.info(
+                f"Query processed successfully by {agent_name} in {result['total_processing_time']:.3f}s"
+            )
+
+            return result
+
+        except Exception as e:
+            processing_time = time.time() - start_time
+            logger.error(f"Error in query processing: {str(e)}", exc_info=True)
+
+            return {
+                "response": "I encountered an error while processing your request. Please try again.",
+                "viewport_content": {"type": "error", "message": str(e)},
+                "agent_used": "error",
+                "processing_time": processing_time,
+            }
+
+
+# Global router instance
+router = RouterAgent()
