@@ -14,152 +14,16 @@ import StrategicFitAnalysisSection from './components/StrategicFitAnalysisSectio
 // Removed scroll animation hooks - using direct whileInView animations instead
 
 
-// Real portfolio data for Prathamesh More
-const portfolioData = {
-  profile: {
-    name: "Prathamesh More",
-    roles: ["Machine Learning Engineer", "Data Scientist", "Full Stack Developer"],
-    links: [
-      { type: "github", url: "https://github.com/Spidey13" },
-      { type: "linkedin", url: "https://linkedin.com/in/more-prathamesh" },
-      { type: "scholar", url: "https://scholar.google.com" },
-      { type: "resume", url: "#" }
-    ]
-  },
-  projects: [
-    {
-      id: 1,
-      title: "F1 Race Strategy Simulator",
-      description: "Advanced simulation system combining real-time telemetry data with machine learning models to optimize race strategies. High-fidelity digital twin for race strategy optimization.",
-      technologies: ["XGBoost", "CatBoost", "Python", "Streamlit", "Pandas", "NumPy", "Plotly"],
-      metrics: {
-        "Accuracy": "94%",
-        "Data Points": "500K+",
-        "Race Scenarios": "50+",
-        "Prediction Speed": "<2s"
-      },
-      githubUrl: "https://github.com/Spidey13/f1-strategy-simulator",
-      featured: true,
-      category: "Machine Learning",
-      relevanceScore: 0
-    },
-    {
-      id: 2,
-      title: "Agentic AI for Multimodal Analysis",
-      description: "Sophisticated AI agent system using ReAct patterns for multimodal analysis and reasoning tasks. ReAct pattern implementation for complex reasoning.",
-      technologies: ["LangChain", "OpenAI", "Python", "FastAPI", "ReAct Pattern", "Multimodal AI"],
-      metrics: {
-        "Reasoning Accuracy": "92%",
-        "Modalities": "3",
-        "Response Time": "<5s",
-        "Complexity Score": "9/10"
-      },
-      githubUrl: "https://github.com/Spidey13/agentic-multimodal-ai",
-      featured: true,
-      category: "Artificial Intelligence",
-      relevanceScore: 0
-    },
-    {
-      id: 3,
-      title: "Wafer Fault Detection System",
-      description: "Machine learning system for automated semiconductor wafer fault detection in manufacturing. 94% F1-score manufacturing quality control.",
-      technologies: ["Random Forest", "XGBoost", "Python", "MLOps", "Feature Engineering", "Industrial AI"],
-      metrics: {
-        "F1 Score": "94%",
-        "Precision": "96%",
-        "Recall": "92%",
-        "Processing Speed": "1000 wafers/min"
-      },
-      githubUrl: "https://github.com/Spidey13/wafer-fault-detection",
-      featured: false,
-      category: "Industrial AI",
-      relevanceScore: 0
-    },
-
-  ],
-  experience: [
-    {
-      id: 1,
-      company: "Indiana University",
-      position: "Data Science Research Assistant",
-      duration: "05/2024 to Present",
-      description: "Leading research initiatives in text mining and natural language processing for academic publications analysis.",
-      technologies: ["Python", "LDA", "NMF", "K-Means", "Plotly", "Dash", "Text Mining", "Topic Modeling"],
-      achievements: [
-        "Architected and implemented modular text-mining framework using LDA, NMF, and K-Means algorithms, processing 550+ academic publications and automating thematic analysis workflows",
-        "Developed and deployed self-service analytics dashboards with Plotly and Dash, enabling researchers to perform independent analysis and reducing consultation time by 60%",
-        "Achieved 93% topic coherence through advanced hyperparameter optimization and model validation techniques, significantly improving research insights quality",
-
-      ],
-      type: "Research"
-    },
-    {
-      id: 2,
-      company: "Dimensionless Technologies",
-      position: "Machine Learning Engineer Intern",
-      duration: "04/2023 to 08/2023",
-      description: "Developed and deployed production-ready NLP solutions using AWS cloud infrastructure and MLOps best practices.",
-      technologies: ["Python", "AWS", "BERT", "NLP", "Docker", "MLOps", "Entity Recognition", "Cloud Computing"],
-      achievements: [
-        "Engineered and deployed AWS-based NLP pipelines using containerized BERT models, achieving 70% speed improvement over baseline implementations through optimized preprocessing and parallel processing",
-        "Implemented fine-tuned BERT model for entity recognition tasks, achieving 0.84 precision on complex domain-specific datasets and reducing manual annotation requirements",
-        "Designed and executed comprehensive MLOps workflows including automated testing, version control, and deployment pipelines, ensuring 99.5% uptime for production services",
-
-      ],
-      type: "Internship"
-    },
-    {
-      id: 3,
-      company: "Benchmark Computer Solutions",
-      position: "Full Stack Developer Intern",
-      duration: "08/2022 to 12/2022",
-      description: "Built comprehensive resume parsing system with machine learning capabilities and full-stack web application development.",
-      technologies: ["Python", "React", "PostgreSQL", "Machine Learning", "Data Engineering", "Full-Stack Development"],
-      achievements: [
-        "Developed comprehensive resume parsing system using advanced NLP techniques and machine learning models, improving F1-score from 0.78 to 0.91 through feature engineering and model optimization",
-        "Built end-to-end data processing pipelines handling 10,000+ documents daily, reducing manual processing time by 40% and improving data quality through automated validation",
-        "Designed and implemented full-stack web application with React frontend and Python backend, serving 500+ daily users with sub-2-second response times",
-
-      ],
-      type: "Internship"
-    }
-  ],
-  publications: [
-    {
-      id: 1,
-      title: "An Algorithmic Approach for Text Summarization",
-      authors: ["A. Joshi", "P. More", "S. Shah", "M. A. Sahitya"],
-      venue: "2023 International Conference for Advancement in Technology (ICONAT)",
-      year: 2023,
-      type: "Conference Paper",
-      category: "Natural Language Processing",
-      doi: "10.1109/ICONAT57137.2023.10080575",
-      pdfUrl: "https://ieeexplore.ieee.org/abstract/document/10080575",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "An Exploratory Text-Mining Approach to Analyzing DEI-Related Issues in Architecture & Design Industry Publications",
-      authors: ["P. More", "Co-authors"],
-      venue: "Design Research Journal (Taylor & Francis)",
-      year: 2025,
-      type: "Journal Article",
-      category: "Data Science",
-      doi: "10.1080/14606925.2025.2482556",
-      pdfUrl: "https://www.tandfonline.com/doi/abs/10.1080/14606925.2025.2482556",
-      featured: true
-    },
-
-  ],
-
-}
+// Portfolio data will be loaded dynamically from backend
 
 function App() {
   // Core state
   const [showHero, setShowHero] = useState(true);
   const [userInput, setUserInput] = useState('');
   const [aiMessage, setAiMessage] = useState("");
-  const [currentPortfolioData, setCurrentPortfolioData] = useState(portfolioData);
+  const [currentPortfolioData, setCurrentPortfolioData] = useState<any>(null);
+  const [portfolioLoading, setPortfolioLoading] = useState(true);
+  const [portfolioError, setPortfolioError] = useState<string | null>(null);
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
@@ -170,6 +34,34 @@ function App() {
   // Strategic Fit Analysis state
   const [showStrategicAnalysis, setShowStrategicAnalysis] = useState(false);
   const [strategicAnalysisResult, setStrategicAnalysisResult] = useState<any>(null);
+
+  // Load portfolio data on component mount
+  useEffect(() => {
+    const fetchPortfolioData = async () => {
+      try {
+        setPortfolioLoading(true);
+        setPortfolioError(null);
+        
+        const response = await fetch('http://localhost:8000/api/v1/portfolio-data');
+        
+        if (!response.ok) {
+          throw new Error(`Failed to load portfolio data: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setCurrentPortfolioData(data);
+        console.log('Portfolio data loaded successfully:', data);
+        
+      } catch (error) {
+        console.error('Error loading portfolio data:', error);
+        setPortfolioError('Failed to load portfolio data. Please try again later.');
+      } finally {
+        setPortfolioLoading(false);
+      }
+    };
+
+    fetchPortfolioData();
+  }, []);
 
   // Handle smooth scrolling to sections
   const scrollToSection = (sectionId: string) => {
@@ -285,64 +177,106 @@ function App() {
 
   // Helper function to parse AI analysis into Kanban format
   const parseAnalysisToKanban = (analysisResult: any) => {
-    // Extract structured data from AI response
-    // const response = analysisResult.analysis || analysisResult.response || '';
+    console.log('Parsing analysis result for Kanban:', analysisResult);
     
-    // This is a simplified parser - in production, the backend should return structured data
-    // For now, we use static data but could parse analysisResult.analysis for dynamic content
-    console.log('Parsing analysis result:', analysisResult);
+    // Extract kanban_data from the AI response
+    const kanbanData = analysisResult.kanban_data || analysisResult.viewport_content?.kanban_data;
     
+    if (kanbanData) {
+      return {
+        technicalSkills: kanbanData.technicalSkills || [],
+        relevantExperience: kanbanData.relevantExperience || [],
+        projectEvidence: kanbanData.projectEvidence || [],
+        quantifiableImpact: kanbanData.quantifiableImpact || []
+      };
+    }
+    
+    // Fallback structure if AI response doesn't have structured data
+    console.warn('No structured kanban_data found in AI response, using fallback');
     return {
       technicalSkills: [
-        { id: '1', title: 'Python & ML Libraries', description: 'XGBoost, CatBoost, Scikit-learn expertise', score: '95%' },
-        { id: '2', title: 'Data Analysis', description: 'Pandas, NumPy, statistical modeling', score: '90%' },
-        { id: '3', title: 'Web Development', description: 'React, FastAPI, full-stack development', score: '85%' }
+        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse technical skills from AI response', score: 'N/A' }
       ],
       relevantExperience: [
-        { id: '1', title: 'Data Scientist', description: 'Machine learning and analytics projects', score: 'High' },
-        { id: '2', title: 'Research Assistant', description: 'Academic research and publications', score: 'High' }
+        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse experience from AI response', score: 'N/A' }
       ],
       projectEvidence: [
-        { id: '1', title: 'F1 Race Strategy Simulator', description: '94% accuracy ML model with real-time data', score: 'Excellent' },
-        { id: '2', title: 'Wafer Fault Detection', description: 'Computer vision and defect classification', score: 'Strong' }
+        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse projects from AI response', score: 'N/A' }
       ],
       quantifiableImpact: [
-        { id: '1', title: '70% Speed Improvement', description: 'Information retrieval optimization', score: 'High Impact' },
-        { id: '2', title: '10x Faster Training', description: 'Model retraining time reduction', score: 'High Impact' }
+        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse impact metrics from AI response', score: 'N/A' }
       ]
     };
   }
 
   // Helper function to parse AI analysis into summary format
   const parseAnalysisToSummary = (analysisResult: any) => {
-    // const response = analysisResult.analysis || analysisResult.response || '';
-    const matchScore = analysisResult.match_score || '94%';
+    console.log('Parsing analysis result for Summary:', analysisResult);
     
+    // Extract summary_data from the AI response
+    const summaryData = analysisResult.summary_data || analysisResult.viewport_content?.summary_data;
+    const matchScore = analysisResult.match_score || '0%';
+    
+    if (summaryData) {
+      return {
+        overallMatch: summaryData.overallMatch || 'Analysis Complete',
+        matchPercentage: summaryData.matchPercentage || parseInt(matchScore.replace('%', '')) || 0,
+        executiveSummary: summaryData.executiveSummary || 'Analysis completed successfully.',
+        keyStrengths: summaryData.keyStrengths || [],
+        competitiveAdvantages: summaryData.competitiveAdvantages || [],
+        interviewHighlights: summaryData.interviewHighlights || [],
+        processingTime: summaryData.processingTime || '2.3s',
+        agentUsed: summaryData.agentUsed || analysisResult.agent_used || 'Strategic Fit Agent'
+      };
+    }
+    
+    // Fallback structure if AI response doesn't have structured data
+    console.warn('No structured summary_data found in AI response, using fallback');
     return {
-      overallMatch: 'Excellent Fit',
-      matchPercentage: parseInt(matchScore.replace('%', '')) || 94,
-      executiveSummary: 'This candidate demonstrates exceptional technical expertise with quantifiable business impact. Their proven ML capabilities and full-stack development skills make them an ideal fit for technical leadership roles.',
-      keyStrengths: [
-        'Delivered 70% performance improvements in production systems',
-        'Published ML research with real-world applications',
-        'Built end-to-end data science solutions from scratch',
-        'Combines technical depth with practical business outcomes'
-      ],
-      competitiveAdvantages: [
-        'Rare combination of ML expertise and full-stack development',
-        'Proven ability to translate complex problems into measurable solutions',
-        'Strong academic foundation with practical industry applications',
-        'Track record of delivering quantifiable business value'
-      ],
-      interviewHighlights: [
-        'Ask about the F1 Strategy Simulator - showcases ML problem-solving',
-        'Discuss the 70% speed improvement achievement - demonstrates impact',
-        'Explore their research publications - shows thought leadership',
-        'Review their full-stack projects - proves end-to-end capabilities'
-      ],
-      processingTime: '2.3s',
+      overallMatch: 'Analysis Incomplete',
+      matchPercentage: parseInt(matchScore.replace('%', '')) || 0,
+      executiveSummary: 'Could not complete the analysis. Please try again with a different job description.',
+      keyStrengths: ['Analysis could not be completed'],
+      competitiveAdvantages: ['Please try again'],
+      interviewHighlights: ['Analysis incomplete - try again'],
+      processingTime: '0s',
       agentUsed: analysisResult.agent_used || 'Strategic Fit Agent'
     };
+  }
+
+  // Show loading state while portfolio data is being fetched
+  if (portfolioLoading) {
+    return (
+      <div className="min-h-screen bg-background text-primary flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg text-secondary">Loading portfolio data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if portfolio data failed to load
+  if (portfolioError || !currentPortfolioData) {
+    return (
+      <div className="min-h-screen bg-background text-primary flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-8">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-primary mb-2">Could not load portfolio data</h2>
+          <p className="text-secondary mb-6">{portfolioError || 'Please try again later.'}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors"
+          >
+            Refresh Page
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -479,7 +413,7 @@ function App() {
                             
                             {/* Social Links */}
                             <div className="flex justify-center gap-3">
-                              {currentPortfolioData.profile.links.map((link, index) => (
+                              {currentPortfolioData.profile.links.map((link: any, index: number) => (
                             <motion.a
                               key={index}
                               href={link.url}

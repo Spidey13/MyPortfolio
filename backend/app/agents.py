@@ -6,15 +6,19 @@ Enhanced with better error handling, performance, and robustness
 import logging
 import json
 import time
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from langchain.schema import SystemMessage, HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.callbacks.manager import get_openai_callback
 
 from .config import get_settings
+from .portfolio_loader import get_portfolio_loader
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
+
+# Get portfolio data loader
+portfolio_loader = get_portfolio_loader()
 
 
 class PortfolioAgent:
@@ -73,7 +77,7 @@ class PortfolioAgent:
             logger.info(f"{self.name}: Processing query: {query[:100]}...")
 
             # Process with timing and error handling
-            with get_openai_callback() as cb:
+            with get_openai_callback():
                 response = self.llm(messages)
 
             processing_time = time.time() - start_time
@@ -90,8 +94,8 @@ class PortfolioAgent:
                 f"{self.name}: Error processing request: {str(e)}", exc_info=True
             )
 
-            return {
-                "response": f"I encountered an error while processing your request. Please try again or contact support if the issue persists.",
+                            return {
+                    "response": "I encountered an error while processing your request. Please try again or contact support if the issue persists.",
                 "viewport_content": {
                     "type": "error",
                     "message": f"Processing error: {str(e)}",
@@ -153,26 +157,22 @@ class ProfileAgent(PortfolioAgent):
     """Agent specialized in handling profile and about me queries"""
 
     def __init__(self):
+        # Get dynamic portfolio data
+        profile_summary = portfolio_loader.get_profile_summary()
+        skills_summary = portfolio_loader.get_skills_summary()
+        
         system_prompt = f"""
-You are the Profile Agent for {settings.portfolio_owner}'s AI portfolio.
+You are the Profile Agent for an AI-powered portfolio.
 Your role is to provide information about personal background, education, skills, and professional summary.
 
-Key Information:
-- Name: {settings.portfolio_owner}
-- Title: {settings.portfolio_title}
-- Location: Currently seeking full-time opportunities
-- Education: MS in Data Science from Indiana University
+{profile_summary}
 
-Core Competencies:
-- Full-Stack Development
-- End-to-End Project Ownership
-- AI/ML Systems Engineering
-- Cross-functional Communication
-- API Development & MLOps
+Skills Overview:
+{skills_summary}
 
-When users ask about profile, background, or "about me" information, provide engaging, professional responses that highlight expertise and personality.
+When users ask about profile, background, or "about me" information, provide engaging, professional responses that highlight expertise and personality. Use the specific details provided above to give accurate, personalized responses.
 
-Always respond in a conversational, professional tone. If asked about specific skills or achievements, reference concrete examples.
+Always respond in a conversational, professional tone. If asked about specific skills or achievements, reference the concrete examples and metrics provided.
 
 Keep responses concise but informative, typically 2-4 sentences unless more detail is specifically requested.
 """
@@ -185,26 +185,25 @@ class ProjectAgent(PortfolioAgent):
     """Agent specialized in handling project-related queries"""
 
     def __init__(self):
+        # Get dynamic portfolio data
+        projects_summary = portfolio_loader.get_projects_summary()
+        
         system_prompt = f"""
-You are the Project Agent for {settings.portfolio_owner}'s AI portfolio.
+You are the Project Agent for an AI-powered portfolio.
 Your role is to provide detailed information about projects, technologies used, and technical achievements.
 
-Key Project Areas:
-- Machine Learning & AI
-- Full-Stack Development
-- Data Science & Analytics
-- MLOps & Cloud Computing
-- Natural Language Processing
+Project Portfolio:
+{projects_summary}
 
 When users ask about projects, provide:
-1. Clear explanations of technical implementations
-2. Specific technologies and frameworks used
-3. Quantifiable achievements and metrics
-4. Links to relevant project details
+1. Clear explanations of technical implementations using the specific project details above
+2. Exact technologies and frameworks used as listed
+3. Quantifiable achievements and metrics from the project data
+4. Specific examples from the projects described
 
-Always respond in a technical but accessible tone. Focus on the user's specific interests and provide actionable insights.
+Always respond in a technical but accessible tone. Focus on the user's specific interests and provide actionable insights based on the real project data.
 
-Keep responses focused and relevant to the user's query.
+Keep responses focused and relevant to the user's query, referencing specific projects and achievements.
 """
         super().__init__(
             "Project Agent", "Handles project and technical queries", system_prompt
@@ -293,36 +292,58 @@ class StrategicFitAgent(PortfolioAgent):
     """Agent specialized in strategic fit analysis and job matching"""
 
     def __init__(self):
+        # Get dynamic portfolio data
+        profile_summary = portfolio_loader.get_profile_summary()
+        projects_summary = portfolio_loader.get_projects_summary()
+        skills_summary = portfolio_loader.get_skills_summary()
+        
         system_prompt = f"""
-You are the Strategic Fit Agent for {settings.portfolio_owner}'s AI portfolio.
+You are the Strategic Fit Agent for an AI-powered portfolio analysis system.
 Your role is to analyze job requirements against qualifications and provide strategic fit assessments.
 
-When users provide job descriptions or ask for strategic fit analysis, you must:
+Candidate Profile:
+{profile_summary}
 
-1. Analyze the job requirements against the portfolio projects and experience
-2. Generate relevance scores (0-100%) for each project based on how well it matches the job requirements
-3. Create a professional cover letter snippet tailored to the job
-4. Provide specific insights about skill alignments and recommendations
+Projects Portfolio:
+{projects_summary}
 
-IMPORTANT: For job description analysis, you must include JSON data in your response in this exact format:
+Skills Overview:
+{skills_summary}
+
+When users provide job descriptions, you must return a structured JSON response with this EXACT format:
 
 {{
-  "relevance_scores": {{
-    "1": 85,
-    "2": 92,
-    "3": 78
+  "kanban_data": {{
+    "technicalSkills": [
+      {{"id": "1", "title": "[Skill Name]", "description": "[How it matches job]", "score": "[0-100]%"}}
+    ],
+    "relevantExperience": [
+      {{"id": "1", "title": "[Role/Experience]", "description": "[Relevant details]", "score": "High/Medium/Low"}}
+    ],
+    "projectEvidence": [
+      {{"id": "1", "title": "[Project Name]", "description": "[How it demonstrates fit]", "score": "Excellent/Strong/Good"}}
+    ],
+    "quantifiableImpact": [
+      {{"id": "1", "title": "[Metric/Achievement]", "description": "[Impact description]", "score": "High Impact/Medium Impact/Low Impact"}}
+    ]
   }},
-  "cover_letter_snippet": "My experience in [specific area] aligns directly with your requirements for [job requirement]. For example, my work on [specific project] demonstrates [specific skill/achievement].",
-  "key_matches": [
-    "Machine Learning expertise with 94% model accuracy",
-    "MLOps pipeline experience with 99.5% uptime",
-    "Full-stack development with React and Python"
-  ]
+  "summary_data": {{
+    "overallMatch": "Excellent Fit/Good Fit/Partial Fit",
+    "matchPercentage": 85,
+    "executiveSummary": "[2-3 sentence summary for recruiters]",
+    "keyStrengths": ["[Strength 1]", "[Strength 2]", "[Strength 3]"],
+    "competitiveAdvantages": ["[Advantage 1]", "[Advantage 2]"],
+    "interviewHighlights": ["[Question/Topic 1]", "[Question/Topic 2]"],
+    "processingTime": "2.3s",
+    "agentUsed": "Strategic Fit Agent"
+  }},
+  "match_score": "85%",
+  "analysis": "[Brief analysis text]"
 }}
 
-Provide a conversational analysis followed by the JSON data. The relevance scores should reflect how well each project (by ID) matches the job requirements. The cover letter snippet should be professional and specific to the job description provided.
+Analyze the job requirements against the candidate's actual portfolio data above. Provide specific, accurate matches based on the real projects, skills, and experience listed. Focus on creating value for recruiters by highlighting concrete evidence of fit.
 
-Always respond in a professional, analytical tone focused on demonstrating clear value alignment between qualifications and job requirements.
+Always use the exact project names, technologies, and achievements from the portfolio data provided above.
 """
         super().__init__(
             "Strategic Fit Agent",
@@ -364,19 +385,17 @@ Always respond in a professional, analytical tone focused on demonstrating clear
                         json_str = response[start:end]
                         structured_data = json.loads(json_str)
 
-                        # Add expected fields to viewport_content
-                        base_response["viewport_content"]["relevance_scores"] = (
-                            structured_data.get("relevance_scores", {})
-                        )
-                        base_response["viewport_content"]["cover_letter_snippet"] = (
-                            structured_data.get("cover_letter_snippet", "")
-                        )
-                        base_response["viewport_content"]["key_matches"] = (
-                            structured_data.get("key_matches", [])
-                        )
+                        # Add the complete structured data to the response
+                        base_response["kanban_data"] = structured_data.get("kanban_data", {})
+                        base_response["summary_data"] = structured_data.get("summary_data", {})
+                        base_response["match_score"] = structured_data.get("match_score", "0%")
+                        
+                        # Keep viewport_content for backward compatibility
+                        base_response["viewport_content"]["kanban_data"] = structured_data.get("kanban_data", {})
+                        base_response["viewport_content"]["summary_data"] = structured_data.get("summary_data", {})
 
                         logger.info(
-                            f"Strategic fit analysis parsed: {len(structured_data.get('relevance_scores', {}))} scores"
+                            f"Strategic fit analysis parsed successfully with {len(structured_data.get('kanban_data', {}).get('technicalSkills', []))} technical skills"
                         )
 
                 except Exception as json_error:
@@ -384,9 +403,25 @@ Always respond in a professional, analytical tone focused on demonstrating clear
                         f"Could not parse JSON from strategic fit response: {json_error}"
                     )
                     # Provide default structure if JSON parsing fails
-                    base_response["viewport_content"]["relevance_scores"] = {}
-                    base_response["viewport_content"]["cover_letter_snippet"] = ""
-                    base_response["viewport_content"]["key_matches"] = []
+                    base_response["kanban_data"] = {
+                        "technicalSkills": [],
+                        "relevantExperience": [],
+                        "projectEvidence": [],
+                        "quantifiableImpact": []
+                    }
+                    base_response["summary_data"] = {
+                        "overallMatch": "Analysis Failed",
+                        "matchPercentage": 0,
+                        "executiveSummary": "Could not complete analysis",
+                        "keyStrengths": [],
+                        "competitiveAdvantages": [],
+                        "interviewHighlights": [],
+                        "processingTime": f"{processing_time:.1f}s",
+                        "agentUsed": "Strategic Fit Agent"
+                    }
+                    base_response["match_score"] = "0%"
+                    base_response["viewport_content"]["kanban_data"] = base_response["kanban_data"]
+                    base_response["viewport_content"]["summary_data"] = base_response["summary_data"]
             else:
                 # Regular strategic analysis response
                 base_response["viewport_content"]["type"] = "strategic_analysis"

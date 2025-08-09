@@ -11,6 +11,7 @@ from datetime import datetime
 from app.config import get_settings
 from app.agents import router
 from app.services import PortfolioService
+from app.portfolio_loader import get_raw_portfolio_data
 from app.middleware import (
     ErrorHandlingMiddleware,
     RateLimitMiddleware,
@@ -319,6 +320,22 @@ async def get_publications():
     except Exception as e:
         logger.error(f"Error retrieving publications data: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/v1/portfolio-data")
+async def get_portfolio_data():
+    """Get complete portfolio data from the centralized JSON source"""
+    try:
+        logger.info("Fetching complete portfolio data")
+        portfolio_data = get_raw_portfolio_data()
+        logger.info(f"Portfolio data fetched successfully: {len(portfolio_data.get('projects', []))} projects")
+        return portfolio_data
+    except Exception as e:
+        logger.error(f"Error retrieving portfolio data: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error retrieving portfolio data: {str(e)}"
+        )
 
 
 # Demo endpoints placeholder
