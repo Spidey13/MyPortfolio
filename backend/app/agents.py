@@ -10,9 +10,6 @@ from typing import Dict, Any
 from langchain.schema import SystemMessage, HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-# Note: get_openai_callback is for cost tracking, not LangSmith observability
-from langchain_community.callbacks.manager import get_openai_callback
-
 from .config import get_settings
 from .portfolio_loader import get_portfolio_loader
 
@@ -79,8 +76,7 @@ class PortfolioAgent:
             logger.info(f"{self.name}: Processing query: {query[:100]}...")
 
             # Process with timing and error handling
-            with get_openai_callback():
-                response = self.llm(messages)
+            response = self.llm(messages)
 
             processing_time = time.time() - start_time
 
