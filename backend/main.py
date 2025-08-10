@@ -21,9 +21,8 @@ from app.middleware import (
     get_monitoring_metrics,
 )
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Import professional logging system
+from app.logger import logger, performance_logger, security_logger, set_request_id
 
 # Get settings
 settings = get_settings()
@@ -65,7 +64,15 @@ portfolio_service = PortfolioService()
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Global exception handler for unhandled exceptions"""
-    logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+    logger.error(
+        "Unhandled exception occurred",
+        exception_type=type(exc).__name__,
+        exception_message=str(exc),
+        request_method=request.method,
+        request_path=str(request.url.path),
+        request_query=str(request.url.query) if request.url.query else None,
+        exc_info=True,
+    )
     return JSONResponse(
         status_code=500,
         content={
@@ -111,9 +118,7 @@ class HealthResponse(BaseModel):
     google_api_configured: bool = Field(
         ..., description="Google API configuration status"
     )
-    langchain_configured: bool = Field(
-        ..., description="LangChain configuration status"
-    )
+    langchain_configured: bool = Field(..., description="LangChain framework status")
     uptime: str = Field(..., description="Service uptime")
     version: str = Field(..., description="API version")
 
@@ -154,11 +159,17 @@ async def health_check():
     """Enhanced health check endpoint"""
     uptime = datetime.utcnow() - startup_time
 
+    logger.info(
+        "Health check requested",
+        uptime_seconds=uptime.total_seconds(),
+        google_api_configured=settings.has_google_api,
+    )
+
     return HealthResponse(
         status="healthy",
         message="Backend is running successfully! ✨",
         google_api_configured=settings.has_google_api,
-        langchain_configured=settings.has_langchain_api,
+        langchain_configured=True,  # LangChain core framework is always available
         uptime=str(uptime),
         version="1.0.0",
     )
@@ -328,13 +339,14 @@ async def get_portfolio_data():
     try:
         logger.info("Fetching complete portfolio data")
         portfolio_data = get_raw_portfolio_data()
-        logger.info(f"Portfolio data fetched successfully: {len(portfolio_data.get('projects', []))} projects")
+        logger.info(
+            f"Portfolio data fetched successfully: {len(portfolio_data.get('projects', []))} projects"
+        )
         return portfolio_data
     except Exception as e:
         logger.error(f"Error retrieving portfolio data: {str(e)}", exc_info=True)
         raise HTTPException(
-            status_code=500,
-            detail=f"Error retrieving portfolio data: {str(e)}"
+            status_code=500, detail=f"Error retrieving portfolio data: {str(e)}"
         )
 
 

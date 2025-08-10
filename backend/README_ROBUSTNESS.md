@@ -51,7 +51,7 @@ log_format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 ### New Properties:
 - `is_production`: Check if running in production mode
 - `has_google_api`: Check if Google API is configured
-- `has_langchain_api`: Check if LangChain API is configured
+- `has_langchain_api`: Check if LangChain framework is available (always true)
 
 ## 🛡️ Security Enhancements
 
@@ -190,7 +190,8 @@ python test_backend_robustness.py
 ```bash
 # Required
 GOOGLE_API_KEY=your_google_api_key
-LANGCHAIN_API_KEY=your_langchain_api_key
+# LangChain API key (optional - only needed for LangSmith observability)
+# LANGCHAIN_API_KEY=your_langchain_api_key
 
 # Optional
 DEBUG=true
@@ -207,7 +208,7 @@ MAX_REQUEST_SIZE=10485760
   "status": "healthy",
   "message": "Backend is running successfully! ✨",
   "google_api_configured": true,
-  "langchain_configured": true,
+  "langchain_configured": true,  // LangChain core framework
   "uptime": "0:05:30.123456",
   "version": "1.0.0"
 }

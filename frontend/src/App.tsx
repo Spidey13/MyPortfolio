@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { log } from './utils/logger';
 import axios from 'axios';
+
+// Import profile picture
+import profilePhoto from './assets/pfp.jpg';
 
 import CommandPalette from './components/CommandPalette';
 import ScrollProgress from './components/ScrollProgress';
@@ -11,6 +15,7 @@ import HeroSection from './components/HeroSection';
 import Navbar from './components/Navbar';
 import ProjectDetailModal from './components/ProjectDetailModal';
 import StrategicFitAnalysisSection from './components/StrategicFitAnalysisSection';
+
 // Removed scroll animation hooks - using direct whileInView animations instead
 
 
@@ -50,10 +55,16 @@ function App() {
         
         const data = await response.json();
         setCurrentPortfolioData(data);
-        console.log('Portfolio data loaded successfully:', data);
+        log.info('Portfolio data loaded successfully', { 
+          projectCount: data.projects?.length,
+          experienceCount: data.experience?.length 
+        });
         
       } catch (error) {
-        console.error('Error loading portfolio data:', error);
+        log.error('Failed to load portfolio data', error as Error, {
+          component: 'App',
+          action: 'fetchPortfolioData'
+        });
         setPortfolioError('Failed to load portfolio data. Please try again later.');
       } finally {
         setPortfolioLoading(false);
@@ -159,9 +170,10 @@ function App() {
 
   // Handle Strategic Fit Analysis
   const handleStrategicAnalysisComplete = (analysisResult: any) => {
+    const analysisStartTime = Date.now();
     // Parse the analysis result and convert to Kanban format
     const kanbanData = parseAnalysisToKanban(analysisResult);
-    const summaryData = parseAnalysisToSummary(analysisResult);
+    const summaryData = parseAnalysisToSummary(analysisResult, analysisStartTime);
     
     setStrategicAnalysisResult({
       kanbanData,
@@ -195,22 +207,22 @@ function App() {
     console.warn('No structured kanban_data found in AI response, using fallback');
     return {
       technicalSkills: [
-        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse technical skills from AI response', score: 'N/A' }
+        { id: '1', title: 'AI Analysis Failed', description: 'Please try again with a different job description or check backend connection', score: 'Moderate' }
       ],
       relevantExperience: [
-        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse experience from AI response', score: 'N/A' }
+        { id: '1', title: 'AI Analysis Failed', description: 'Please try again with a different job description or check backend connection', score: 'Moderate' }
       ],
       projectEvidence: [
-        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse projects from AI response', score: 'N/A' }
+        { id: '1', title: 'AI Analysis Failed', description: 'Please try again with a different job description or check backend connection', score: 'Moderate' }
       ],
       quantifiableImpact: [
-        { id: '1', title: 'Analysis Incomplete', description: 'Could not parse impact metrics from AI response', score: 'N/A' }
+        { id: '1', title: 'AI Analysis Failed', description: 'Please try again with a different job description or check backend connection', score: 'Moderate' }
       ]
     };
   }
 
   // Helper function to parse AI analysis into summary format
-  const parseAnalysisToSummary = (analysisResult: any) => {
+  const parseAnalysisToSummary = (analysisResult: any, analysisStartTime?: number) => {
     console.log('Parsing analysis result for Summary:', analysisResult);
     
     // Extract summary_data from the AI response
@@ -225,7 +237,7 @@ function App() {
         keyStrengths: summaryData.keyStrengths || [],
         competitiveAdvantages: summaryData.competitiveAdvantages || [],
         interviewHighlights: summaryData.interviewHighlights || [],
-        processingTime: summaryData.processingTime || '2.3s',
+        processingTime: summaryData.processingTime || (analysisStartTime ? `${((Date.now() - analysisStartTime) / 1000).toFixed(1)}s` : '2.3s'),
         agentUsed: summaryData.agentUsed || analysisResult.agent_used || 'Strategic Fit Agent'
       };
     }
@@ -246,7 +258,7 @@ function App() {
 
   // Show loading state while portfolio data is being fetched
   if (portfolioLoading) {
-    return (
+  return (
       <div className="min-h-screen bg-background text-primary flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -393,13 +405,26 @@ function App() {
                         >
                           {/* Clean Profile Photo Card */}
                           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
-                            {/* Large Profile Picture */}
+                            {/* Optimized Profile Picture */}
                         <motion.div 
-                              className="w-40 h-48 bg-gradient-to-br from-accent/10 to-accent-secondary/10 rounded-xl mx-auto mb-6 flex items-center justify-center border border-accent/20"
+                              className="w-40 h-48 bg-gradient-to-br from-accent/10 to-accent-secondary/10 rounded-xl mx-auto mb-6 flex items-center justify-center border border-accent/20 overflow-hidden shadow-lg"
                               whileHover={{ scale: 1.02 }}
                               transition={{ duration: 0.3 }}
                             >
-                              <svg className="w-20 h-20 text-accent/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              {/* Profile Image - Replace src with your actual image path */}
+                              <img 
+                                src={profilePhoto} 
+                                alt="Prathamesh Pravin More - AI/ML Engineer"
+                                className="w-full h-full object-cover rounded-xl"
+                                onError={(e) => {
+                                  // Fallback to icon if image fails to load
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                  target.nextElementSibling?.classList.remove('hidden');
+                                }}
+                              />
+                              {/* Fallback Icon */}
+                              <svg className="w-20 h-20 text-accent/60 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                               </svg>
                         </motion.div>
@@ -413,7 +438,7 @@ function App() {
                             
                             {/* Social Links */}
                             <div className="flex justify-center gap-3">
-                              {currentPortfolioData.profile.links.map((link: any, index: number) => (
+                          {currentPortfolioData.profile.links.map((link: any, index: number) => (
                             <motion.a
                               key={index}
                               href={link.url}
@@ -429,8 +454,8 @@ function App() {
                                     {link.type === 'linkedin' && (
                                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                                     )}
-                                    {link.type === 'scholar' && (
-                                      <path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 11a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+                                    {link.type === 'publications' && (
+                                      <path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9 12 9s-5.548 2.249-6.758 4.769zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/>
                                     )}
                                     {link.type === 'resume' && (
                                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 3v5h5M16 13H8M16 17H8M10 9H8"/>
@@ -593,29 +618,25 @@ function App() {
                                     
                                     {/* Category & Status */}
                                     <div className="flex items-center gap-3">
-                                      <span className="px-3 py-1 bg-accent/10 text-accent text-sm font-medium rounded-full">
-                                        {project.category || 'AI/ML'}
-                                      </span>
+                                                                        <span className="px-3 py-1 bg-accent/10 text-accent text-sm font-medium rounded-full">
+                                    Featured
+                                  </span>
                                       <span className="text-sm text-secondary">2024</span>
                             </div>
                           </div>
                           
-                                  {/* Key Metrics - Compact */}
-                                  {project.metrics && Object.keys(project.metrics).length > 0 && (
-                                    <div className="flex gap-6">
-                                      {Object.entries(project.metrics).slice(0, 2).map(([key, value]) => (
-                                        <div key={key} className="text-right">
-                                          <div className="text-2xl font-bold text-accent">{String(value)}</div>
-                                          <div className="text-xs text-secondary uppercase tracking-wider">{key}</div>
-                                        </div>
-                                      ))}
+                                  {/* Key Technologies - Compact */}
+                                  <div className="flex gap-6">
+                                    <div className="text-right">
+                                      <div className="text-2xl font-bold text-accent">{project.technologies.length}</div>
+                                      <div className="text-xs text-secondary uppercase tracking-wider">Technologies</div>
                             </div>
-                          )}
+                                  </div>
                                 </div>
 
                                 {/* Project Description */}
                                 <p className="text-lg text-secondary leading-relaxed mb-6">
-                                  {project.description}
+                                  {project.star.situation}
                                 </p>
 
                                 {/* Grid Layout for Details */}
@@ -654,7 +675,7 @@ function App() {
                                 {/* Project Action */}
                                 <div className="flex items-center justify-between pt-6 mt-6 border-t border-gray-100">
                                   <div className="text-sm text-secondary">
-                                    {project.githubUrl ? 'Open Source' : 'Proprietary'} Project
+                                    {project.github_url ? 'Open Source' : 'Proprietary'} Project
                                   </div>
                                   <div className="flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all duration-200">
                                     <span>View Case Study</span>
@@ -730,7 +751,7 @@ function App() {
                                 <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                                   <div className="flex-1">
                                     <h3 className="text-2xl font-bold text-primary mb-2">
-                                      {exp.position}
+                                      {exp.role || exp.position}
                                     </h3>
                                     <div className="flex items-center gap-3 mb-3">
                                       <span className="text-lg font-semibold text-accent">
@@ -748,26 +769,24 @@ function App() {
 
                                 {/* Simplified Description */}
                                 <p className="text-secondary leading-relaxed mb-4">
-                                  {exp.description}
+                                  {exp.star?.situation || exp.description}
                                 </p>
 
                                 {/* Key Highlights - Reduced */}
-                                {exp.achievements && exp.achievements.length > 0 && (
+                                {exp.star?.result && (
                                   <div className="mb-4">
                                     <div className="space-y-2">
-                                      {exp.achievements.slice(0, 2).map((achievement: string, idx: number) => (
-                                        <div key={idx} className="flex items-start gap-2">
-                                          <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                                          <span className="text-sm text-secondary">{achievement}</span>
-                                        </div>
-                                      ))}
+                                      <div className="flex items-start gap-2">
+                                        <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                                        <span className="text-sm text-secondary">{exp.star.result}</span>
+                                      </div>
                                     </div>
                                   </div>
                                 )}
 
                                 {/* Core Technologies - Simplified */}
                                 {exp.technologies && exp.technologies.length > 0 && (
-                                  <div>
+                                  <div className="mb-4">
                                     <div className="flex flex-wrap gap-2">
                                       {exp.technologies.slice(0, 5).map((tech: string, idx: number) => (
                                         <span 
@@ -782,6 +801,37 @@ function App() {
                                           +{exp.technologies.length - 5}
                                         </span>
                                       )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Core Competencies */}
+                                {exp.competencies && exp.competencies.length > 0 && (
+                                  <div className="mb-4">
+                                    <div className="flex flex-wrap gap-2">
+                                      {exp.competencies.map((comp: string, idx: number) => (
+                                        <span 
+                                          key={idx}
+                                          className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded border border-gray-200"
+                                        >
+                                          {comp}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Soft Skills */}
+                                {exp.soft_skills && exp.soft_skills.length > 0 && (
+                                  <div>
+                                    <h4 className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-2">Soft Skills</h4>
+                                    <div className="space-y-1">
+                                      {exp.soft_skills.map((skill: string, idx: number) => (
+                                        <div key={idx} className="flex items-start gap-2">
+                                          <div className="w-1 h-1 bg-emerald-400 rounded-full mt-2 flex-shrink-0"></div>
+                                          <span className="text-xs text-gray-600 leading-relaxed">{skill}</span>
+                                        </div>
+                                      ))}
                                     </div>
                                   </div>
                                 )}
@@ -848,18 +898,13 @@ function App() {
                               {pub.title}
                             </h3>
                                   
-                                  {/* Authors */}
-                                  <div className="text-secondary mb-3">
-                                    {pub.authors.join(", ")}
-                                  </div>
-                                  
-                                  {/* Venue & Year */}
+                                  {/* Outlet & Date */}
                                   <div className="flex items-center gap-3 flex-wrap">
                                     <span className="text-accent font-semibold">
-                                      {pub.venue}
+                                      {pub.outlet}
                               </span>
                                     <span className="text-secondary">•</span>
-                                    <span className="text-secondary">{pub.year}</span>
+                                    <span className="text-secondary">{pub.date}</span>
                             </div>
                           </div>
                                 
@@ -873,21 +918,21 @@ function App() {
                         
                               {/* Publication Details */}
                               <div className="grid md:grid-cols-3 gap-6 mb-6">
-                                {/* Type & Category */}
+                                {/* Outlet & Date */}
                                 <div>
-                                  <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Type</h4>
+                                  <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Publication</h4>
                                   <div className="space-y-1">
-                                    <div className="text-sm text-secondary">{pub.type}</div>
-                                    <div className="text-sm text-secondary">{pub.category}</div>
+                                    <div className="text-sm text-secondary">{pub.outlet}</div>
+                                    <div className="text-sm text-secondary">{pub.date}</div>
                                   </div>
                                 </div>
                                 
-                                {/* DOI */}
-                                {pub.doi && (
+                                {/* Related Project */}
+                                {pub.related_project_id && (
                                   <div>
-                                    <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">DOI</h4>
-                                    <div className="text-sm text-secondary font-mono break-all">
-                                      {pub.doi}
+                                    <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Related Project</h4>
+                                    <div className="text-sm text-secondary">
+                                      Project {pub.related_project_id}
                                     </div>
                                   </div>
                                 )}
@@ -896,13 +941,13 @@ function App() {
                                 <div>
                                   <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Access</h4>
                           <motion.a
-                            href={pub.pdfUrl}
+                            href="#"
                             target="_blank"
                             rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all duration-200"
                                     whileHover={{ x: 3 }}
                           >
-                                    <span>View Paper</span>
+                                    <span>View Publication</span>
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
@@ -913,10 +958,10 @@ function App() {
                               {/* Quick Stats */}
                               <div className="flex items-center justify-between pt-6 border-t border-gray-100">
                                 <div className="text-sm text-secondary">
-                                  Published in {pub.venue}
+                                  Published in {pub.outlet}
                           </div>
                                 <div className="text-sm text-accent font-medium">
-                                  {pub.type}
+                                  {pub.date}
                         </div>
                               </div>
                             </div>
@@ -940,9 +985,9 @@ function App() {
                         <div className="w-px h-8 bg-gray-300"></div>
                         <div className="text-center">
                           <div className="text-2xl font-bold text-accent">
-                            {currentPortfolioData.publications.filter((pub: any) => pub.type === 'Conference Paper').length}
+                            {currentPortfolioData.publications.filter((pub: any) => pub.outlet.includes('IEEE')).length}
                           </div>
-                          <div className="text-sm text-secondary">Conference Papers</div>
+                          <div className="text-sm text-secondary">IEEE Papers</div>
                         </div>
                         <div className="w-px h-8 bg-gray-300"></div>
                         <div className="text-center">
@@ -956,6 +1001,8 @@ function App() {
                   </div>
                 </div>
               </motion.div>
+
+
 
               {/* Premium Contact Section */}
               <motion.div

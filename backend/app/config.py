@@ -71,20 +71,8 @@ class Settings(BaseModel):
         description="Google model to use",
     )
 
-    # LangChain Configuration
-    langchain_api_key: str = Field(
-        default_factory=lambda: os.getenv("LANGCHAIN_API_KEY", ""),
-        description="LangChain API key",
-    )
-    langchain_tracing_v2: bool = Field(
-        default_factory=lambda: os.getenv("LANGCHAIN_TRACING_V2", "false").lower()
-        == "true",
-        description="Enable LangChain tracing v2",
-    )
-    langchain_project: str = Field(
-        default_factory=lambda: os.getenv("LANGCHAIN_PROJECT", "portfolio-backend"),
-        description="LangChain project name",
-    )
+    # LangChain Configuration (Core framework - no external API needed)
+    # Note: We use LangChain for AI agent orchestration, not LangSmith observability
 
     # FastAPI Configuration
     cors_origins: List[str] = Field(
@@ -126,7 +114,14 @@ class Settings(BaseModel):
     log_level: str = Field(default="INFO", description="Logging level")
     log_format: str = Field(
         default="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        description="Log format",
+        description="Log format (legacy - now using structured JSON)",
+    )
+    log_to_file: bool = Field(default=True, description="Enable file logging")
+    log_rotation_size: int = Field(
+        default=10 * 1024 * 1024, description="Log file rotation size in bytes"
+    )
+    log_retention_days: int = Field(
+        default=30, description="Log retention period in days"
     )
 
     @property
@@ -141,50 +136,23 @@ class Settings(BaseModel):
 
     @property
     def has_langchain_api(self) -> bool:
-        """Check if LangChain API is configured"""
-        return bool(self.langchain_api_key)
+        """Check if LangChain is available (always true since we use core framework)"""
+        return True
 
 
 # Global settings instance
 settings = Settings()
 
 
-# Configure logging
-def setup_logging():
-    """Setup comprehensive logging configuration"""
-    log_level = getattr(logging, settings.log_level.upper(), logging.INFO)
-
-    # Create logs directory if it doesn't exist
-    logs_dir = backend_dir / "logs"
-    logs_dir.mkdir(exist_ok=True)
-
-    # Configure logging
-    logging.basicConfig(
-        level=log_level,
-        format=settings.log_format,
-        handlers=[
-            logging.StreamHandler(),  # Console handler
-            logging.FileHandler(logs_dir / "app.log"),  # File handler
-        ],
-    )
-
-    # Set specific loggers
-    logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
-    logging.getLogger("uvicorn.error").setLevel(logging.INFO)
-
-    logger = logging.getLogger(__name__)
-    logger.info(f"Logging: {settings.log_level} -> {logs_dir}")
-
-
-# Initialize logging
-setup_logging()
+# Note: Logging is now configured in app/logger.py using structured logging
+# This legacy setup_logging function is kept for compatibility but not used
 
 # Simplified status logging
 logger = logging.getLogger(__name__)
 api_status = "[OK]" if settings.has_google_api else "[FAIL]"
 debug_status = "[DEV]" if settings.debug else "[PROD]"
 logger.info(
-    f"{debug_status} Portfolio Backend | API: {api_status} | Model: {settings.google_model}"
+    f"{debug_status} Portfolio Backend | API: {api_status} | Model: {settings.google_model} | LangChain: [OK]"
 )
 if settings.debug:
     logger.info(f"CORS: {', '.join(settings.cors_origins)}")

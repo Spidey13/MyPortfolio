@@ -71,6 +71,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
       { id: 'about', title: 'About Me', subtitle: 'View profile and background', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
       { id: 'projects', title: 'Projects', subtitle: 'View featured projects', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
       { id: 'experience', title: 'Experience', subtitle: 'View work history', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6' },
+
       { id: 'publications', title: 'Publications', subtitle: 'View research publications', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
       { id: 'contact', title: 'Contact', subtitle: 'Get in touch', icon: 'M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' }
     ]
@@ -99,19 +100,19 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
     // Project commands
     if (portfolioData?.projects) {
       portfolioData.projects.forEach((project: any) => {
-        // Create keywords from title, description, and technologies
+        // Create keywords from title, situation, and technologies
         const keywords = [
           ...project.title.toLowerCase().split(' '),
-          ...project.description.toLowerCase().split(' '),
+          ...project.star.situation.toLowerCase().split(' '),
           ...(project.technologies || []).map((tech: string) => tech.toLowerCase()),
           ...project.title.toLowerCase().split(' ').map((word: string) => word.replace(/[^a-z]/g, '')), // Remove special chars
-          ...project.description.toLowerCase().split(' ').map((word: string) => word.replace(/[^a-z]/g, ''))
+          ...project.star.situation.toLowerCase().split(' ').map((word: string) => word.replace(/[^a-z]/g, ''))
         ].filter((word: string) => word.length > 2) // Only keep words longer than 2 chars
 
         commands.push({
           id: `project-${project.id}`,
           title: project.title,
-          subtitle: project.description.substring(0, 60) + '...',
+          subtitle: project.star.situation.substring(0, 60) + '...',
           category: 'Projects',
           icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
           keywords: keywords,
@@ -131,15 +132,15 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
     if (portfolioData?.experience) {
       portfolioData.experience.forEach((exp: any) => {
         const keywords = [
-          ...exp.position.toLowerCase().split(' '),
+          ...(exp.role || exp.position || '').toLowerCase().split(' '),
           ...exp.company.toLowerCase().split(' '),
-          ...exp.description.toLowerCase().split(' '),
+          ...exp.star.situation.toLowerCase().split(' '),
           ...(exp.technologies || []).map((tech: string) => tech.toLowerCase())
         ].filter((word: string) => word.length > 2)
 
         commands.push({
           id: `exp-${exp.id}`,
-          title: `${exp.position} at ${exp.company}`,
+          title: `${exp.role || exp.position} at ${exp.company}`,
           subtitle: exp.duration,
           category: 'Experience',
           icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6',
@@ -160,14 +161,14 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
       portfolioData.publications.forEach((pub: any) => {
         const keywords = [
           ...pub.title.toLowerCase().split(' '),
-          ...(pub.authors || []).map((author: string) => author.toLowerCase()),
-          ...(pub.venue || '').toLowerCase().split(' ')
+          ...pub.outlet.toLowerCase().split(' '),
+          ...pub.date.toLowerCase().split(' ')
         ].filter((word: string) => word.length > 2)
 
         commands.push({
           id: `pub-${pub.id}`,
           title: pub.title,
-          subtitle: `${pub.year} • ${pub.type}`,
+          subtitle: `${pub.date} • ${pub.outlet}`,
           category: 'Publications',
           icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
           keywords: keywords,
@@ -181,6 +182,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
         })
       })
     }
+
+
 
     // Skills commands (from projects)
     const skills = new Set<string>()

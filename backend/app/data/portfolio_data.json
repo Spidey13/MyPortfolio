@@ -1,21 +1,27 @@
 {
   "profile": {
     "name": "Prathamesh Pravin More",
-    "title": "Machine Learning Engineer & Full Stack Developer",
-    "summary": "Recent M.S. Data Science graduate specializing in Generative AI, Large Language Models (LLMs), and end-to-end MLOps. Proven expertise in architecting scalable ML systems and delivering measurable business impact.",
+    "title": "AI/ML Engineer & Data Scientist",
+    "summary": "M.S. Data Science graduate specializing in productionizing end-to-end Generative AI and Agentic AI solutions. Proven experience architecting advanced RAG pipelines and deploying full-stack ML applications using Python, LangChain, and MLOps best practices.",
     "location": "Currently seeking full-time opportunities",
     "email": "pramore@iu.edu",
+    "highlights": [
+      "Architected and operationalized end-to-end MLOps pipelines using Docker, MLflow, and DVC that slashed model retraining time by 10x.",
+      "Engineered agentic AI workflows and advanced Retrieval-Augmented Generation (RAG) pipelines using LangChain and vector databases (Pinecone).",
+      "Delivered high-impact results, including a 70% improvement in information retrieval speed and a 94% F1-score in a production-level anomaly detection system.",
+      "Published research on novel algorithms and text-mining frameworks in outlets including IEEE and The Design Journal."
+    ],
     "links": [
       { "type": "github", "url": "https://github.com/Spidey13" },
       { "type": "linkedin", "url": "https://linkedin.com/in/more-prathamesh" },
-      { "type": "scholar", "url": "https://scholar.google.com" },
-      { "type": "resume", "url": "#" }
+      { "type": "publications", "url": "https://scholar.google.com/citations?user=hzA9FxwAAAAJ&hl=en" },
+      { "type": "resume", "url": "https://tinyurl.com/434tnjd9" }
     ]
-  },
+  },  
   "education": {
     "degree": "M.S. in Data Science",
     "university": "Indiana University",
-    "graduation": "2024",
+    "graduation": "2025",
     "gpa": "3.7/4.0",
     "coursework": [
       "Applied Machine Learning",
@@ -32,163 +38,148 @@
       "company": "Indiana University",
       "duration": "05/2024 to 08/2024",
       "location": "Bloomington, IN",
-      "description": "Architected advanced topic modeling pipelines using LDA, NMF, K-Means clustering on 10M+ research abstracts, improving information retrieval speed by 70%.",
-      "achievements": [
-        "Improved information retrieval speed by 70%",
-        "Processed 10M+ research abstracts",
-        "Implemented advanced topic modeling pipelines",
-        "Used LDA, NMF, K-Means clustering techniques"
+      "star": {
+        "situation": "Researchers needed to analyze over 550 design publications for complex DEI themes, a task too large for manual review.",
+        "task": "My goal was to architect an automated and reproducible system to analyze these publications, identify trends, and visualize the findings for a non-technical audience.",
+        "action": "I engineered advanced topic modeling pipelines using LDA, NMF, and K-Means, and built interactive dashboards with Plotly and Dash for temporal analysis.",
+        "result": "The system achieved 93% Topic Coherence, and the modular text-mining framework was accepted for publication in The Design Journal.",
+        "impact": "This automated framework enabled reproducible research at scale and provided stakeholders with a self-service tool to explore complex data, directly contributing to a peer-reviewed publication.",
+        "architecture": "A modular Python framework was chosen for its flexibility in testing various topic modeling algorithms, while Plotly/Dash provided a low-latency solution for interactive web-based data visualization without requiring a heavy frontend stack."
+      },
+      "technologies": ["Python", "LDA", "NMF", "K-Means", "Plotly", "Dash", "Scikit-learn"],
+      "competencies": [
+        "Research & Innovation: Novel Algorithm Development, Academic Research & Publication, Proof-of-Concept Development",
+        "Technical Leadership: End-to-End ML Pipeline Architecture, Performance Optimization",
+        "Problem Solving: Complex System Analysis, Data-Driven Decision Making"
       ],
-      "technologies": ["Python", "LDA", "NMF", "K-Means", "Scikit-learn", "Pandas", "NumPy"]
+      "soft_skills": [
+        "Communication: Technical Documentation, Presentation & Public Speaking",
+        "Innovation: Creative Problem Solving, Design Thinking, Continuous Improvement",
+        "Leadership: Strategic Thinking, Influence & Negotiation"
+      ]
     },
     {
       "id": 2,
-      "role": "Research Assistant",
-      "company": "Indiana University",
-      "duration": "01/2024 to 05/2024",
-      "location": "Bloomington, IN",
-      "description": "Conducted cutting-edge research in Natural Language Processing and Machine Learning, focusing on advanced text analysis and model optimization.",
-      "achievements": [
-        "Published ML research with real-world applications",
-        "Developed novel NLP algorithms",
-        "Collaborated on academic publications",
-        "Mentored undergraduate students"
+      "role": "Machine Learning Engineer Intern",
+      "company": "Dimensionless Technologies",
+      "duration": "05/2023 to 07/2023",
+      "location": "Mumbai, India",
+      "star": {
+        "situation": "As the only technical team member at Dimensionless Technologies, I was responsible for both technical development and direct client communication. The company needed to streamline the processing of industrial documents for tender creation and monitor market trends from news articles.",
+        "task": "I was tasked with building and deploying two separate NLP pipelines while managing all client relationships, requirements gathering, and project delivery as the sole technical representative.",
+        "action": "I implemented an OCR model with a QA system for documents and devised a BERT-based pipeline using AWS for real-time trend analysis. Additionally, I handled all client communications, requirement discussions, and project presentations, translating technical concepts into business value for stakeholders.",
+        "result": "The QA system improved information retrieval speed by 70%, and the trend analysis pipeline achieved a precision of 0.84. Successfully delivered both solutions on time while maintaining excellent client relationships.",
+        "impact": "The OCR solution drastically reduced manual data entry and accelerated the tender creation process, while the news pipeline provided the client with timely market insights for strategic decision-making. My direct client engagement led to additional project opportunities.",
+        "architecture": "An AWS Lambda-based architecture was selected for the news pipeline to create a serverless, event-driven system that was both cost-effective and highly scalable. The OCR system combined Tesseract for text extraction with a semantic search layer for contextual retrieval."
+      },
+      "technologies": ["Python", "BERT", "AWS", "OCR", "NLP", "Trend Monitoring"],
+      "competencies": [
+        "Technical Leadership: End-to-End ML Pipeline Architecture, Production System Design",
+        "Problem Solving: Complex System Analysis, Algorithm Design & Optimization",
+        "Business Impact: Stakeholder Communication, ROI Analysis & Measurement, Cross-Functional Collaboration"
       ],
-      "technologies": ["Python", "TensorFlow", "PyTorch", "NLP", "Research Methodology"]
+      "soft_skills": [
+        "Communication: Technical Documentation, Presentation & Public Speaking, Client Relationship Management",
+        "Leadership: Strategic Thinking, Decision Making Under Pressure, Influence & Negotiation",
+        "Adaptability: Rapid Learning & Skill Acquisition, Change Management, Remote Work Excellence"
+      ]
+    },
+    {
+      "id": 3,
+      "role": "Full Stack Developer Intern",
+      "company": "Benchmark Computer Solutions Pvt. Ltd.",
+      "duration": "08/2022 to 10/2022",
+      "location": "Mumbai, India",
+      "star": {
+        "situation": "The recruitment team was manually screening over 1,000 resumes, a process that was slow, labor-intensive, and prone to inconsistencies.",
+        "task": "My objective was to automate the extraction of structured data from resumes to accelerate the screening process and improve consistency.",
+        "action": "I developed a full-stack Flask application with a RESTful API and engineered advanced NLP modules using SpaCy and Transformers for parsing.",
+        "result": "The application reduced recruiter screening time by 30% and improved the entity extraction F1-score from 0.78 to 0.91.",
+        "impact": "This tool directly improved hiring efficiency, allowing the HR team to focus on higher-quality candidates and significantly shortening the hiring funnel.",
+        "architecture": "A Flask backend was chosen for its lightweight nature and ease of developing RESTful APIs. The NLP module used a hybrid approach, combining rule-based matching with SpaCy for common entities and a fine-tuned Transformer model for more nuanced extractions."
+      },
+      "technologies": ["Python", "Flask", "REST API", "SpaCy", "Transformers", "Active Learning"],
+      "competencies": [
+        "Technical Leadership: Production System Design, Code Review & Mentorship",
+        "Problem Solving: Algorithm Design & Optimization, Root Cause Analysis",
+        "Business Impact: ROI Analysis & Measurement, Project Management"
+      ],
+      "soft_skills": [
+        "Communication: Technical Documentation, Cross-Cultural Collaboration",
+        "Adaptability: Rapid Learning & Skill Acquisition, Agile Methodologies",
+        "Innovation: Creative Problem Solving, Continuous Improvement"
+      ]
     }
   ],
   "projects": [
     {
-      "id": 1,
+      "id": "p1",
       "title": "F1 Race Strategy Simulator",
-      "shortDescription": "ML-powered F1 race strategy optimization with 94% accuracy prediction model",
-      "description": "Developed a comprehensive Formula 1 race strategy simulator using advanced machine learning algorithms to predict optimal pit stop strategies and tire management decisions.",
-      "technologies": ["Python", "XGBoost", "CatBoost", "Scikit-learn", "Pandas", "Data Visualization"],
-      "githubUrl": "https://github.com/Spidey13/f1-strategy-simulator",
-      "achievements": [
-        "94% accuracy in race outcome predictions",
-        "Real-time strategy optimization",
-        "Integration with live F1 data feeds",
-        "Advanced statistical modeling"
-      ],
-      "metrics": {
-        "accuracy": "94%",
-        "data_points": "10K+ races analyzed",
-        "performance": "Real-time processing"
+      "github_url": "#",
+      "star": {
+        "situation": "F1 race outcomes depend on complex strategic decisions (e.g., pit stops) that are difficult to optimize under dynamic, high-stakes race conditions.",
+        "task": "The goal was to engineer a high-fidelity Digital Twin to model race dynamics, simulate entire races, and identify optimal strategies.",
+        "action": "I used CatBoost and XGBoost on high-frequency telemetry data to model lap times and tire degradation. The entire system was operationalized with an end-to-end MLOps pipeline using MLflow, Docker, and FastAPI, serving insights to a Streamlit dashboard.",
+        "result": "The system accurately predicted critical race variables and provided actionable strategic insights, demonstrating a complete, production-ready MLOps workflow.",
+        "impact": "This tool allows for powerful 'what-if' analysis, enabling a user to test different strategies against simulated competitors to find the optimal path to victory, moving beyond simple heuristics to data-driven decision-making.",
+        "architecture": "A multi-agent simulation architecture was designed, where each 'driver' agent makes decisions based on the output of predictive models. The system was decoupled with a FastAPI backend for the core simulation engine and a Streamlit front-end for interactive analysis."
       },
-      "category": "Machine Learning",
+      "technologies": ["CatBoost", "XGBoost", "MLflow", "DVC", "Docker", "FastAPI", "Streamlit"],
       "featured": true
     },
     {
-      "id": 2,
+      "id": "p2",
       "title": "Wafer Fault Detection System",
-      "shortDescription": "Computer vision system for semiconductor wafer defect classification",
-      "description": "Built an automated wafer fault detection system using computer vision and deep learning to classify semiconductor manufacturing defects with high precision.",
-      "technologies": ["Python", "Computer Vision", "Deep Learning", "OpenCV", "Classification Algorithms"],
-      "githubUrl": "https://github.com/Spidey13/wafer-fault-detection",
-      "achievements": [
-        "Automated defect classification",
-        "Reduced manual inspection time",
-        "High precision fault detection",
-        "Industrial-grade computer vision"
-      ],
-      "metrics": {
-        "precision": "High",
-        "processing_speed": "Real-time",
-        "defect_types": "Multiple classifications"
+      "github_url": "#",
+      "star": {
+        "situation": "In semiconductor manufacturing, the rapid and accurate detection of wafer defects from high-dimensional sensor data is essential to maintain production yield.",
+        "task": "I was tasked with building a high-precision, automated anomaly detection system with a full MLOps lifecycle for continuous monitoring and retraining.",
+        "action": "I engineered a pipeline using XGBoost and Random Forest on sensor data (200+ features) and integrated a real-time model monitoring solution with proactive data drift detection.",
+        "result": "The system successfully classified wafer defects with a 94% F1-score and the MLOps architecture slashed model retraining time by 10x.",
+        "impact": "This system helps prevent costly manufacturing errors by providing early warnings of production anomalies, leading to a significant reduction in wasted materials and an increase in production yield.",
+        "architecture": "The MLOps pipeline was built using MLflow for experiment tracking, DVC for data versioning, and Docker for containerization. A Flask API served the model, which included a separate monitoring module to check for data drift against a baseline schema."
       },
-      "category": "Computer Vision",
+      "technologies": ["XGBoost", "Random Forest", "MLflow", "DVC", "Docker", "Flask", "OpenCV"],
       "featured": true
     },
     {
-      "id": 3,
-      "title": "MLOps Pipeline Architecture",
-      "shortDescription": "End-to-end MLOps system with automated model training and deployment",
-      "description": "Designed and implemented a comprehensive MLOps pipeline featuring automated model training, validation, deployment, and monitoring with CI/CD integration.",
-      "technologies": ["Python", "Docker", "Kubernetes", "MLflow", "CI/CD", "Model Monitoring"],
-      "githubUrl": "https://github.com/Spidey13/mlops-pipeline",
-      "achievements": [
-        "10x faster model retraining time",
-        "Automated deployment pipeline",
-        "99.5% system uptime",
-        "Comprehensive model monitoring"
-      ],
-      "metrics": {
-        "speed_improvement": "10x faster training",
-        "uptime": "99.5%",
-        "automation": "Fully automated"
+      "id": "p3",
+      "title": "Audio-Lyric Emotional Alignment",
+      "github_url": "#",
+      "star": {
+        "situation": "Understanding the emotional congruence between a song's music (audio) and its lyrics (text) is a complex, multimodal AI challenge that simple recommendation engines fail to capture.",
+        "task": "The objective was to build an autonomous agent that could reason about both modalities to quantify this alignment and provide richer contextual understanding of song composition.",
+        "action": "I engineered an agentic AI workflow using LangChain to automate the analysis, implementing a RAG pipeline with Pinecone to enrich LLM context and using Sentence Transformers and OpenL3 for multimodal analysis.",
+        "result": "The system successfully analyzed emotion trends across genres and the use of generative models boosted downstream classification accuracy to 92%.",
+        "impact": "This project serves as a proof-of-concept for advanced, emotion-aware music recommendation systems that can provide users with more nuanced and personalized playlists based on the true 'vibe' of a song.",
+        "architecture": "A reasoning-and-acting (ReAct) agent was designed in LangChain. The agent was equipped with tools to fetch lyrics, generate text embeddings (Sentence Transformers), generate audio embeddings (OpenL3), and perform similarity analysis. The entire workflow was orchestrated to provide a final congruence score and summary."
       },
-      "category": "MLOps",
+      "technologies": ["LangChain", "LLMs", "RAG", "Sentence Transformers", "OpenL3", "PyTorch"],
       "featured": true
     }
   ],
   "skills": {
-    "programming": [
-      { "name": "Python", "level": "Expert", "years": 4 },
-      { "name": "JavaScript", "level": "Advanced", "years": 3 },
-      { "name": "TypeScript", "level": "Advanced", "years": 2 },
-      { "name": "SQL", "level": "Advanced", "years": 3 },
-      { "name": "R", "level": "Intermediate", "years": 2 }
-    ],
-    "machine_learning": [
-      { "name": "Scikit-learn", "level": "Expert" },
-      { "name": "XGBoost", "level": "Expert" },
-      { "name": "CatBoost", "level": "Expert" },
-      { "name": "TensorFlow", "level": "Advanced" },
-      { "name": "PyTorch", "level": "Advanced" },
-      { "name": "MLflow", "level": "Advanced" }
-    ],
-    "web_development": [
-      { "name": "React", "level": "Advanced" },
-      { "name": "FastAPI", "level": "Advanced" },
-      { "name": "Node.js", "level": "Intermediate" },
-      { "name": "RESTful APIs", "level": "Advanced" }
-    ],
-    "data_tools": [
-      { "name": "Pandas", "level": "Expert" },
-      { "name": "NumPy", "level": "Expert" },
-      { "name": "Matplotlib", "level": "Advanced" },
-      { "name": "Seaborn", "level": "Advanced" }
-    ],
-    "cloud_devops": [
-      { "name": "Docker", "level": "Advanced" },
-      { "name": "Kubernetes", "level": "Intermediate" },
-      { "name": "CI/CD", "level": "Advanced" },
-      { "name": "Git", "level": "Expert" }
-    ]
+    "languages_and_tools": ["Python", "R", "SQL", "Java", "C++", "Scala", "Spark", "Hadoop", "Airflow"],
+    "databases": ["MySQL", "PostgreSQL", "MongoDB", "Firebase", "Pinecone"],
+    "ml_and_nlp": ["Transformers", "LLMs", "LangChain", "RAG", "PyTorch", "TensorFlow", "Scikit-learn", "SpaCy", "NLTK", "XGBoost", "CatBoost"],
+    "cloud_and_mlops": ["AWS (S3, SageMaker, ECS)", "Azure", "MLflow", "DVC", "Kubeflow", "Docker", "Kubernetes", "CI/CD", "FastAPI"],
+    "visualization": ["Plotly", "Dash", "Streamlit", "Matplotlib", "Seaborn", "Power BI", "Tableau"]
   },
+
   "publications": [
     {
       "id": 1,
-      "title": "Advanced Topic Modeling for Large-Scale Research Analytics",
-      "authors": ["Prathamesh More", "Dr. Research Advisor"],
-      "journal": "Journal of Machine Learning Research",
-      "year": 2024,
-      "type": "Journal Article",
-      "description": "Novel approach to topic modeling on massive research datasets with improved information retrieval capabilities.",
-      "keywords": ["Topic Modeling", "NLP", "Information Retrieval", "Machine Learning"],
-      "impact": "70% improvement in information retrieval speed"
+      "title": "Modular text-mining framework for DEI themes",
+      "outlet": "The Design Journal (Taylor & Francis)",
+      "date": "2025",
+      "related_project_id": null
     },
     {
       "id": 2,
-      "title": "MLOps Best Practices for Production Machine Learning Systems",
-      "authors": ["Prathamesh More"],
-      "conference": "International Conference on Machine Learning Systems",
-      "year": 2024,
-      "type": "Conference Paper",
-      "description": "Comprehensive study on MLOps implementation strategies for scalable production ML systems.",
-      "keywords": ["MLOps", "Production ML", "System Architecture", "Scalability"],
-      "impact": "10x model retraining time reduction methodology"
+      "title": "Novel extractive summarization algorithm",
+      "outlet": "IEEE CONIT 2023",
+      "date": "2023",
+      "related_project_id": "p4"
     }
-  ],
-  "core_competencies": [
-    "Full-Stack Development",
-    "End-to-End Project Ownership", 
-    "AI/ML Systems Engineering",
-    "Cross-functional Communication",
-    "API Development & MLOps",
-    "Data Science & Analytics",
-    "Computer Vision",
-    "Natural Language Processing"
   ]
 }

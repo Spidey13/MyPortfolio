@@ -10,7 +10,7 @@ from enum import Enum
 class LinkType(str, Enum):
     github = "github"
     linkedin = "linkedin"
-    scholar = "scholar"
+    publications = "publications"
     resume = "resume"
     website = "website"
 
@@ -25,7 +25,8 @@ class Profile(BaseModel):
     title: str = Field(..., min_length=1, max_length=200)
     summary: str = Field(..., min_length=10, max_length=1000)
     location: str = Field(..., min_length=1, max_length=200)
-    email: str = Field(..., regex=r'^[^@]+@[^@]+\.[^@]+$')
+    email: str = Field(..., pattern=r"^[^@]+@[^@]+\.[^@]+$")
+    highlights: List[str] = Field(..., min_items=1)
     links: List[Link] = Field(..., min_items=1)
 
 
@@ -37,15 +38,25 @@ class Education(BaseModel):
     coursework: List[str] = Field(default=[])
 
 
+class StarFormat(BaseModel):
+    situation: str = Field(..., min_length=10, max_length=1000)
+    task: str = Field(..., min_length=10, max_length=1000)
+    action: str = Field(..., min_length=10, max_length=2000)
+    result: str = Field(..., min_length=10, max_length=1000)
+    impact: str = Field(..., min_length=10, max_length=1000)
+    architecture: str = Field(..., min_length=10, max_length=1000)
+
+
 class Experience(BaseModel):
     id: int = Field(..., gt=0)
     role: str = Field(..., min_length=1, max_length=200)
     company: str = Field(..., min_length=1, max_length=200)
     duration: str = Field(..., min_length=1, max_length=100)
     location: str = Field(..., min_length=1, max_length=200)
-    description: str = Field(..., min_length=10, max_length=2000)
-    achievements: List[str] = Field(..., min_items=1)
+    star: StarFormat
     technologies: List[str] = Field(..., min_items=1)
+    competencies: Optional[List[str]] = Field(default=[])
+    soft_skills: Optional[List[str]] = Field(default=[])
 
 
 class ProjectMetrics(BaseModel):
@@ -61,21 +72,17 @@ class ProjectMetrics(BaseModel):
 
 
 class Project(BaseModel):
-    id: int = Field(..., gt=0)
+    id: str = Field(..., min_length=1, max_length=10)
     title: str = Field(..., min_length=1, max_length=200)
-    shortDescription: str = Field(..., min_length=10, max_length=500)
-    description: str = Field(..., min_length=20, max_length=2000)
+    github_url: str = Field(..., min_length=1)
+    star: StarFormat
     technologies: List[str] = Field(..., min_items=1)
-    githubUrl: str = Field(..., min_length=1)
-    achievements: List[str] = Field(..., min_items=1)
-    metrics: ProjectMetrics
-    category: str = Field(..., min_length=1, max_length=100)
     featured: bool = Field(default=False)
 
 
 class Skill(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
-    level: str = Field(..., regex=r'^(Beginner|Intermediate|Advanced|Expert)$')
+    level: str = Field(..., pattern=r"^(Beginner|Intermediate|Advanced|Expert)$")
     years: Optional[int] = Field(None, ge=0, le=20)
 
 
@@ -84,36 +91,50 @@ class SkillCategory(BaseModel):
     level: str
 
 
+class CompetencyCategory(BaseModel):
+    category: str = Field(..., min_length=1, max_length=100)
+    skills: List[str] = Field(..., min_items=1)
+
+
 class Skills(BaseModel):
-    programming: List[Skill] = Field(..., min_items=1)
-    machine_learning: List[SkillCategory] = Field(..., min_items=1)
-    web_development: List[SkillCategory] = Field(..., min_items=1)
-    data_tools: List[SkillCategory] = Field(..., min_items=1)
-    cloud_devops: List[SkillCategory] = Field(..., min_items=1)
+    languages_and_tools: List[str] = Field(..., min_items=1)
+    databases: List[str] = Field(..., min_items=1)
+    ml_and_nlp: List[str] = Field(..., min_items=1)
+    cloud_and_mlops: List[str] = Field(..., min_items=1)
+    visualization: List[str] = Field(..., min_items=1)
+
+
+class CoreCompetencies(BaseModel):
+    technical_leadership: CompetencyCategory
+    problem_solving: CompetencyCategory
+    research_innovation: CompetencyCategory
+    business_impact: CompetencyCategory
+
+
+class SoftSkills(BaseModel):
+    communication: CompetencyCategory
+    adaptability: CompetencyCategory
+    leadership: CompetencyCategory
+    innovation: CompetencyCategory
 
 
 class Publication(BaseModel):
     id: int = Field(..., gt=0)
     title: str = Field(..., min_length=1, max_length=300)
-    authors: List[str] = Field(..., min_items=1)
-    journal: Optional[str] = None
-    conference: Optional[str] = None
-    year: int = Field(..., ge=2020, le=2025)
-    type: str = Field(..., regex=r'^(Journal Article|Conference Paper|Book Chapter|Preprint)$')
-    description: str = Field(..., min_length=10, max_length=1000)
-    keywords: List[str] = Field(..., min_items=1)
-    impact: str = Field(..., min_length=1, max_length=500)
+    outlet: str = Field(..., min_length=1, max_length=200)
+    date: str = Field(..., min_length=1, max_length=50)
+    related_project_id: Optional[str] = None
 
 
 class PortfolioData(BaseModel):
     """Complete portfolio data model with validation"""
+
     profile: Profile
     education: Education
     experience: List[Experience] = Field(..., min_items=1)
     projects: List[Project] = Field(..., min_items=1)
     skills: Skills
     publications: List[Publication] = Field(..., min_items=1)
-    core_competencies: List[str] = Field(..., min_items=1)
 
     class Config:
         extra = "forbid"  # Don't allow extra fields
@@ -149,6 +170,7 @@ class SummaryData(BaseModel):
 
 class AnalysisResult(BaseModel):
     """Complete analysis result from AI"""
+
     kanban_data: KanbanData
     summary_data: SummaryData
     match_score: str

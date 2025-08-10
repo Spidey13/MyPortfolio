@@ -33,6 +33,9 @@ const Navbar: React.FC<NavbarProps> = ({ className = '', onNavigate, portfolioDa
     setIsAnalyzing(true);
     
     try {
+      // Add a small delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const result = await analyzeJobMatch(jobDescription, portfolioData || {});
       console.log('Job Analysis Result:', result);
       
@@ -103,31 +106,37 @@ const Navbar: React.FC<NavbarProps> = ({ className = '', onNavigate, portfolioDa
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
         >
-              {/* Command Center Button - Leftmost */}
+              {/* Quick Search Button - Leftmost */}
               <motion.button
                 onClick={handleCommandCenterClick}
-                className="px-3 py-2 bg-white/5 backdrop-blur-sm border border-white/20 hover:border-white/30 hover:bg-white/10 transition-all duration-200 rounded-full flex items-center gap-2 text-secondary hover:text-primary group mr-4"
+                className="px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/20 hover:border-white/30 hover:bg-white/10 transition-all duration-200 rounded-full flex items-center gap-2 text-secondary hover:text-primary group mr-4"
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.98 }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                {/* Ctrl+K Keys */}
-                <div className="flex items-center gap-1">
-                  <kbd className="text-xs font-mono font-bold px-2 py-1 bg-white/10 border border-white/20 rounded shadow-sm text-secondary group-hover:text-primary transition-colors">
-                    ⌘
-                  </kbd>
-                  <span className="text-secondary/60 text-xs">+</span>
-                  <kbd className="text-xs font-mono font-bold px-2 py-1 bg-white/10 border border-white/20 rounded shadow-sm text-secondary group-hover:text-primary transition-colors">
-                    K
+                {/* Search Icon */}
+                <svg className="w-4 h-4 text-secondary group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                
+                {/* Button Text */}
+                <span className="text-sm font-medium text-secondary group-hover:text-primary transition-colors">
+                  Quick Search
+                </span>
+                
+                {/* Subtle Keyboard Shortcut */}
+                <div className="flex items-center gap-1 opacity-60 group-hover:opacity-80 transition-opacity">
+                  <kbd className="text-xs font-mono px-1.5 py-0.5 bg-white/10 border border-white/20 rounded text-secondary/70">
+                    ⌘K
                   </kbd>
                 </div>
               </motion.button>
 
               {/* Navigation Items */}
               {navItems.map((item, index) => (
-                <motion.button
+            <motion.button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
                   className="px-4 py-2 text-secondary hover:text-accent hover:bg-accent/5 transition-all duration-200 text-base font-light rounded-full"
@@ -162,14 +171,14 @@ const Navbar: React.FC<NavbarProps> = ({ className = '', onNavigate, portfolioDa
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                </div>
+            </div>
                 
                 {/* Text */}
                 <span className="relative z-10 font-medium text-base whitespace-nowrap">
                   AI Job Analysis
                 </span>
               </motion.button>
-        </motion.div>
+          </motion.div>
     </motion.nav>
     </motion.div>
     

@@ -140,7 +140,7 @@ ai-portfolio-website/
 ## 🔧 Configuration
 
 ### Environment Variables
-- `OPENAI_API_KEY` - OpenAI API key for LangChain
+- `GOOGLE_API_KEY` - Google Gemini API key for LangChain AI agents
 - `ANTHROPIC_API_KEY` - Anthropic API key (optional)
 - `CORS_ORIGINS` - Allowed CORS origins
 

@@ -9,6 +9,8 @@ import time
 from typing import Dict, Any
 from langchain.schema import SystemMessage, HumanMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
+
+# Note: get_openai_callback is for cost tracking, not LangSmith observability
 from langchain_community.callbacks.manager import get_openai_callback
 
 from .config import get_settings
@@ -94,8 +96,8 @@ class PortfolioAgent:
                 f"{self.name}: Error processing request: {str(e)}", exc_info=True
             )
 
-                            return {
-                    "response": "I encountered an error while processing your request. Please try again or contact support if the issue persists.",
+            return {
+                "response": "I encountered an error while processing your request. Please try again or contact support if the issue persists.",
                 "viewport_content": {
                     "type": "error",
                     "message": f"Processing error: {str(e)}",
@@ -160,7 +162,7 @@ class ProfileAgent(PortfolioAgent):
         # Get dynamic portfolio data
         profile_summary = portfolio_loader.get_profile_summary()
         skills_summary = portfolio_loader.get_skills_summary()
-        
+
         system_prompt = f"""
 You are the Profile Agent for an AI-powered portfolio.
 Your role is to provide information about personal background, education, skills, and professional summary.
@@ -187,7 +189,7 @@ class ProjectAgent(PortfolioAgent):
     def __init__(self):
         # Get dynamic portfolio data
         projects_summary = portfolio_loader.get_projects_summary()
-        
+
         system_prompt = f"""
 You are the Project Agent for an AI-powered portfolio.
 Your role is to provide detailed information about projects, technologies used, and technical achievements.
@@ -296,7 +298,9 @@ class StrategicFitAgent(PortfolioAgent):
         profile_summary = portfolio_loader.get_profile_summary()
         projects_summary = portfolio_loader.get_projects_summary()
         skills_summary = portfolio_loader.get_skills_summary()
-        
+        core_competencies_summary = portfolio_loader.get_core_competencies_summary()
+        soft_skills_summary = portfolio_loader.get_soft_skills_summary()
+
         system_prompt = f"""
 You are the Strategic Fit Agent for an AI-powered portfolio analysis system.
 Your role is to analyze job requirements against qualifications and provide strategic fit assessments.
@@ -310,21 +314,27 @@ Projects Portfolio:
 Skills Overview:
 {skills_summary}
 
+Core Competencies:
+{core_competencies_summary}
+
+Soft Skills:
+{soft_skills_summary}
+
 When users provide job descriptions, you must return a structured JSON response with this EXACT format:
 
 {{
   "kanban_data": {{
     "technicalSkills": [
-      {{"id": "1", "title": "[Skill Name]", "description": "[How it matches job]", "score": "[0-100]%"}}
+      {{"id": "1", "title": "[Skill Name]", "description": "[How it matches job]", "score": "Excellent/High/Strong/Good/Moderate"}}
     ],
     "relevantExperience": [
-      {{"id": "1", "title": "[Role/Experience]", "description": "[Relevant details]", "score": "High/Medium/Low"}}
+      {{"id": "1", "title": "[Role/Experience]", "description": "[Relevant details]", "score": "Excellent/High/Strong/Good/Moderate"}}
     ],
     "projectEvidence": [
-      {{"id": "1", "title": "[Project Name]", "description": "[How it demonstrates fit]", "score": "Excellent/Strong/Good"}}
+      {{"id": "1", "title": "[Project Name]", "description": "[How it demonstrates fit]", "score": "Excellent/High/Strong/Good/Moderate"}}
     ],
     "quantifiableImpact": [
-      {{"id": "1", "title": "[Metric/Achievement]", "description": "[Impact description]", "score": "High Impact/Medium Impact/Low Impact"}}
+      {{"id": "1", "title": "[Metric/Achievement]", "description": "[Impact description]", "score": "Excellent/High/Strong/Good/Moderate"}}
     ]
   }},
   "summary_data": {{
@@ -386,13 +396,23 @@ Always use the exact project names, technologies, and achievements from the port
                         structured_data = json.loads(json_str)
 
                         # Add the complete structured data to the response
-                        base_response["kanban_data"] = structured_data.get("kanban_data", {})
-                        base_response["summary_data"] = structured_data.get("summary_data", {})
-                        base_response["match_score"] = structured_data.get("match_score", "0%")
-                        
+                        base_response["kanban_data"] = structured_data.get(
+                            "kanban_data", {}
+                        )
+                        base_response["summary_data"] = structured_data.get(
+                            "summary_data", {}
+                        )
+                        base_response["match_score"] = structured_data.get(
+                            "match_score", "0%"
+                        )
+
                         # Keep viewport_content for backward compatibility
-                        base_response["viewport_content"]["kanban_data"] = structured_data.get("kanban_data", {})
-                        base_response["viewport_content"]["summary_data"] = structured_data.get("summary_data", {})
+                        base_response["viewport_content"]["kanban_data"] = (
+                            structured_data.get("kanban_data", {})
+                        )
+                        base_response["viewport_content"]["summary_data"] = (
+                            structured_data.get("summary_data", {})
+                        )
 
                         logger.info(
                             f"Strategic fit analysis parsed successfully with {len(structured_data.get('kanban_data', {}).get('technicalSkills', []))} technical skills"
@@ -407,7 +427,7 @@ Always use the exact project names, technologies, and achievements from the port
                         "technicalSkills": [],
                         "relevantExperience": [],
                         "projectEvidence": [],
-                        "quantifiableImpact": []
+                        "quantifiableImpact": [],
                     }
                     base_response["summary_data"] = {
                         "overallMatch": "Analysis Failed",
@@ -417,11 +437,15 @@ Always use the exact project names, technologies, and achievements from the port
                         "competitiveAdvantages": [],
                         "interviewHighlights": [],
                         "processingTime": f"{processing_time:.1f}s",
-                        "agentUsed": "Strategic Fit Agent"
+                        "agentUsed": "Strategic Fit Agent",
                     }
                     base_response["match_score"] = "0%"
-                    base_response["viewport_content"]["kanban_data"] = base_response["kanban_data"]
-                    base_response["viewport_content"]["summary_data"] = base_response["summary_data"]
+                    base_response["viewport_content"]["kanban_data"] = base_response[
+                        "kanban_data"
+                    ]
+                    base_response["viewport_content"]["summary_data"] = base_response[
+                        "summary_data"
+                    ]
             else:
                 # Regular strategic analysis response
                 base_response["viewport_content"]["type"] = "strategic_analysis"

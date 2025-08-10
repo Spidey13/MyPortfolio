@@ -15,7 +15,13 @@ from collections import defaultdict
 import asyncio
 from datetime import datetime, timedelta
 
-logger = logging.getLogger(__name__)
+from .logger import (
+    logger,
+    performance_logger,
+    security_logger,
+    set_request_id,
+    clear_context,
+)
 
 
 class ErrorHandlingMiddleware(BaseHTTPMiddleware):
@@ -26,25 +32,56 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         start_time = time.time()
+        request_id = set_request_id()
+
+        # Get client IP
+        client_ip = request.client.host if request.client else "unknown"
 
         try:
-            # Log request
-            logger.info(f"Request: {request.method} {request.url.path}")
+            # Log structured request
+            logger.info(
+                "Request started",
+                method=request.method,
+                path=str(request.url.path),
+                query_params=str(request.url.query) if request.url.query else None,
+                client_ip=client_ip,
+                user_agent=request.headers.get("user-agent", "unknown"),
+            )
 
             response = await call_next(request)
 
-            # Log response
+            # Calculate processing time
             process_time = time.time() - start_time
-            logger.info(f"Response: {response.status_code} - {process_time:.3f}s")
+
+            # Log structured response
+            performance_logger.api_request(
+                method=request.method,
+                path=str(request.url.path),
+                duration=process_time,
+                status_code=response.status_code,
+                client_ip=client_ip,
+            )
 
             # Add timing header
             response.headers["X-Process-Time"] = str(process_time)
+            response.headers["X-Request-ID"] = request_id
 
             return response
 
         except HTTPException as e:
             # Handle FastAPI HTTP exceptions
-            logger.warning(f"HTTP Exception: {e.status_code} - {e.detail}")
+            process_time = time.time() - start_time
+
+            logger.warning(
+                "HTTP exception occurred",
+                status_code=e.status_code,
+                detail=e.detail,
+                method=request.method,
+                path=str(request.url.path),
+                client_ip=client_ip,
+                process_time_ms=round(process_time * 1000, 2),
+            )
+
             return JSONResponse(
                 status_code=e.status_code,
                 content={
@@ -52,12 +89,25 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
                     "message": e.detail,
                     "status_code": e.status_code,
                     "timestamp": datetime.utcnow().isoformat(),
+                    "request_id": request_id,
                 },
             )
 
         except Exception as e:
             # Handle unexpected exceptions
-            logger.error(f"Unexpected error: {str(e)}", exc_info=True)
+            process_time = time.time() - start_time
+
+            logger.error(
+                "Unexpected exception in middleware",
+                exception_type=type(e).__name__,
+                exception_message=str(e),
+                method=request.method,
+                path=str(request.url.path),
+                client_ip=client_ip,
+                process_time_ms=round(process_time * 1000, 2),
+                exc_info=True,
+            )
+
             return JSONResponse(
                 status_code=500,
                 content={
@@ -65,14 +115,17 @@ class ErrorHandlingMiddleware(BaseHTTPMiddleware):
                     "message": "An unexpected error occurred",
                     "status_code": 500,
                     "timestamp": datetime.utcnow().isoformat(),
+                    "request_id": request_id,
                 },
             )
+        finally:
+            clear_context()
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Rate limiting middleware"""
 
-    def __init__(self, app: ASGIApp, requests_per_minute: int = 100):
+    def __init__(self, app: ASGIApp, requests_per_minute: int = 20):
         super().__init__(app)
         self.requests_per_minute = requests_per_minute
         self.requests: Dict[str, list] = defaultdict(list)

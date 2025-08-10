@@ -1,20 +1,37 @@
 // Backend connection utilities
+import { log, withPerformance } from './logger';
 
 export const BACKEND_URL = 'http://localhost:8000';
 
 export const testBackendConnection = async (): Promise<boolean> => {
-  try {
-    const response = await fetch(`${BACKEND_URL}/health`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return response.ok;
-  } catch (error) {
-    console.warn('Backend connection failed:', error);
-    return false;
-  }
+  return withPerformance('testBackendConnection', async () => {
+    try {
+      const start = performance.now();
+      const response = await fetch(`${BACKEND_URL}/health`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const duration = performance.now() - start;
+      
+      log.apiCall('GET', '/health', duration, response.status);
+      
+      if (response.ok) {
+        log.info('Backend connection successful');
+      } else {
+        log.warn('Backend health check failed', { status: response.status });
+      }
+      
+      return response.ok;
+    } catch (error) {
+      log.error('Backend connection failed', error as Error, {
+        component: 'backendConnection',
+        action: 'testConnection'
+      });
+      return false;
+    }
+  });
 };
 
 export const analyzeJobMatch = async (jobDescription: string, portfolioData: any) => {
