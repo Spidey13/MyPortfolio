@@ -76,7 +76,7 @@ class Settings(BaseModel):
 
     # FastAPI Configuration
     cors_origins: List[str] = Field(
-        default=["http://localhost:5173", "http://localhost:3000"],
+        default_factory=lambda: _get_cors_origins(),
         description="Allowed CORS origins",
     )
     debug: bool = Field(
@@ -156,6 +156,29 @@ logger.info(
 )
 if settings.debug:
     logger.info(f"CORS: {', '.join(settings.cors_origins)}")
+
+
+def _get_cors_origins() -> List[str]:
+    """Get CORS origins from environment variable or use defaults"""
+    cors_env = os.getenv("CORS_ORIGINS")
+    if cors_env:
+        try:
+            # Parse JSON array from environment variable
+            import json
+
+            origins = json.loads(cors_env)
+            if isinstance(origins, list):
+                return origins
+        except (json.JSONDecodeError, TypeError):
+            # Fallback: split by comma if it's a comma-separated string
+            origins = [
+                origin.strip() for origin in cors_env.split(",") if origin.strip()
+            ]
+            if origins:
+                return origins
+
+    # Default origins for development
+    return ["http://localhost:5173", "http://localhost:3000"]
 
 
 def get_settings() -> Settings:
