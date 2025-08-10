@@ -9,53 +9,28 @@ from typing import List
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
-# Get the directory where this config file is located (backend/app/)
-current_dir = Path(__file__).parent
-backend_dir = current_dir.parent  # backend/
-project_root = backend_dir.parent  # Portfolio/
 
-# Try to load .env from multiple locations (in order of preference):
-# 1. Backend directory (backend/.env)
-# 2. Project root directory (Portfolio/.env)
-# 3. Current working directory (.env)
-env_locations = [backend_dir / ".env", project_root / ".env", Path(".env")]
-
-loaded_env_path = None
-for env_path in env_locations:
-    if env_path.exists():
-        # Load with dotenv first
-        result = load_dotenv(env_path)
-
-        # Check for BOM and handle manually if needed
+def _get_cors_origins() -> List[str]:
+    """Get CORS origins from environment variable or use defaults"""
+    cors_env = os.getenv("CORS_ORIGINS")
+    if cors_env:
         try:
-            with open(env_path, "rb") as f:
-                raw_bytes = f.read()
-                has_bom = raw_bytes.startswith(b"\xef\xbb\xbf")
+            # Parse JSON array from environment variable
+            import json
 
-            if has_bom:
-                with open(
-                    env_path, "r", encoding="utf-8-sig"
-                ) as f:  # utf-8-sig handles BOM
-                    for line_num, line in enumerate(f, 1):
-                        line = line.strip()
-                        if line and "=" in line and not line.startswith("#"):
-                            key, value = line.split("=", 1)
-                            key = key.strip()
-                            value = value.strip()
-                            # Remove any remaining BOM characters
-                            key = key.lstrip("\ufeff")
-                            os.environ[key] = value
-        except Exception:
-            pass  # Silent error handling
+            origins = json.loads(cors_env)
+            if isinstance(origins, list):
+                return origins
+        except (json.JSONDecodeError, TypeError):
+            # Fallback: split by comma if it's a comma-separated string
+            origins = [
+                origin.strip() for origin in cors_env.split(",") if origin.strip()
+            ]
+            if origins:
+                return origins
 
-        loaded_env_path = env_path
-        break
-
-# Only show a single status line
-google_api_status = "[OK]" if os.getenv("GOOGLE_API_KEY") else "[FAIL]"
-print(
-    f"Config: API Key {google_api_status} | Model: {os.getenv('GOOGLE_MODEL', 'gemini-2.0-flash')}"
-)
+    # Default origins for development
+    return ["http://localhost:5173", "http://localhost:3000"]
 
 
 class Settings(BaseModel):
@@ -140,6 +115,55 @@ class Settings(BaseModel):
         return True
 
 
+# Get the directory where this config file is located (backend/app/)
+current_dir = Path(__file__).parent
+backend_dir = current_dir.parent  # backend/
+project_root = backend_dir.parent  # Portfolio/
+
+# Try to load .env from multiple locations (in order of preference):
+# 1. Backend directory (backend/.env)
+# 2. Project root directory (Portfolio/.env)
+# 3. Current working directory (.env)
+env_locations = [backend_dir / ".env", project_root / ".env", Path(".env")]
+
+loaded_env_path = None
+for env_path in env_locations:
+    if env_path.exists():
+        # Load with dotenv first
+        result = load_dotenv(env_path)
+
+        # Check for BOM and handle manually if needed
+        try:
+            with open(env_path, "rb") as f:
+                raw_bytes = f.read()
+                has_bom = raw_bytes.startswith(b"\xef\xbb\xbf")
+
+            if has_bom:
+                with open(
+                    env_path, "r", encoding="utf-8-sig"
+                ) as f:  # utf-8-sig handles BOM
+                    for line_num, line in enumerate(f, 1):
+                        line = line.strip()
+                        if line and "=" in line and not line.startswith("#"):
+                            key, value = line.split("=", 1)
+                            key = key.strip()
+                            value = value.strip()
+                            # Remove any remaining BOM characters
+                            key = key.lstrip("\ufeff")
+                            os.environ[key] = value
+        except Exception:
+            pass  # Silent error handling
+
+        loaded_env_path = env_path
+        break
+
+# Only show a single status line
+google_api_status = "[OK]" if os.getenv("GOOGLE_API_KEY") else "[FAIL]"
+print(
+    f"Config: API Key {google_api_status} | Model: {os.getenv('GOOGLE_MODEL', 'gemini-2.0-flash')}"
+)
+
+
 # Global settings instance
 settings = Settings()
 
@@ -156,29 +180,6 @@ logger.info(
 )
 if settings.debug:
     logger.info(f"CORS: {', '.join(settings.cors_origins)}")
-
-
-def _get_cors_origins() -> List[str]:
-    """Get CORS origins from environment variable or use defaults"""
-    cors_env = os.getenv("CORS_ORIGINS")
-    if cors_env:
-        try:
-            # Parse JSON array from environment variable
-            import json
-
-            origins = json.loads(cors_env)
-            if isinstance(origins, list):
-                return origins
-        except (json.JSONDecodeError, TypeError):
-            # Fallback: split by comma if it's a comma-separated string
-            origins = [
-                origin.strip() for origin in cors_env.split(",") if origin.strip()
-            ]
-            if origins:
-                return origins
-
-    # Default origins for development
-    return ["http://localhost:5173", "http://localhost:3000"]
 
 
 def get_settings() -> Settings:
