@@ -47,7 +47,8 @@ function App() {
         setPortfolioLoading(true);
         setPortfolioError(null);
         
-        const response = await fetch('http://localhost:8000/api/v1/portfolio-data');
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const response = await fetch(`${apiBaseUrl}/api/v1/portfolio-data`);
         
         if (!response.ok) {
           throw new Error(`Failed to load portfolio data: ${response.status}`);
@@ -114,7 +115,8 @@ function App() {
     }, 200);
     
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/chat', {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await axios.post(`${apiBaseUrl}/api/v1/chat`, {
         message: userInput,
         context: { portfolioData: currentPortfolioData }
       })
@@ -134,7 +136,8 @@ function App() {
 
     } catch (error) {
       console.error('Chat error:', error)
-      setAiMessage("I apologize, but I'm having trouble connecting to the backend. Please ensure the backend server is running on http://localhost:8000")
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      setAiMessage(`I apologize, but I'm having trouble connecting to the backend. Please ensure the backend server is running on ${apiBaseUrl}`)
       setIsAnalyzing(false);
       setAnalysisProgress(0);
       clearInterval(progressInterval);
