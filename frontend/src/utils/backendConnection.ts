@@ -1,7 +1,7 @@
 // Backend connection utilities
 import { log, withPerformance } from './logger';
 
-export const BACKEND_URL = 'http://localhost:8000';
+export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 export const testBackendConnection = async (): Promise<boolean> => {
   return withPerformance('testBackendConnection', async () => {

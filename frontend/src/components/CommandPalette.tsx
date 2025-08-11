@@ -55,7 +55,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
       
     } catch (error) {
       console.error('AI chat error:', error)
-      setAiResponse("I apologize, but I'm having trouble connecting to the AI backend. Please ensure the backend server is running on http://localhost:8000")
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      setAiResponse(`I apologize, but I'm having trouble connecting to the AI backend. Please ensure the backend server is running on ${apiBaseUrl}`)
       setShowAIResponse(true)
     } finally {
       setIsProcessingAI(false)

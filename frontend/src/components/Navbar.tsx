@@ -56,7 +56,8 @@ const Navbar: React.FC<NavbarProps> = ({ className = '', onNavigate, portfolioDa
       
     } catch (error) {
       console.warn('Backend connection failed:', error);
-      alert('⚠️ Backend offline - Please ensure the backend server is running on localhost:8000');
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      alert(`⚠️ Backend offline - Please ensure the backend server is running on ${apiBaseUrl}`);
     } finally {
       setIsAnalyzing(false);
     }
