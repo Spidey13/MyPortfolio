@@ -16,19 +16,24 @@ import Navbar from './components/Navbar';
 import ProjectDetailModal from './components/ProjectDetailModal';
 import StrategicFitAnalysisSection from './components/StrategicFitAnalysisSection';
 
+// Static data and progressive loading
+import { STATIC_PORTFOLIO_DATA, type PortfolioData } from './data/staticPortfolioData';
+import { useBackendStatus } from './hooks/useBackendStatus';
+import { getEnhancedFallbackResponse } from './data/aiFallbackResponses';
+
 // Removed scroll animation hooks - using direct whileInView animations instead
-
-
-// Portfolio data will be loaded dynamically from backend
 
 function App() {
   // Core state
   const [showHero, setShowHero] = useState(true);
   const [userInput, setUserInput] = useState('');
   const [aiMessage, setAiMessage] = useState("");
-  const [currentPortfolioData, setCurrentPortfolioData] = useState<any>(null);
-  const [portfolioLoading, setPortfolioLoading] = useState(true);
-  const [portfolioError, setPortfolioError] = useState<string | null>(null);
+  
+  // Portfolio data - initialize with static data for instant load
+  const [currentPortfolioData, setCurrentPortfolioData] = useState<PortfolioData>(STATIC_PORTFOLIO_DATA);
+  
+  // Backend status management
+  const { statusInfo, isReady: isAIReady, isWarming } = useBackendStatus();
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
@@ -40,40 +45,43 @@ function App() {
   const [showStrategicAnalysis, setShowStrategicAnalysis] = useState(false);
   const [strategicAnalysisResult, setStrategicAnalysisResult] = useState<any>(null);
 
-  // Load portfolio data on component mount
+  // Background data sync - non-blocking, updates silently when backend is ready
   useEffect(() => {
-    const fetchPortfolioData = async () => {
+    const syncWithBackend = async () => {
       try {
-        setPortfolioLoading(true);
-        setPortfolioError(null);
-        
         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
         const response = await fetch(`${apiBaseUrl}/api/v1/portfolio-data`);
         
         if (!response.ok) {
-          throw new Error(`Failed to load portfolio data: ${response.status}`);
+          throw new Error(`Failed to sync portfolio data: ${response.status}`);
         }
         
-        const data = await response.json();
-        setCurrentPortfolioData(data);
-        log.info('Portfolio data loaded successfully', { 
-          projectCount: data.projects?.length,
-          experienceCount: data.experience?.length 
+        const freshData = await response.json();
+        
+        // Silent update - no loading states, no UI blocking
+        setCurrentPortfolioData(freshData);
+        
+        log.info('Portfolio data synced with backend', { 
+          projectCount: freshData.projects?.length,
+          experienceCount: freshData.experience?.length,
+          wasCached: false 
         });
         
       } catch (error) {
-        log.error('Failed to load portfolio data', error as Error, {
+        // Graceful fallback - static data continues to work
+        log.info('Using static portfolio data - backend sync failed', {
+          error: error instanceof Error ? error.message : 'Unknown error',
           component: 'App',
-          action: 'fetchPortfolioData'
+          action: 'syncWithBackend'
         });
-        setPortfolioError('Failed to load portfolio data. Please try again later.');
-      } finally {
-        setPortfolioLoading(false);
       }
     };
 
-    fetchPortfolioData();
-  }, []);
+    // Only attempt sync when backend is warming up or ready
+    if (isAIReady || isWarming) {
+      syncWithBackend();
+    }
+  }, [isAIReady, isWarming]);
 
   // Handle smooth scrolling to sections
   const scrollToSection = (sectionId: string) => {
@@ -96,9 +104,17 @@ function App() {
     }
   }
 
-  // Handle AI chat with enhanced loading states
+  // Handle AI chat with smart fallbacks during cold start
   const handleSendMessage = async () => {
     if (!userInput.trim() || isAnalyzing) return;
+    
+    // Check if AI is ready - if not, use fallback response
+    if (!isAIReady) {
+      const fallbackResponse = getEnhancedFallbackResponse(userInput);
+      setAiMessage(fallbackResponse);
+      setUserInput('');
+      return;
+    }
     
     setIsAnalyzing(true);
     setAnalysisProgress(0);
@@ -136,8 +152,11 @@ function App() {
 
     } catch (error) {
       console.error('Chat error:', error)
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-      setAiMessage(`I apologize, but I'm having trouble connecting to the backend. Please ensure the backend server is running on ${apiBaseUrl}`)
+      
+      // If AI was supposed to be ready but failed, try fallback
+      const fallbackResponse = getEnhancedFallbackResponse(userInput);
+      setAiMessage(fallbackResponse + '\n\n*Note: Experiencing technical difficulties. The above is based on static data.*');
+      
       setIsAnalyzing(false);
       setAnalysisProgress(0);
       clearInterval(progressInterval);
@@ -259,40 +278,8 @@ function App() {
     };
   }
 
-  // Show loading state while portfolio data is being fetched
-  if (portfolioLoading) {
-  return (
-      <div className="min-h-screen bg-background text-primary flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg text-secondary">Loading portfolio data...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error state if portfolio data failed to load
-  if (portfolioError || !currentPortfolioData) {
-    return (
-      <div className="min-h-screen bg-background text-primary flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-8">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-          </div>
-          <h2 className="text-xl font-bold text-primary mb-2">Could not load portfolio data</h2>
-          <p className="text-secondary mb-6">{portfolioError || 'Please try again later.'}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors"
-          >
-            Refresh Page
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // No more blocking loading screens! 
+  // Portfolio loads instantly with static data, AI features show their own status
 
   return (
     <SmoothScroll>
@@ -1193,102 +1180,7 @@ function App() {
                 </div>
               </motion.div>
 
-              {/* Skills Section */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
-              >
-                <div className="bg-surface rounded-lg p-4 sm:p-6 border border-accent/20">
-                  <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 sm:mb-6">Core Competencies</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {Object.entries({
-                      "Generative AI & LLMs": [
-                        { name: "OpenAI GPT Models", proficiency: 95 },
-                        { name: "LangChain", proficiency: 90 },
-                        { name: "Hugging Face Transformers", proficiency: 85 },
-                        { name: "Prompt Engineering", proficiency: 92 },
-                        { name: "RAG (Retrieval-Augmented Generation)", proficiency: 88 }
-                      ],
-                      "Machine Learning & Modeling": [
-                        { name: "Scikit-learn", proficiency: 95 },
-                        { name: "XGBoost", proficiency: 90 },
-                        { name: "Random Forest", proficiency: 88 },
-                        { name: "Deep Learning (TensorFlow, PyTorch)", proficiency: 85 },
-                        { name: "Feature Engineering", proficiency: 92 }
-                      ],
-                      "Data Engineering & MLOps": [
-                        { name: "Apache Spark", proficiency: 80 },
-                        { name: "Docker", proficiency: 85 },
-                        { name: "MLflow", proficiency: 78 },
-                        { name: "AWS (S3, EC2, Lambda)", proficiency: 82 },
-                        { name: "Data Pipelines", proficiency: 88 }
-                      ],
-                      "Languages & Databases": [
-                        { name: "Python", proficiency: 95 },
-                        { name: "SQL", proficiency: 90 },
-                        { name: "JavaScript", proficiency: 80 },
-                        { name: "R", proficiency: 75 },
-                        { name: "PostgreSQL", proficiency: 85 }
-                      ],
-                      "Web & API Development": [
-                        { name: "FastAPI", proficiency: 88 },
-                        { name: "React", proficiency: 82 },
-                        { name: "REST APIs", proficiency: 90 },
-                        { name: "Node.js", proficiency: 75 },
-                        { name: "Express.js", proficiency: 78 }
-                      ],
-                      "Tools & Frameworks": [
-                        { name: "Git", proficiency: 92 },
-                        { name: "Jupyter", proficiency: 95 },
-                        { name: "Streamlit", proficiency: 90 },
-                        { name: "Plotly", proficiency: 85 },
-                        { name: "Pandas", proficiency: 95 }
-                      ]
-                    }).map(([category, skills], categoryIndex) => (
-                      <motion.div
-                        key={category}
-                        className="space-y-4"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 1.2 + categoryIndex * 0.1 }}
-                      >
-                        <h3 className="text-base sm:text-lg font-semibold text-accent mb-3">{category}</h3>
-                        <div className="space-y-3">
-                          {skills.map((skill: any, skillIndex: number) => (
-                            <motion.div
-                              key={skill.name}
-                              className="group"
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.3, delay: 1.4 + categoryIndex * 0.1 + skillIndex * 0.05 }}
-                            >
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-medium text-primary group-hover:text-accent transition-colors duration-200">
-                                  {skill.name}
-                                </span>
-                                <span className="text-xs text-secondary">{skill.proficiency}%</span>
-                              </div>
-                              <div className="w-full bg-border rounded-full h-2 overflow-hidden">
-                                <motion.div
-                                  className="h-full bg-gradient-to-r from-accent to-accent/70 rounded-full"
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${skill.proficiency}%` }}
-                                  transition={{ 
-                                    duration: 1.2, 
-                                    delay: 1.6 + categoryIndex * 0.1 + skillIndex * 0.05,
-                                    ease: [0.25, 0.46, 0.45, 0.94]
-                                  }}
-                                />
-                              </div>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+             
             </div>
           </motion.main>
         )}
@@ -1382,12 +1274,48 @@ function App() {
           </motion.div>
         )}
 
+        {/* AI Status Indicator */}
+        {!showHero && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="fixed top-20 right-4 lg:top-4 lg:right-4 z-40"
+          >
+            <div className={`px-3 py-2 rounded-lg text-sm font-medium backdrop-blur-sm border ${
+              isAIReady 
+                ? 'bg-green-500/10 border-green-500/20 text-green-400' 
+                : isWarming 
+                  ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400'
+                  : 'bg-red-500/10 border-red-500/20 text-red-400'
+            }`}>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  isAIReady 
+                    ? 'bg-green-400' 
+                    : isWarming 
+                      ? 'bg-yellow-400 animate-pulse'
+                      : 'bg-red-400'
+                }`} />
+                <span>
+                  {isAIReady 
+                    ? 'AI Ready' 
+                    : isWarming 
+                      ? `AI Starting... ${statusInfo.estimatedWaitTime || 60}s`
+                      : 'AI Offline'
+                  }
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Command Palette */}
         <CommandPalette 
           isOpen={showCommandPalette} 
           onClose={() => setShowCommandPalette(false)}
           portfolioData={currentPortfolioData}
           onNavigate={scrollToSection}
+          isAIReady={isAIReady}
         />
         
         {/* Project Detail Modal */}

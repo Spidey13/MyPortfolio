@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { chatWithAI } from '../utils/backendConnection';
+import { getEnhancedFallbackResponse } from '../data/aiFallbackResponses';
 
 interface CommandItem {
   id: string;
@@ -18,9 +19,10 @@ interface CommandPaletteProps {
   onClose: () => void
   portfolioData: any
   onNavigate?: (sectionId: string) => void
+  isAIReady?: boolean
 }
 
-const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfolioData, onNavigate }) => {
+const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfolioData, onNavigate, isAIReady = false }) => {
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isProcessingAI, setIsProcessingAI] = useState(false)
@@ -42,11 +44,20 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
            queryLower.length > 20 // Long queries are likely AI questions
   }
 
-  // Handle AI chat
+  // Handle AI chat with smart fallbacks during cold start
   const handleAIChat = async (question: string) => {
-    setIsProcessingAI(true)
     setShowAIResponse(false)
     setAiResponse('')
+    
+    // Check if AI is ready - if not, use fallback response immediately
+    if (!isAIReady) {
+      const fallbackResponse = getEnhancedFallbackResponse(question);
+      setAiResponse(fallbackResponse);
+      setShowAIResponse(true);
+      return;
+    }
+    
+    setIsProcessingAI(true)
     
     try {
       const result = await chatWithAI(question, portfolioData)
@@ -55,8 +66,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
       
     } catch (error) {
       console.error('AI chat error:', error)
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-      setAiResponse(`I apologize, but I'm having trouble connecting to the AI backend. Please ensure the backend server is running on ${apiBaseUrl}`)
+      
+      // If AI was supposed to be ready but failed, try fallback
+      const fallbackResponse = getEnhancedFallbackResponse(question);
+      setAiResponse(fallbackResponse + '\n\n*Note: Experiencing technical difficulties. The above is based on static data.*');
       setShowAIResponse(true)
     } finally {
       setIsProcessingAI(false)
