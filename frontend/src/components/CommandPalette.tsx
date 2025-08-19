@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { chatWithAI } from '../utils/backendConnection';
 import { getEnhancedFallbackResponse } from '../data/aiFallbackResponses';
+import { trackAIChat, trackFallbackResponse } from '../utils/analytics';
 
 interface CommandItem {
   id: string;
@@ -49,20 +50,32 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
     setShowAIResponse(false)
     setAiResponse('')
     
+    // Track AI chat initiation
+    const queryType = question.toLowerCase().includes('project') ? 'project_query' : 
+                     question.toLowerCase().includes('experience') ? 'experience_query' :
+                     question.toLowerCase().includes('skill') ? 'skill_query' : 'general_query';
+    trackAIChat(queryType);
+    
     // Check if AI is ready - if not, use fallback response immediately
     if (!isAIReady) {
       const fallbackResponse = getEnhancedFallbackResponse(question);
       setAiResponse(fallbackResponse);
       setShowAIResponse(true);
+      trackFallbackResponse(question);
       return;
     }
     
     setIsProcessingAI(true)
+    const startTime = Date.now();
     
     try {
       const result = await chatWithAI(question, portfolioData)
+      const responseTime = Date.now() - startTime;
       setAiResponse(result.response)
       setShowAIResponse(true)
+      
+      // Track successful AI response with timing
+      trackAIChat(queryType, responseTime);
       
     } catch (error) {
       console.error('AI chat error:', error)
@@ -71,6 +84,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, portfo
       const fallbackResponse = getEnhancedFallbackResponse(question);
       setAiResponse(fallbackResponse + '\n\n*Note: Experiencing technical difficulties. The above is based on static data.*');
       setShowAIResponse(true)
+      trackFallbackResponse(question);
     } finally {
       setIsProcessingAI(false)
     }

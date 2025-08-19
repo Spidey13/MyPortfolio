@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { log } from '../utils/logger';
+import { trackBackendStatus } from '../utils/analytics';
 
 export type BackendStatus = 'offline' | 'warming' | 'ready' | 'error';
 
@@ -126,6 +127,9 @@ export function useBackendStatus() {
       warmupStartTime: warmupStartRef.current,
     });
 
+    // Track warming status
+    trackBackendStatus('warming');
+
     log.info('Starting backend warmup process');
 
     // Trigger warmup by calling health endpoint
@@ -178,6 +182,9 @@ export function useBackendStatus() {
         lastChecked: new Date(),
       }));
       
+      // Track offline status
+      trackBackendStatus('offline');
+      
       // Start warmup if not already warming
       if (statusInfo.status !== 'warming') {
         await startWarmup();
@@ -190,11 +197,17 @@ export function useBackendStatus() {
     
     if (aiOk) {
       // Everything is ready!
+      const warmupTime = warmupStartRef.current ? 
+        Math.floor((Date.now() - warmupStartRef.current.getTime()) / 1000) : undefined;
+      
       setStatusInfo({
         status: 'ready',
         message: 'AI features ready!',
         lastChecked: new Date(),
       });
+      
+      // Track ready status with warmup time
+      trackBackendStatus('ready', warmupTime);
       
       // Clear warmup tracking
       warmupStartRef.current = undefined;

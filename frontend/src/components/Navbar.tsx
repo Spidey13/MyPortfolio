@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { analyzeJobMatch } from '../utils/backendConnection';
 import JobAnalysisDrawer from './JobAnalysisDrawer';
+import { trackJobAnalysis, trackSectionView } from '../utils/analytics';
 
 interface NavbarProps {
   className?: string;
@@ -17,6 +18,9 @@ const Navbar: React.FC<NavbarProps> = ({ className = '', onNavigate, portfolioDa
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleNavClick = (sectionId: string) => {
+    // Track section view
+    trackSectionView(sectionId);
+    
     if (onNavigate) {
       onNavigate(sectionId);
     } else {
@@ -39,12 +43,18 @@ const Navbar: React.FC<NavbarProps> = ({ className = '', onNavigate, portfolioDa
   const handleAnalyzeJob = async (jobDescription: string) => {
     setIsAnalyzing(true);
     
+    // Track job analysis initiation
+    trackJobAnalysis();
+    
     try {
       // Add a small delay for better UX
       await new Promise(resolve => setTimeout(resolve, 500));
       
       const result = await analyzeJobMatch(jobDescription, portfolioData || {});
       console.log('Job Analysis Result:', result);
+      
+      // Track successful analysis with match score
+      trackJobAnalysis(typeof result.match_score === 'number' ? result.match_score : undefined);
       
       // Trigger the Kanban board display
       if (onAnalysisComplete) {

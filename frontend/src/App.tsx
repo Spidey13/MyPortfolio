@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { log } from './utils/logger';
 import axios from 'axios';
+import { trackBackendStatus } from './utils/analytics';
 
 // Import profile picture
 import profilePhoto from './assets/pfp.jpg';
