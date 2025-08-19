@@ -1,13 +1,19 @@
 // Analytics utility for custom event tracking
-declare global {
-  interface Window {
-    gtag: (...args: any[]) => void;
-  }
-}
 
 export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventName, parameters);
+  }
+};
+
+// Page view tracking for SPA
+export const trackPageView = (pagePath: string, pageTitle?: string) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    const measurementId = import.meta.env.VITE_GA_ID || 'G-QNFSXQL1DX';
+    window.gtag('config', measurementId, {
+      page_path: pagePath,
+      page_title: pageTitle || document.title
+    });
   }
 };
 
@@ -28,6 +34,8 @@ export const trackJobAnalysis = (matchScore?: number) => {
 };
 
 export const trackSectionView = (sectionName: string) => {
+  // Track as both page view and custom event for better analytics
+  trackPageView(`/${sectionName}`, `${sectionName} - Prathamesh More Portfolio`);
   trackEvent('section_viewed', {
     section: sectionName,
     timestamp: new Date().toISOString()

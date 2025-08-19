@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { log } from './utils/logger';
 import axios from 'axios';
-import { trackBackendStatus } from './utils/analytics';
+import { trackBackendStatus, trackPageView } from './utils/analytics';
 
 // Import profile picture
 import profilePhoto from './assets/pfp.jpg';
@@ -83,6 +83,11 @@ function App() {
       syncWithBackend();
     }
   }, [isAIReady, isWarming]);
+
+  // Track initial page view
+  useEffect(() => {
+    trackPageView('/', 'Prathamesh More - Portfolio');
+  }, []);
 
   // Handle smooth scrolling to sections
   const scrollToSection = (sectionId: string) => {
