@@ -8,7 +8,7 @@
     "highlights": [
       "Architected and operationalized end-to-end MLOps pipelines using Docker, MLflow, and DVC that slashed model retraining time by 10x.",
       "Engineered agentic AI workflows and advanced Retrieval-Augmented Generation (RAG) pipelines using LangChain and vector databases (Pinecone).",
-      "Delivered high-impact results, including a 70% improvement in information retrieval speed and a 94% F1-score in a production-level anomaly detection system.",
+      "Delivered high-impact results, including a 70% improvement in information retrieval speed and a 98% F1-score in a production-level anomaly detection system.",
       "Published research on novel algorithms and text-mining frameworks in outlets including IEEE and The Design Journal."
     ],
     "links": [
@@ -36,7 +36,7 @@
       "id": 1,
       "role": "Data Science Intern",
       "company": "Indiana University",
-      "duration": "05/2024 to 08/2024",
+      "duration": "05/2024 to Present",
       "location": "Bloomington, IN",
       "star": {
         "situation": "Researchers needed to analyze over 550 design publications for complex DEI themes, a task too large for manual review.",
@@ -62,7 +62,7 @@
       "id": 2,
       "role": "Machine Learning Engineer Intern",
       "company": "Dimensionless Technologies",
-      "duration": "05/2023 to 07/2023",
+      "duration": "03/2023 to 07/2023",
       "location": "Mumbai, India",
       "star": {
         "situation": "As the only technical team member at Dimensionless Technologies, I was responsible for both technical development and direct client communication. The company needed to streamline the processing of industrial documents for tender creation and monitor market trends from news articles.",
@@ -88,7 +88,7 @@
       "id": 3,
       "role": "Full Stack Developer Intern",
       "company": "Benchmark Computer Solutions Pvt. Ltd.",
-      "duration": "08/2022 to 10/2022",
+      "duration": "06/2022 to 12/2022",
       "location": "Mumbai, India",
       "star": {
         "situation": "The recruitment team was manually screening over 1,000 resumes, a process that was slow, labor-intensive, and prone to inconsistencies.",
@@ -117,12 +117,12 @@
       "title": "F1 Race Strategy Simulator",
       "github_url": "#",
       "star": {
-        "situation": "F1 race outcomes depend on complex strategic decisions (e.g., pit stops) that are difficult to optimize under dynamic, high-stakes race conditions.",
-        "task": "The goal was to engineer a high-fidelity Digital Twin to model race dynamics, simulate entire races, and identify optimal strategies.",
-        "action": "I used CatBoost and XGBoost on high-frequency telemetry data to model lap times and tire degradation. The entire system was operationalized with an end-to-end MLOps pipeline using MLflow, Docker, and FastAPI, serving insights to a Streamlit dashboard.",
-        "result": "The system accurately predicted critical race variables and provided actionable strategic insights, demonstrating a complete, production-ready MLOps workflow.",
-        "impact": "This tool allows for powerful 'what-if' analysis, enabling a user to test different strategies against simulated competitors to find the optimal path to victory, moving beyond simple heuristics to data-driven decision-making.",
-        "architecture": "A multi-agent simulation architecture was designed, where each 'driver' agent makes decisions based on the output of predictive models. The system was decoupled with a FastAPI backend for the core simulation engine and a Streamlit front-end for interactive analysis."
+        "situation": "F1 race outcomes depend on complex strategic decisions that are difficult to optimize under dynamic, high-stakes race conditions.",
+        "task": "The goal was to build a high-fidelity Digital Twin to model race dynamics, simulate entire races, and identify optimal strategies.",
+        "action": "I engineered a multi-agent simulation using CatBoost and XGBoost on high-frequency telemetry data and operationalized the system with an end-to-end MLOps pipeline using MLflow, Docker, and FastAPI.",
+        "result": "The system accurately modeled critical race variables like tire degradation and lap times, serving actionable strategic insights to an interactive Streamlit dashboard.",
+        "impact": "This tool enables powerful 'what-if' analysis, allowing users to test strategies against simulated competitors to find the optimal path to victory and move beyond simple heuristics to data-driven decision-making.",
+        "architecture": "A multi-agent simulation architecture was designed, where each 'driver' agent makes decisions based on predictive model outputs. The system was decoupled with a FastAPI backend for the core simulation engine and a Streamlit front-end for interactive analysis."
       },
       "technologies": ["CatBoost", "XGBoost", "MLflow", "DVC", "Docker", "FastAPI", "Streamlit"],
       "featured": true
@@ -132,11 +132,11 @@
       "title": "Wafer Fault Detection System",
       "github_url": "#",
       "star": {
-        "situation": "In semiconductor manufacturing, the rapid and accurate detection of wafer defects from high-dimensional sensor data is essential to maintain production yield.",
+        "situation": "In semiconductor manufacturing, accurately detecting wafer defects from high-dimensional sensor data is essential to maintain production yield.",
         "task": "I was tasked with building a high-precision, automated anomaly detection system with a full MLOps lifecycle for continuous monitoring and retraining.",
-        "action": "I engineered a pipeline using XGBoost and Random Forest on sensor data (200+ features) and integrated a real-time model monitoring solution with proactive data drift detection.",
-        "result": "The system successfully classified wafer defects with a 94% F1-score and the MLOps architecture slashed model retraining time by 10x.",
-        "impact": "This system helps prevent costly manufacturing errors by providing early warnings of production anomalies, leading to a significant reduction in wasted materials and an increase in production yield.",
+        "action": "I engineered a classification pipeline using XGBoost and Random Forest and integrated a real-time model monitoring solution with proactive data drift detection.",
+        "result": "The system successfully classified wafer defects with a 98% F1-score and the MLOps architecture slashed model retraining time by 10x.",
+        "impact": "This system prevents costly manufacturing errors by providing early warnings of production anomalies, leading to a significant reduction in wasted materials and an increase in production yield.",
         "architecture": "The MLOps pipeline was built using MLflow for experiment tracking, DVC for data versioning, and Docker for containerization. A Flask API served the model, which included a separate monitoring module to check for data drift against a baseline schema."
       },
       "technologies": ["XGBoost", "Random Forest", "MLflow", "DVC", "Docker", "Flask", "OpenCV"],
@@ -148,13 +148,43 @@
       "github_url": "#",
       "star": {
         "situation": "Understanding the emotional congruence between a song's music (audio) and its lyrics (text) is a complex, multimodal AI challenge that simple recommendation engines fail to capture.",
-        "task": "The objective was to build an autonomous agent that could reason about both modalities to quantify this alignment and provide richer contextual understanding of song composition.",
-        "action": "I engineered an agentic AI workflow using LangChain to automate the analysis, implementing a RAG pipeline with Pinecone to enrich LLM context and using Sentence Transformers and OpenL3 for multimodal analysis.",
+        "task": "The objective was to build an autonomous agent that could reason about both modalities to quantify this alignment and provide richer contextual understanding.",
+        "action": "I engineered an agentic AI workflow using LangChain, implementing a RAG pipeline with Pinecone and using Sentence Transformers and OpenL3 for multimodal analysis.",
         "result": "The system successfully analyzed emotion trends across genres and the use of generative models boosted downstream classification accuracy to 92%.",
         "impact": "This project serves as a proof-of-concept for advanced, emotion-aware music recommendation systems that can provide users with more nuanced and personalized playlists based on the true 'vibe' of a song.",
-        "architecture": "A reasoning-and-acting (ReAct) agent was designed in LangChain. The agent was equipped with tools to fetch lyrics, generate text embeddings (Sentence Transformers), generate audio embeddings (OpenL3), and perform similarity analysis. The entire workflow was orchestrated to provide a final congruence score and summary."
+        "architecture": "A reasoning-and-acting (ReAct) agent was designed in LangChain. The agent was equipped with tools to fetch lyrics, generate multimodal embeddings (Sentence Transformers, OpenL3), and perform similarity analysis. The entire workflow was orchestrated to provide a final congruence score."
       },
       "technologies": ["LangChain", "LLMs", "RAG", "Sentence Transformers", "OpenL3", "PyTorch"],
+      "featured": true
+    },
+    {
+      "id": "p4",
+      "title": "Perspective-Aware Summarization with Prompt Optimization",
+      "github_url": "#",
+      "star": {
+        "situation": "Healthcare forums have noisy, multi-perspective answers, and manually crafting prompts for LLMs to summarize them is inefficient.",
+        "task": "My goal was to create a system that could automatically optimize prompts for an LLM to generate high-quality, perspective-aware summaries.",
+        "action": "I developed an Automatic Prompt Optimization (APO) framework using DSPy and designed two novel augmentation methods: injecting keywords from a BERTopic model and adding relevant text spans selected by a custom-trained cross-encoder.",
+        "result": "The final model outperformed the baseline by 6-14% across all key metrics (ROUGE, BERTScore), achieving state-of-the-art results on the PUMA dataset.",
+        "impact": "This project demonstrates a method to significantly improve controllable text generation without costly LLM fine-tuning, paving the way for more efficient and accurate summarization systems.",
+        "architecture": "The system leverages a frozen LLM and treats the prompt as the primary optimizable parameter. A DSPy pipeline manages the optimization loop, which includes a cross-encoder for span ranking and a BERTopic model for keyword extraction."
+      },
+      "technologies": ["Python", "PyTorch", "DSPy", "Transformers", "BERTopic", "Scikit-Learn"],
+      "featured": true
+    },
+    {
+      "id": "p5",
+      "title": "AI-Powered Conversational Portfolio",
+      "github_url": "#",
+      "star": {
+        "situation": "Traditional static portfolios are passive and fail to demonstrate a developer's interactive and AI engineering skills directly.",
+        "task": "The vision was to build a portfolio where the website experience itself is a live demo of my full-stack and AI capabilities.",
+        "action": "I built a full-stack application with a React/TypeScript frontend and a production-grade FastAPI backend, powered by a multi-agent AI system using LangChain and Google Gemini.",
+        "result": "The application successfully serves as an interactive portfolio, handling natural language queries with context-aware responses and dynamic content, and features a full production middleware stack (logging, monitoring, rate-limiting).",
+        "impact": "This project provides an immediate, engaging demonstration of my technical skills to recruiters and hiring managers, moving beyond static text to a live, interactive showcase of my work.",
+        "architecture": "A multi-agent LangChain architecture featuring a router agent that directs queries to specialized agents (Portfolio, General, Contact). The system is served by a FastAPI backend with a comprehensive middleware stack and deployed via CI/CD to Vercel and Render."
+      },
+      "technologies": ["React", "TypeScript", "FastAPI", "Python", "LangChain", "Google Gemini", "Docker"],
       "featured": true
     }
   ],
@@ -165,7 +195,6 @@
     "cloud_and_mlops": ["AWS (S3, SageMaker, ECS)", "Azure", "MLflow", "DVC", "Kubeflow", "Docker", "Kubernetes", "CI/CD", "FastAPI"],
     "visualization": ["Plotly", "Dash", "Streamlit", "Matplotlib", "Seaborn", "Power BI", "Tableau"]
   },
-
   "publications": [
     {
       "id": 1,
