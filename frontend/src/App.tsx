@@ -1165,7 +1165,7 @@ function App() {
                       </motion.a>
 
                       <motion.a
-                              href="https://github.com/prathameshmore"
+                              href="https://github.com/Spidey13"
                         target="_blank"
                         rel="noopener noreferrer"
                               className="group flex items-center justify-center gap-3 p-4 bg-gradient-to-r from-accent/10 to-accent/5 rounded-xl border border-accent/20 hover:border-accent/40 transition-all duration-300"

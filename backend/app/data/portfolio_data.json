@@ -115,7 +115,7 @@
     {
       "id": "p1",
       "title": "F1 Race Strategy Simulator",
-      "github_url": "#",
+      "github_url": "https://github.com/Spidey13",
       "star": {
         "situation": "F1 race outcomes depend on complex strategic decisions that are difficult to optimize under dynamic, high-stakes race conditions.",
         "task": "The goal was to build a high-fidelity Digital Twin to model race dynamics, simulate entire races, and identify optimal strategies.",
@@ -130,7 +130,7 @@
     {
       "id": "p2",
       "title": "Wafer Fault Detection System",
-      "github_url": "#",
+      "github_url": "https://github.com/Spidey13",
       "star": {
         "situation": "In semiconductor manufacturing, accurately detecting wafer defects from high-dimensional sensor data is essential to maintain production yield.",
         "task": "I was tasked with building a high-precision, automated anomaly detection system with a full MLOps lifecycle for continuous monitoring and retraining.",
@@ -145,7 +145,7 @@
     {
       "id": "p3",
       "title": "Audio-Lyric Emotional Alignment",
-      "github_url": "#",
+      "github_url": "https://github.com/Spidey13",
       "star": {
         "situation": "Understanding the emotional congruence between a song's music (audio) and its lyrics (text) is a complex, multimodal AI challenge that simple recommendation engines fail to capture.",
         "task": "The objective was to build an autonomous agent that could reason about both modalities to quantify this alignment and provide richer contextual understanding.",
@@ -160,7 +160,7 @@
     {
       "id": "p4",
       "title": "Perspective-Aware Summarization with Prompt Optimization",
-      "github_url": "#",
+      "github_url": "https://github.com/Spidey13",
       "star": {
         "situation": "Healthcare forums have noisy, multi-perspective answers, and manually crafting prompts for LLMs to summarize them is inefficient.",
         "task": "My goal was to create a system that could automatically optimize prompts for an LLM to generate high-quality, perspective-aware summaries.",
@@ -175,7 +175,7 @@
     {
       "id": "p5",
       "title": "AI-Powered Conversational Portfolio",
-      "github_url": "#",
+      "github_url": "https://github.com/Spidey13",
       "star": {
         "situation": "Traditional static portfolios are passive and fail to demonstrate a developer's interactive and AI engineering skills directly.",
         "task": "The vision was to build a portfolio where the website experience itself is a live demo of my full-stack and AI capabilities.",
