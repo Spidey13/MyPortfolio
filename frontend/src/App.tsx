@@ -1151,7 +1151,7 @@ function App() {
                           {/* Professional Links Grid */}
                           <div className="grid grid-cols-2 gap-4">
                       <motion.a
-                              href="https://linkedin.com/in/prathameshmore"
+                              href="https://linkedin.com/in/more-prathamesh"
                         target="_blank"
                         rel="noopener noreferrer"
                               className="group flex items-center justify-center gap-3 p-4 bg-gradient-to-r from-accent/10 to-accent/5 rounded-xl border border-accent/20 hover:border-accent/40 transition-all duration-300"
