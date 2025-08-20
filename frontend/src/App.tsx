@@ -581,7 +581,7 @@ function App() {
 
                       {/* Clean Case Study Cards */}
                       <div className="space-y-12">
-                        {currentPortfolioData.projects.map((project: any, index: number) => (
+                        {currentPortfolioData.projects?.map((project: any, index: number) => (
                           <motion.article
                           key={project.id}
                             className="group cursor-pointer"
