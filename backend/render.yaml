@@ -12,7 +12,7 @@ services:
       - key: ENVIRONMENT
         value: production
       - key: CORS_ORIGINS
-        value: '["https://yourname.vercel.app"]'
+        value: '["*"]'
       - key: PORT
         value: 8000
       - key: HOST
