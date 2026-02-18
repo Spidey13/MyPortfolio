@@ -17,7 +17,7 @@ export interface BackendStatusInfo {
   warmupStartTime?: Date;
 }
 
-const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Configuration
 const CHECK_INTERVALS = {
@@ -89,7 +89,7 @@ export function useBackendStatus() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), TIMEOUTS.ai);
 
-      const response = await fetch(`${BACKEND_URL}/api/v1/chat`, {
+      const response = await fetch(`${BACKEND_URL}/chat`, {
         signal: controller.signal,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

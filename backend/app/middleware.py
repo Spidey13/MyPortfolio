@@ -232,6 +232,8 @@ class MonitoringMiddleware(BaseHTTPMiddleware):
         self.request_count = 0
         self.error_count = 0
         self.response_times = []
+        self.total_tokens_used = 0
+        self.total_llm_calls = 0
 
     async def dispatch(self, request: Request, call_next):
         start_time = time.time()
@@ -276,6 +278,11 @@ class MonitoringMiddleware(BaseHTTPMiddleware):
             else 0,
             "min_response_time": min(self.response_times) if self.response_times else 0,
             "max_response_time": max(self.response_times) if self.response_times else 0,
+            "total_tokens_used": self.total_tokens_used,
+            "total_llm_calls": self.total_llm_calls,
+            "avg_tokens_per_call": self.total_tokens_used / self.total_llm_calls
+            if self.total_llm_calls > 0
+            else 0,
         }
 
 
@@ -286,3 +293,9 @@ monitoring_middleware = MonitoringMiddleware(None)
 def get_monitoring_metrics() -> Dict[str, Any]:
     """Get monitoring metrics"""
     return monitoring_middleware.get_metrics()
+
+
+def track_tokens(tokens: int):
+    """Track token usage for monitoring"""
+    monitoring_middleware.total_tokens_used += tokens
+    monitoring_middleware.total_llm_calls += 1

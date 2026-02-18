@@ -1,7 +1,8 @@
 // Backend connection utilities
 import { log, withPerformance } from './logger';
 
-export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// Vercel serverless functions are at /api
+export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export const testBackendConnection = async (): Promise<boolean> => {
   return withPerformance('testBackendConnection', async () => {
@@ -34,28 +35,21 @@ export const testBackendConnection = async (): Promise<boolean> => {
   });
 };
 
-export const analyzeJobMatch = async (jobDescription: string, portfolioData: any) => {
+export const analyzeJobMatch = async (jobDescription: string) => {
   try {
-    // Use the chat endpoint with a strategic fit analysis prompt
-    const analysisPrompt = `Please analyze how well my profile matches this job description and provide a strategic fit analysis:
+    // OPTIMIZED: Removed portfolioData param - backend already has it
+    const analysisPrompt = `Please analyze how well my profile matches this job description:
 
-${jobDescription}
-
-Please analyze my skills, experience, and projects against the job requirements and provide:
-1. Match percentage/score
-2. Key strengths that align
-3. Areas where I excel
-4. Potential gaps to address
-5. Strategic recommendations`;
+${jobDescription}`;
     
-    const response = await fetch(`${BACKEND_URL}/api/v1/chat`, {
+    const response = await fetch(`${BACKEND_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: analysisPrompt,
-        context: { portfolioData }
+        message: analysisPrompt
+        // REMOVED: context: { portfolioData } - backend loads data dynamically
       })
     });
     
@@ -65,16 +59,28 @@ Please analyze my skills, experience, and projects against the job requirements 
     
     const result = await response.json();
     
-    // Extract match score from response if possible
-    const responseText = result.response || '';
-    const matchScoreMatch = responseText.match(/(\d+)\s*%/);
-    const matchScore = matchScoreMatch ? matchScoreMatch[1] + '%' : 'Analysis completed';
+    // FIXED: Map backend response structure to frontend expectations
+    const kanbanData = result.kanban_data || result.viewport_content?.kanban_data || {};
+    const summaryData = result.summary_data || result.viewport_content?.summary_data || {};
+    const matchScore = summaryData.matchPercentage || 0;
     
     return {
-      match_score: matchScore,
-      analysis: responseText,
+      // Map kanban data to flat structure
+      technicalSkills: kanbanData.technicalSkills || [],
+      relevantExperience: kanbanData.relevantExperience || [],
+      projectEvidence: kanbanData.projectEvidence || [],
+      quantifiableImpact: kanbanData.quantifiableImpact || [],
+      
+      // Map match score
+      matchScore: matchScore,
+      
+      // Include summary data
+      summary: summaryData,
+      
+      // Legacy fields
+      match_score: `${matchScore}%`,
+      analysis: result.response || '',
       agent_used: result.agent_used || 'strategic-fit',
-      viewport_content: result.viewport_content
     };
   } catch (error) {
     console.error('Job analysis failed:', error);
@@ -82,16 +88,17 @@ Please analyze my skills, experience, and projects against the job requirements 
   }
 };
 
-export const chatWithAI = async (message: string, portfolioData: any) => {
+export const chatWithAI = async (message: string) => {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/v1/chat`, {
+    // OPTIMIZED: Removed portfolioData param - backend already has it
+    const response = await fetch(`${BACKEND_URL}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message,
-        context: { portfolioData }
+        message
+        // REMOVED: context: { portfolioData } - backend loads data dynamically
       })
     });
     

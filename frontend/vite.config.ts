@@ -28,13 +28,13 @@ export default defineConfig({
   
   // Server configuration for development
   server: {
-    port: 3000,
+    port: 5173,
     host: true,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
-        secure: false,
+        rewrite: (path) => path
       }
     }
   },

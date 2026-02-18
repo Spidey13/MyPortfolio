@@ -12,6 +12,7 @@ from app.config import get_settings
 from app.agents import router
 from app.services import PortfolioService
 from app.portfolio_loader import get_raw_portfolio_data
+from app.cache import query_cache
 from app.middleware import (
     ErrorHandlingMiddleware,
     RateLimitMiddleware,
@@ -20,6 +21,16 @@ from app.middleware import (
     MonitoringMiddleware,
     get_monitoring_metrics,
 )
+
+# Import analytics service
+try:
+    from app.analytics import get_analytics_service
+    analytics_service = get_analytics_service()
+    ANALYTICS_AVAILABLE = True
+except Exception as e:
+    logger.warning(f"Analytics service not available: {e}")
+    analytics_service = None
+    ANALYTICS_AVAILABLE = False
 
 # Import professional logging system
 from app.logger import logger, performance_logger, security_logger, set_request_id
@@ -136,6 +147,18 @@ class MetricsResponse(BaseModel):
     max_response_time: float = Field(
         ..., description="Maximum response time in seconds"
     )
+    total_tokens_used: int = Field(
+        default=0, description="Total LLM tokens used"
+    )
+    total_llm_calls: int = Field(
+        default=0, description="Total LLM API calls made"
+    )
+    avg_tokens_per_call: float = Field(
+        default=0, description="Average tokens per LLM call"
+    )
+    cache_stats: Optional[Dict[str, Any]] = Field(
+        default=None, description="Cache statistics (hits, misses, hit rate)"
+    )
 
 
 # Track startup time
@@ -177,8 +200,18 @@ async def health_check():
 
 @app.get("/metrics", response_model=MetricsResponse)
 async def get_metrics():
-    """Get application metrics"""
+    """Get application metrics including cache statistics"""
     metrics = get_monitoring_metrics()
+    
+    # Add cache statistics
+    metrics["cache_stats"] = query_cache.get_stats()
+    
+    logger.info(
+        "Metrics requested",
+        total_requests=metrics["total_requests"],
+        cache_hit_rate=metrics["cache_stats"]["hit_rate"]
+    )
+    
     return MetricsResponse(**metrics)
 
 
@@ -348,6 +381,100 @@ async def get_portfolio_data():
         raise HTTPException(
             status_code=500, detail=f"Error retrieving portfolio data: {str(e)}"
         )
+
+
+# ============================================================================
+# ANALYTICS ENDPOINTS
+# ============================================================================
+
+@app.get("/api/v1/analytics/queries")
+async def get_query_analytics(
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    agent: Optional[str] = None
+):
+    """
+    Get AI query analytics with optional filters
+    
+    Query Parameters:
+    - start_date: ISO format date (e.g., '2024-01-01')
+    - end_date: ISO format date (e.g., '2024-12-31')  
+    - agent: Filter by specific agent name
+    """
+    if not ANALYTICS_AVAILABLE or not analytics_service:
+        raise HTTPException(
+            status_code=503,
+            detail="Analytics service not available. Please configure Turso database."
+        )
+    
+    try:
+        logger.info("Fetching query analytics")
+        analytics_data = analytics_service.get_query_analytics(
+            start_date=start_date,
+            end_date=end_date,
+            agent=agent
+        )
+        return analytics_data
+    except Exception as e:
+        logger.error(f"Error retrieving query analytics: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving analytics: {str(e)}"
+        )
+
+
+@app.get("/api/v1/analytics/cache")
+async def get_cache_analytics():
+    """Get cache performance metrics"""
+    if not ANALYTICS_AVAILABLE or not analytics_service:
+        raise HTTPException(
+            status_code=503,
+            detail="Analytics service not available. Please configure Turso database."
+        )
+    
+    try:
+        logger.info("Fetching cache analytics")
+        cache_data = analytics_service.get_cache_analytics()
+        return cache_data
+    except Exception as e:
+        logger.error(f"Error retrieving cache analytics: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving cache analytics: {str(e)}"
+        )
+
+
+@app.post("/api/v1/analytics/event")
+async def log_analytics_event(request: Request):
+    """
+    Log a custom analytics event from frontend
+    
+    Body:
+    {
+        "session_id": "string",
+        "event_type": "string",
+        "event_data": {}
+    }
+    """
+    if not ANALYTICS_AVAILABLE or not analytics_service:
+        return {"success": False, "message": "Analytics not available"}
+    
+    try:
+        body = await request.json()
+        session_id = body.get("session_id", "unknown")
+        event_type = body.get("event_type")
+        event_data = body.get("event_data", {})
+        user_agent = request.headers.get("user-agent")
+        
+        analytics_service.log_event(
+            session_id=session_id,
+            event_type=event_type,
+            event_data=event_data,
+            user_agent=user_agent
+        )
+        
+        return {"success": True}
+    except Exception as e:
+        logger.error(f"Error logging event: {str(e)}", exc_info=True)
+        return {"success": False, "message": str(e)}
 
 
 # Demo endpoints placeholder
