@@ -3,7 +3,7 @@
  * These provide immediate value while backend AI is warming up (1-3 minute cold start)
  */
 
-import { PORTFOLIO_DATA } from './index';
+import { PORTFOLIO_DATA } from './index.js';
 
 export interface FallbackResponse {
   response: string;
