@@ -5,9 +5,9 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { routeQuery } from './lib/router.js';
-import { AgentFactory } from './lib/agents.js';
-import { trackAIQuery, trackAgentUsage } from './lib/analytics.js';
+import { routeQuery } from './lib/router';
+import { AgentFactory } from './lib/agents';
+import { trackAIQuery, trackAgentUsage } from './lib/analytics';
 
 const agentFactory = new AgentFactory();
 
@@ -15,11 +15,6 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
   // Add CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -28,6 +23,11 @@ export default async function handler(
   // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
+  }
+
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const startTime = Date.now();
