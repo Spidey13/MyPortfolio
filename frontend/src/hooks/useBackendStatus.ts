@@ -17,7 +17,7 @@ export interface BackendStatusInfo {
   warmupStartTime?: Date;
 }
 
-const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 // Configuration
 const CHECK_INTERVALS = {
@@ -45,8 +45,8 @@ export function useBackendStatus() {
     message: 'Checking backend status...',
   });
 
-  const checkIntervalRef = useRef<NodeJS.Timeout>();
-  const warmupStartRef = useRef<Date>();
+  const checkIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const warmupStartRef = useRef<Date | undefined>(undefined);
   const currentMessageIndexRef = useRef(0);
 
   /**
@@ -57,7 +57,8 @@ export function useBackendStatus() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), TIMEOUTS.health);
 
-      const response = await fetch(`${BACKEND_URL}/health`, {
+      // updated to /api/health
+      const response = await fetch(`${BACKEND_URL}/api/health`, {
         signal: controller.signal,
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -89,7 +90,8 @@ export function useBackendStatus() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), TIMEOUTS.ai);
 
-      const response = await fetch(`${BACKEND_URL}/api/v1/chat`, {
+      // updated to /api/chat
+      const response = await fetch(`${BACKEND_URL}/api/chat`, {
         signal: controller.signal,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

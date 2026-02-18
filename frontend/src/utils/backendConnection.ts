@@ -1,13 +1,14 @@
 // Backend connection utilities
 import { log, withPerformance } from './logger';
 
-export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 export const testBackendConnection = async (): Promise<boolean> => {
   return withPerformance('testBackendConnection', async () => {
     try {
       const start = performance.now();
-      const response = await fetch(`${BACKEND_URL}/health`, {
+      // Use relative path for Vercel deployment
+      const response = await fetch(`${BACKEND_URL}/api/health`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -15,7 +16,7 @@ export const testBackendConnection = async (): Promise<boolean> => {
       });
       const duration = performance.now() - start;
       
-      log.apiCall('GET', '/health', duration, response.status);
+      log.apiCall('GET', '/api/health', duration, response.status);
       
       if (response.ok) {
         log.info('Backend connection successful');
@@ -48,7 +49,8 @@ Please analyze my skills, experience, and projects against the job requirements 
 4. Potential gaps to address
 5. Strategic recommendations`;
     
-    const response = await fetch(`${BACKEND_URL}/api/v1/chat`, {
+    // Updated endpoint: /api/chat (removed /v1)
+    const response = await fetch(`${BACKEND_URL}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +86,8 @@ Please analyze my skills, experience, and projects against the job requirements 
 
 export const chatWithAI = async (message: string, portfolioData: any) => {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/v1/chat`, {
+    // Updated endpoint: /api/chat (removed /v1)
+    const response = await fetch(`${BACKEND_URL}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
