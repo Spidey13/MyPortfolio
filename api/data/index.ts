@@ -3,19 +3,19 @@
  * This file combines all data modules into a single export
  */
 
-export * from './profile.js';
-export * from './experience.js';
-export * from './projects.js';
-export * from './publications.js';
-export * from './skills.js';
-export * from './activities.js';
+export * from './profile';
+export * from './experience';
+export * from './projects';
+export * from './publications';
+export * from './skills';
+export * from './activities';
 
-import { PROFILE, EDUCATION } from './profile.js';
-import { EXPERIENCE } from './experience.js';
-import { PROJECTS } from './projects.js';
-import { PUBLICATIONS } from './publications.js';
-import { SKILLS } from './skills.js';
-import { ACTIVITIES } from './activities.js';
+import { PROFILE, EDUCATION } from './profile';
+import { EXPERIENCE } from './experience';
+import { PROJECTS } from './projects';
+import { PUBLICATIONS } from './publications';
+import { SKILLS } from './skills';
+import { ACTIVITIES } from './activities';
 
 /**
  * Combined Portfolio Data
