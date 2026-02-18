@@ -9,8 +9,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./frontend/src/*"]
+    }
   },
-  "include": ["api/**/*.ts"],
-  "exclude": ["node_modules", "frontend"]
+  "include": ["api/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "frontend/dist"]
 }
