@@ -11,8 +11,8 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./api/*"]
+      "@/*": ["./api/*", "./*"]
     }
   },
-  "include": ["api-dev-server.ts", "api/**/*.ts"]
+  "include": ["api-dev-server.ts", "api/**/*.ts", "lib/**/*.ts"]
 }
