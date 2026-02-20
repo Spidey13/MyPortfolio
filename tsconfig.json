@@ -14,5 +14,5 @@
       "@/*": ["./api/*", "./*"]
     }
   },
-  "include": ["api-dev-server.ts", "api/**/*.ts", "lib/**/*.ts"]
+  "include": ["api-dev-server.ts", "api/**/*.ts"]
 }

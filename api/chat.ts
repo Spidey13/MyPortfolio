@@ -5,9 +5,9 @@
  */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { routeQuery } from '../lib/router';
-import { AgentFactory } from '../lib/agents';
-import { trackAIQuery, trackAgentUsage } from '../lib/analytics';
+import { routeQuery } from './lib/router';
+import { AgentFactory } from './lib/agents';
+import { trackAIQuery, trackAgentUsage } from './lib/analytics';
 
 const agentFactory = new AgentFactory();
 
