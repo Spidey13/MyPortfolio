@@ -1,12 +1,8 @@
 // Backend connection utilities
 import { log, withPerformance } from './logger';
 
-<<<<<<< HEAD
-export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '';
-=======
 // Vercel serverless functions are at /api
 export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '/api';
->>>>>>> feature/vercel-test
 
 export const testBackendConnection = async (): Promise<boolean> => {
   return withPerformance('testBackendConnection', async () => {
@@ -47,12 +43,7 @@ export const analyzeJobMatch = async (jobDescription: string) => {
 
 ${jobDescription}`;
     
-<<<<<<< HEAD
-    // Updated endpoint: /api/chat (removed /v1)
-    const response = await fetch(`${BACKEND_URL}/api/chat`, {
-=======
     const response = await fetch(`${BACKEND_URL}/chat`, {
->>>>>>> feature/vercel-test
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -100,13 +91,8 @@ ${jobDescription}`;
 
 export const chatWithAI = async (message: string) => {
   try {
-<<<<<<< HEAD
-    // Updated endpoint: /api/chat (removed /v1)
-    const response = await fetch(`${BACKEND_URL}/api/chat`, {
-=======
     // OPTIMIZED: Removed portfolioData param - backend already has it
     const response = await fetch(`${BACKEND_URL}/chat`, {
->>>>>>> feature/vercel-test
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
