@@ -16,6 +16,10 @@ venv/
 env/
 ENV/
 
+.agent/
+.agents/
+.qwen/
+
 # ===== BUILD OUTPUTS =====
 # Frontend build outputs
 dist/
@@ -32,7 +36,7 @@ develop-eggs/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/
 lib64/
 parts/
 sdist/
@@ -110,3 +114,23 @@ tmp/
 # Keep deployment configs but ignore any local overrides
 .env.local
 .env.production.local 
+
+# Logs
+logs
+dev-debug.log
+# Dependency directories
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 
+
+.vercel

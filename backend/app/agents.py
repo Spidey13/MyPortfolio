@@ -12,8 +12,20 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 from .config import get_settings
 from .portfolio_loader import get_portfolio_loader
+from .cache import query_cache
 
 logger = logging.getLogger(__name__)
+# Import analytics service
+try:
+    from .analytics import get_analytics_service
+
+    analytics = get_analytics_service()
+    ANALYTICS_AVAILABLE = True
+except Exception as e:
+    logger.warning(f"Analytics not available: {e}")
+    analytics = None
+    ANALYTICS_AVAILABLE = False
+
 settings = get_settings()
 
 # Get portfolio data loader
@@ -41,7 +53,7 @@ class PortfolioAgent:
                 model=settings.google_model,
                 temperature=0.3,
                 google_api_key=settings.google_api_key,
-                max_retries=3,
+                max_retries=1,  # OPTIMIZED: Reduced from 3 to prevent quota exhaustion
                 timeout=30,
             )
             logger.info(f"[AI] {self.name}: Ready")
@@ -50,6 +62,61 @@ class PortfolioAgent:
             self.llm = None
 
     def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Process with caching (OPTIMIZED to reduce API calls)"""
+
+        # Check cache first (only for non-contextual queries)
+        if not context and settings.cache_enabled:
+            cached = query_cache.get(query, self.name)
+            if cached:
+                # Log cache hit
+                if analytics and ANALYTICS_AVAILABLE:
+                    try:
+                        analytics.log_cache_hit(query)
+                    except Exception as e:
+                        logger.error(f"Error logging cache hit: {e}")
+
+                cached["cached"] = True
+                cached["processing_time"] = 0.0
+                return cached
+            else:
+                # Log cache miss
+                if analytics and ANALYTICS_AVAILABLE:
+                    try:
+                        analytics.log_cache_miss(query)
+                    except Exception as e:
+                        logger.error(f"Error logging cache miss: {e}")
+
+        # Process normally
+        result = self._process_uncached(query, context)
+
+        # Cache successful responses (only if no context and no errors)
+        if not context and settings.cache_enabled and "error" not in result:
+            query_cache.set(query, self.name, result)
+
+        # Log AI query to analytics
+        if analytics and ANALYTICS_AVAILABLE:
+            try:
+                session_id = (
+                    context.get("session_id", "unknown") if context else "unknown"
+                )
+                analytics.log_ai_query(
+                    session_id=session_id,
+                    query_text=query[:500],  # Truncate long queries
+                    agent_used=self.name,
+                    response_time=result.get("processing_time", 0),
+                    tokens_used=result.get("tokens_used"),
+                    cached=result.get("cached", False),
+                    error_occurred="error" in result,
+                    error_message=result.get("error"),
+                )
+            except Exception as e:
+                logger.error(f"Error logging AI query: {e}")
+
+        return result
+
+    def _process_uncached(
+        self, query: str, context: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
         """Process a query and return structured response with enhanced error handling"""
         start_time = time.time()
 
@@ -88,6 +155,27 @@ class PortfolioAgent:
 
         except Exception as e:
             processing_time = time.time() - start_time
+            error_str = str(e)
+
+            # OPTIMIZED: Detect 429 rate limit errors specifically
+            if (
+                "429" in error_str
+                or "quota" in error_str.lower()
+                or "rate limit" in error_str.lower()
+            ):
+                logger.error(f"{self.name}: Rate limit hit - {error_str}")
+                return {
+                    "response": "I'm currently experiencing high demand. Please try again in a few moments, or ask a simpler question.",
+                    "viewport_content": {
+                        "type": "error",
+                        "message": "Rate limit reached. Please wait before retrying.",
+                        "retry_after": 60,
+                    },
+                    "agent_used": self.name,
+                    "processing_time": processing_time,
+                    "error_type": "rate_limit",
+                }
+
             logger.error(
                 f"{self.name}: Error processing request: {str(e)}", exc_info=True
             )
@@ -151,61 +239,198 @@ class PortfolioAgent:
             }
 
 
+# In backend/app/agents.py
+
+
 class ProfileAgent(PortfolioAgent):
     """Agent specialized in handling profile and about me queries"""
 
     def __init__(self):
-        # Get dynamic portfolio data
-        profile_summary = portfolio_loader.get_profile_summary()
-        skills_summary = portfolio_loader.get_skills_summary()
+        # Store minimal data for fallback
+        self.profile_summary = portfolio_loader.get_profile_summary()
+        self.skills_summary = portfolio_loader.get_skills_summary()
 
-        system_prompt = f"""
-You are the Profile Agent for an AI-powered portfolio.
-Your role is to provide information about personal background, education, skills, and professional summary.
+        # OPTIMIZED: Compact system prompt - load data dynamically
+        system_prompt = """You are a Profile Agent for an AI portfolio.
 
-{profile_summary}
+When answering questions:
+1. Use SPECIFIC EXAMPLES from the context provided (project names, companies, technologies)
+2. When asked about experience/projects, cite actual project titles and proof of skills
+3. Keep responses concise (2-3 sentences) but include concrete examples
+4. If context provides "relevant_examples", prioritize mentioning those specific items
 
-Skills Overview:
-{skills_summary}
-
-When users ask about profile, background, or "about me" information, provide engaging, professional responses that highlight expertise and personality. Use the specific details provided above to give accurate, personalized responses.
-
-Always respond in a conversational, professional tone. If asked about specific skills or achievements, reference the concrete examples and metrics provided.
-
-Keep responses concise but informative, typically 2-4 sentences unless more detail is specifically requested.
-"""
+Be direct and specific. Focus on what the user asks about."""
         super().__init__(
             "Profile Agent", "Handles profile and background queries", system_prompt
         )
+
+    def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Override to add targeted context and fallback"""
+        try:
+            # Add only relevant context dynamically
+            query_lower = query.lower()
+            targeted_context = {}
+
+            # Always include basic profile
+            profile = portfolio_loader.portfolio_data.profile
+            targeted_context["profile"] = (
+                f"{profile.name}, {profile.title}. {profile.summary[:200]}"
+            )
+
+            if (
+                "skill" in query_lower
+                or "technolog" in query_lower
+                or "stack" in query_lower
+            ):
+                targeted_context["skills"] = self.skills_summary
+            elif "education" in query_lower or "degree" in query_lower:
+                edu = portfolio_loader.portfolio_data.education
+                targeted_context["education"] = (
+                    f"{edu.degree} from {edu.university}, GPA: {edu.gpa}"
+                )
+            elif (
+                "experience" in query_lower
+                or "work" in query_lower
+                or "project" in query_lower
+                or "mlops" in query_lower
+                or "ml" in query_lower
+                or "ai" in query_lower
+            ):
+                # Search for relevant projects and experience
+                relevant_items = []
+
+                # Extract keywords from query
+                keywords = query_lower.split()
+                projects = portfolio_loader.portfolio_data.projects
+                experience = portfolio_loader.portfolio_data.experience
+
+                # Search projects for matches
+                for proj in projects:
+                    proj_text = f"{proj.title} {proj.star.situation} {proj.star.task} {' '.join(proj.technologies)}".lower()
+                    if any(keyword in proj_text for keyword in keywords):
+                        relevant_items.append(
+                            f"PROJECT: {proj.title}\n"
+                            f"What: {proj.star.task[:120]}\n"
+                            f"Technologies: {', '.join(proj.technologies[:8])}\n"
+                            f"Impact: {proj.star.result[:100]}"
+                        )
+
+                # Search experience for matches
+                for exp in experience:
+                    exp_text = f"{exp.company} {exp.role} {exp.star.result}".lower()
+                    if any(keyword in exp_text for keyword in keywords):
+                        relevant_items.append(
+                            f"EXPERIENCE: {exp.role} at {exp.company}\n"
+                            f"Duration: {exp.duration}\n"
+                            f"Achievement: {exp.star.result[:100]}"
+                        )
+
+                if relevant_items:
+                    targeted_context["relevant_examples"] = "\n\n".join(
+                        relevant_items[:4]
+                    )  # Limit to 4 items
+                else:
+                    # Fallback to featured projects
+                    featured = [p for p in projects if p.featured][:2]
+                    targeted_context["featured_projects"] = "\n\n".join(
+                        [
+                            f"{p.title}: {p.star.task[:80]}... Technologies: {', '.join(p.technologies[:5])}"
+                            for p in featured
+                        ]
+                    )
+
+            # Merge with provided context
+            full_context = context or {}
+            full_context.update(targeted_context)
+
+            # Call parent's caching-enabled process method
+            return super().process(query, full_context)
+        except Exception as e:
+            # Log the error for debugging
+            logger.error(f"ProfileAgent process error: {str(e)}", exc_info=True)
+            # If AI fails, return static data
+            return self._get_fallback_response(query)
+
+    def _parse_response(
+        self, response: str, query: str, processing_time: float
+    ) -> Dict[str, Any]:
+        """Override to catch the 'error' response from the parent class"""
+        # FIXED: Call parent's _parse_response first to get the dict
+        parsed_response = super()._parse_response(response, query, processing_time)
+
+        # If the parent class returned the generic error message, use fallback instead
+        if "I encountered an error" in parsed_response.get("response", ""):
+            return self._get_fallback_response(query)
+
+        return parsed_response
+
+    def _get_fallback_response(self, query: str) -> Dict[str, Any]:
+        """Generate a static response when AI is down"""
+        # Simple keyword matching
+        query_lower = query.lower()
+
+        if (
+            "skill" in query_lower
+            or "stack" in query_lower
+            or "technolog" in query_lower
+        ):
+            content = (
+                f"Here is an overview of my technical skills:\n\n{self.skills_summary}"
+            )
+        else:
+            content = f"I am currently operating in offline mode, but here is my profile summary:\n\n{self.profile_summary}"
+
+        return {
+            "response": content,
+            "viewport_content": {
+                "type": "text",
+                "agent": self.name,
+                "content": content,
+            },
+            "agent_used": "Profile Agent (Offline)",
+            "processing_time": 0.0,
+        }
 
 
 class ProjectAgent(PortfolioAgent):
     """Agent specialized in handling project-related queries"""
 
     def __init__(self):
-        # Get dynamic portfolio data
-        projects_summary = portfolio_loader.get_projects_summary()
+        # OPTIMIZED: Compact system prompt - load data dynamically
+        system_prompt = """You are a Project Agent for an AI portfolio.
 
-        system_prompt = f"""
-You are the Project Agent for an AI-powered portfolio.
-Your role is to provide detailed information about projects, technologies used, and technical achievements.
-
-Project Portfolio:
-{projects_summary}
-
-When users ask about projects, provide:
-1. Clear explanations of technical implementations using the specific project details above
-2. Exact technologies and frameworks used as listed
-3. Quantifiable achievements and metrics from the project data
-4. Specific examples from the projects described
-
-Always respond in a technical but accessible tone. Focus on the user's specific interests and provide actionable insights based on the real project data.
-
-Keep responses focused and relevant to the user's query, referencing specific projects and achievements.
-"""
+Provide technical details about projects using data from context.
+Be concise. Focus on what the user asks about - don't list all projects."""
         super().__init__(
             "Project Agent", "Handles project and technical queries", system_prompt
         )
+
+    def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Override to add relevant projects only"""
+        query_lower = query.lower()
+        projects = portfolio_loader.portfolio_data.projects
+
+        # Find mentioned projects or use featured
+        relevant_projects = []
+        for project in projects:
+            if project.title.lower() in query_lower:
+                relevant_projects.append(project)
+
+        if not relevant_projects:
+            # Default to featured projects only
+            relevant_projects = [p for p in projects if p.featured][:3]
+
+        context = context or {}
+        context["projects"] = "\n\n".join(
+            [
+                f"Project: {p.title}\n"
+                f"Technologies: {', '.join(p.technologies[:5])}\n"
+                f"Result: {p.star.result[:200]}"
+                for p in relevant_projects
+            ]
+        )
+
+        return super().process(query, context)
 
     def _parse_response(
         self, response: str, query: str, processing_time: float
@@ -290,72 +515,94 @@ class StrategicFitAgent(PortfolioAgent):
     """Agent specialized in strategic fit analysis and job matching"""
 
     def __init__(self):
-        # Get dynamic portfolio data
-        profile_summary = portfolio_loader.get_profile_summary()
-        projects_summary = portfolio_loader.get_projects_summary()
-        skills_summary = portfolio_loader.get_skills_summary()
-        core_competencies_summary = portfolio_loader.get_core_competencies_summary()
-        soft_skills_summary = portfolio_loader.get_soft_skills_summary()
+        # OPTIMIZED: Compact system prompt - load data dynamically per request
+        system_prompt = """You are a Strategic Fit Analyst for a portfolio.
 
-        system_prompt = f"""
-You are the Strategic Fit Agent for an AI-powered portfolio analysis system.
-Your role is to analyze job requirements against qualifications and provide strategic fit assessments.
+Analyze job requirements against candidate qualifications using the portfolio data provided in the context.
 
-Candidate Profile:
-{profile_summary}
-
-Projects Portfolio:
-{projects_summary}
-
-Skills Overview:
-{skills_summary}
-
-Core Competencies:
-{core_competencies_summary}
-
-Soft Skills:
-{soft_skills_summary}
-
-When users provide job descriptions, you must return a structured JSON response with this EXACT format:
-
-{{
-  "kanban_data": {{
-    "technicalSkills": [
-      {{"id": "1", "title": "[Skill Name]", "description": "[How it matches job]", "score": "Excellent/High/Strong/Good/Moderate"}}
-    ],
-    "relevantExperience": [
-      {{"id": "1", "title": "[Role/Experience]", "description": "[Relevant details]", "score": "Excellent/High/Strong/Good/Moderate"}}
-    ],
-    "projectEvidence": [
-      {{"id": "1", "title": "[Project Name]", "description": "[How it demonstrates fit]", "score": "Excellent/High/Strong/Good/Moderate"}}
-    ],
-    "quantifiableImpact": [
-      {{"id": "1", "title": "[Metric/Achievement]", "description": "[Impact description]", "score": "Excellent/High/Strong/Good/Moderate"}}
-    ]
-  }},
-  "summary_data": {{
+Return structured JSON with this format:
+{
+  "kanban_data": {
+    "technicalSkills": [{"id": "1", "title": "[Skill]", "description": "[Match]", "score": "Excellent/High/Good"}],
+    "relevantExperience": [{"id": "1", "title": "[Role]", "description": "[Details]", "score": "Excellent/High/Good"}],
+    "projectEvidence": [{"id": "1", "title": "[Project]", "description": "[Fit]", "score": "Excellent/High/Good"}],
+    "quantifiableImpact": [{"id": "1", "title": "[Metric]", "description": "[Impact]", "score": "Excellent/High/Good"}]
+  },
+  "summary_data": {
     "overallMatch": "Excellent Fit/Good Fit/Partial Fit",
     "matchPercentage": 85,
-    "executiveSummary": "[2-3 sentence summary for recruiters]",
-    "keyStrengths": ["[Strength 1]", "[Strength 2]", "[Strength 3]"],
-    "competitiveAdvantages": ["[Advantage 1]", "[Advantage 2]"],
-    "interviewHighlights": ["[Question/Topic 1]", "[Question/Topic 2]"],
-    "processingTime": "2.3s",
-    "agentUsed": "Strategic Fit Agent"
-  }},
+    "executiveSummary": "[2-3 sentences]",
+    "keyStrengths": ["str1", "str2"],
+    "competitiveAdvantages": ["adv1", "adv2"],
+    "interviewHighlights": ["q1", "q2"]
+  },
   "match_score": "85%",
-  "analysis": "[Brief analysis text]"
-}}
+  "analysis": "[Brief text]"
+}
 
-Analyze the job requirements against the candidate's actual portfolio data above. Provide specific, accurate matches based on the real projects, skills, and experience listed. Focus on creating value for recruiters by highlighting concrete evidence of fit.
-
-Always use the exact project names, technologies, and achievements from the portfolio data provided above.
-"""
+Be concise. Focus on job-relevant data only."""
         super().__init__(
             "Strategic Fit Agent",
             "Handles job analysis and strategic fit queries",
             system_prompt,
         )
+
+    def process(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Override to inject portfolio data only when needed"""
+        # Load portfolio data dynamically per request for job analysis
+        if self._is_job_analysis_query(query):
+            portfolio_context = self._get_relevant_portfolio_data(query)
+            context = context or {}
+            context.update(portfolio_context)
+
+        return super().process(query, context)
+
+    def _is_job_analysis_query(self, query: str) -> bool:
+        """Check if query is a job analysis request"""
+        query_lower = query.lower()
+        return any(
+            keyword in query_lower
+            for keyword in [
+                "job description",
+                "requirements",
+                "position",
+                "role",
+                "hiring",
+                "job posting",
+                "analyze this",
+                "fit analysis",
+            ]
+        )
+
+    def _get_relevant_portfolio_data(self, query: str) -> Dict[str, Any]:
+        """Load only relevant portfolio sections based on query"""
+        query_lower = query.lower()
+        data = {}
+
+        # Always include core profile for job analysis
+        profile = portfolio_loader.portfolio_data.profile
+        data["profile"] = f"{profile.name}, {profile.title}. {profile.summary}"
+
+        # Always include skills for job matching
+        data["skills"] = portfolio_loader.get_skills_summary()
+
+        # Include featured projects only (not all projects)
+        featured_projects = [
+            p for p in portfolio_loader.portfolio_data.projects if p.featured
+        ]
+        data["featured_projects"] = "\n\n".join(
+            [
+                f"- {p.title}: {p.star.result[:150]}... Technologies: {', '.join(p.technologies[:5])}"
+                for p in featured_projects[:3]
+            ]
+        )
+
+        # Include core competencies
+        data["competencies"] = portfolio_loader.get_core_competencies_summary()[
+            :500
+        ]  # Truncate
+
+        return data
 
     def _parse_response(
         self, response: str, query: str, processing_time: float
@@ -478,7 +725,7 @@ class RouterAgent:
                     model=settings.google_model,
                     temperature=0.1,  # Lower temperature for routing
                     google_api_key=settings.google_api_key,
-                    max_retries=2,
+                    max_retries=1,  # OPTIMIZED: Reduced from 2 to prevent quota exhaustion
                     timeout=15,
                 )
                 logger.info("[ROUTER] Ready")
@@ -487,56 +734,115 @@ class RouterAgent:
         except Exception as e:
             logger.error(f"Failed to initialize router LLM: {str(e)}")
 
-    def route_query(self, query: str) -> str:
-        """Enhanced query routing with fallback logic"""
-        if not self.router_llm:
-            # Fallback routing logic
-            query_lower = query.lower()
+    def _get_keyword_route(self, query: str) -> Dict[str, Any]:
+        """Enhanced keyword-based routing with confidence scores"""
+        query_lower = query.lower()
+        scores = {
+            "profile": 0,
+            "project": 0,
+            "career": 0,
+            "demo": 0,
+            "strategic_fit": 0,
+        }
 
-            if any(
-                word in query_lower
-                for word in ["profile", "about", "background", "education", "skills"]
-            ):
-                return "profile"
-            elif any(
-                word in query_lower
-                for word in ["project", "github", "code", "implementation", "technical"]
-            ):
-                return "project"
-            elif any(
-                word in query_lower
-                for word in ["career", "job", "interview", "advice", "development"]
-            ):
-                return "career"
-            elif any(
-                word in query_lower
-                for word in ["demo", "live", "interactive", "show", "walkthrough"]
-            ):
-                return "demo"
-            elif any(
-                word in query_lower
-                for word in [
-                    "job description",
-                    "requirements",
-                    "fit",
-                    "match",
-                    "analysis",
-                    "position",
-                    "role",
-                    "hiring",
-                    "job posting",
-                    "analyze this",
-                    "strategic",
-                ]
-            ):
-                return "strategic_fit"
-            else:
-                return "profile"  # Default fallback
+        # Profile keywords (weighted scoring)
+        profile_keywords = {
+            "high": [
+                "about",
+                "who are you",
+                "tell me about yourself",
+                "background",
+                "education",
+            ],
+            "medium": ["profile", "skills", "experience summary"],
+        }
+
+        # Project keywords
+        project_keywords = {
+            "high": ["project", "github", "built", "developed", "technical"],
+            "medium": ["code", "implementation", "portfolio"],
+        }
+
+        # Career keywords
+        career_keywords = {
+            "high": ["career advice", "job search", "interview prep"],
+            "medium": ["career", "advice", "development"],
+        }
+
+        # Demo keywords
+        demo_keywords = {
+            "high": ["demo", "live", "show me", "walkthrough"],
+            "medium": ["interactive", "demonstration"],
+        }
+
+        # Strategic fit keywords (strongest indicators)
+        strategic_keywords = {
+            "high": [
+                "job description",
+                "requirements",
+                "position",
+                "role requirements",
+                "fit analysis",
+                "analyze this job",
+            ],
+            "medium": ["analyze", "match", "qualification", "hiring"],
+        }
+
+        # Calculate weighted scores
+        for agent, keywords in [
+            ("profile", profile_keywords),
+            ("project", project_keywords),
+            ("career", career_keywords),
+            ("demo", demo_keywords),
+            ("strategic_fit", strategic_keywords),
+        ]:
+            for weight, words in keywords.items():
+                multiplier = 1.0 if weight == "high" else 0.5
+                for word in words:
+                    if word in query_lower:
+                        scores[agent] += multiplier
+
+        best_agent = max(scores.items(), key=lambda x: x[1])
+        confidence = min(best_agent[1] / 3.0, 1.0)  # Normalize to 0-1
+
+        return {
+            "agent": best_agent[0] if best_agent[1] > 0 else "profile",
+            "confidence": confidence,
+        }
+
+    def route_query(self, query: str) -> str:
+        """Multi-tier routing: keyword → LLM fallback (OPTIMIZED)"""
+
+        # TIER 1: Keyword matching (fast, no API call)
+        route = self._get_keyword_route(query)
+
+        # High confidence keyword match - no need for LLM call
+        if route["confidence"] > 0.8:
+            logger.info(
+                f"[FAST-ROUTE] Query routed via keywords to {route['agent']} (confidence: {route['confidence']:.2f})"
+            )
+            return route["agent"]
+
+        # Medium confidence - log but still use LLM if available
+        if route["confidence"] > 0.5:
+            logger.info(
+                f"[KEYWORD] Medium confidence match: {route['agent']} ({route['confidence']:.2f}), attempting LLM verification"
+            )
+        else:
+            logger.info(
+                f"[KEYWORD] Low confidence match: {route['agent']} ({route['confidence']:.2f}), using LLM routing"
+            )
+
+        # TIER 2: LLM routing (only for ambiguous queries)
+        if not self.router_llm:
+            logger.info(
+                f"[FALLBACK] No LLM available, using keyword route: {route['agent']}"
+            )
+            return route["agent"]
 
         try:
             routing_prompt = f"""
             Route the following user query to the most appropriate agent:
-            
             Query: "{query}"
             
             Available agents:
@@ -553,22 +859,26 @@ class RouterAgent:
                 SystemMessage(content=routing_prompt),
                 HumanMessage(content=query),
             ]
-            response = self.router_llm.invoke(messages)
 
+            # LLM routing for uncertain queries
+            response = self.router_llm.invoke(messages)
             agent_name = response.content.strip().lower()
 
             if agent_name in self.agents:
-                logger.info(f"Query routed to {agent_name} agent")
+                logger.info(f"[LLM-ROUTE] Query routed to {agent_name} agent")
                 return agent_name
             else:
                 logger.warning(
-                    f"Invalid agent name returned: {agent_name}, using fallback"
+                    f"Invalid agent name returned: {agent_name}, using keyword route: {route['agent']}"
                 )
-                return self.route_query(query)  # Recursive fallback
+                return route["agent"]
 
         except Exception as e:
-            logger.error(f"Error in query routing: {str(e)}")
-            return self.route_query(query)  # Recursive fallback
+            # On error, use keyword route
+            logger.error(
+                f"LLM routing failed (using keyword route: {route['agent']}): {str(e)}"
+            )
+            return route["agent"]
 
     def process_query(
         self, query: str, context: Dict[str, Any] = None

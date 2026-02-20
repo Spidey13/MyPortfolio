@@ -71,10 +71,45 @@ class Settings(BaseModel):
 
     # Security Configuration
     rate_limit_requests: int = Field(
-        default=100, description="Rate limit requests per minute"
+        default=20, description="Rate limit requests per minute"  # OPTIMIZED: Aligned with middleware
     )
     rate_limit_window: int = Field(
         default=60, description="Rate limit window in seconds"
+    )
+    
+    # Cache Configuration (OPTIMIZED: Reduce API calls)
+    cache_enabled: bool = Field(
+        default=True, description="Enable response caching to reduce API calls"
+    )
+    cache_ttl_seconds: int = Field(
+        default=3600, description="Cache time-to-live in seconds (1 hour default)"
+    )
+    cache_max_size: int = Field(
+        default=100, description="Maximum number of cached responses"
+    )
+    
+    # Database Configuration (Turso)
+    turso_database_url: str = Field(
+        default_factory=lambda: os.getenv("TURSO_DATABASE_URL", ""),
+        description="Turso database URL"
+    )
+    turso_auth_token: str = Field(
+        default_factory=lambda: os.getenv("TURSO_AUTH_TOKEN", ""),
+        description="Turso auth token"
+    )
+    
+    # Analytics Configuration (PostHog)
+    posthog_api_key: str = Field(
+        default_factory=lambda: os.getenv("POSTHOG_API_KEY", ""),
+        description="PostHog API key"
+    )
+    posthog_host: str = Field(
+        default_factory=lambda: os.getenv("POSTHOG_HOST", "https://app.posthog.com"),
+        description="PostHog host URL"
+    )
+    posthog_enabled: bool = Field(
+        default_factory=lambda: os.getenv("POSTHOG_ENABLED", "true").lower() == "true",
+        description="Enable PostHog analytics"
     )
 
     # Portfolio Configuration
@@ -113,6 +148,16 @@ class Settings(BaseModel):
     def has_langchain_api(self) -> bool:
         """Check if LangChain is available (always true since we use core framework)"""
         return True
+    
+    @property
+    def has_turso(self) -> bool:
+        """Check if Turso database is configured"""
+        return bool(self.turso_database_url and self.turso_auth_token)
+    
+    @property
+    def has_posthog(self) -> bool:
+        """Check if PostHog is configured"""
+        return bool(self.posthog_api_key and self.posthog_enabled)
 
 
 # Get the directory where this config file is located (backend/app/)

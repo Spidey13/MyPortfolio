@@ -1,5 +1,6 @@
 import React from 'react';
-import ProfessionalAnalysisBoard from './ProfessionalAnalysisBoard';
+import { motion, AnimatePresence } from 'framer-motion';
+import DashboardJobAnalysis from './DashboardJobAnalysis';
 
 interface AnalysisCard {
   id: string;
@@ -41,12 +42,26 @@ const StrategicFitAnalysisSection: React.FC<StrategicFitAnalysisSectionProps> = 
   if (!analysisResult) return null;
 
   return (
-    <ProfessionalAnalysisBoard
-      isVisible={isVisible}
-      analysisData={analysisResult.kanbanData}
-      summaryData={analysisResult.summaryData}
-      onClose={onClose}
-    />
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          id="strategic-fit-section"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ type: "spring", damping: 30, stiffness: 200 }}
+          className="overflow-hidden"
+        >
+          <DashboardJobAnalysis
+            isVisible={isVisible}
+            analysisData={analysisResult.kanbanData}
+            matchScore={analysisResult.summaryData?.matchPercentage}
+            summaryData={analysisResult.summaryData}
+            onClose={onClose}
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

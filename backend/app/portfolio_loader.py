@@ -1,5 +1,6 @@
 """
 Portfolio data loader with validation and caching
+Supports both JSON file and Turso database backends
 """
 
 import json
@@ -12,16 +13,68 @@ logger = logging.getLogger(__name__)
 
 
 class PortfolioLoader:
-    """Loads and validates portfolio data from JSON file"""
+    """Loads and validates portfolio data from JSON file or database"""
 
-    def __init__(self, data_file: str = "app/data/portfolio_data.json"):
+    def __init__(
+        self, data_file: str = "app/data/portfolio_data.json", use_database: bool = True
+    ):
         self.data_file = data_file
+        self.use_database = use_database
         self._portfolio_data: Optional[PortfolioData] = None
         self._raw_data: Optional[Dict[str, Any]] = None
+        self._db = None
+
+        # Try to import database module
+        if use_database:
+            try:
+                from .database import get_database
+
+                self._db = get_database()
+                if self._db.is_available():
+                    logger.info("✅ Using Turso database for portfolio data")
+                else:
+                    logger.warning("⚠️  Database not available, falling back to JSON")
+                    self.use_database = False
+            except ImportError:
+                logger.warning("⚠️  Database module not available, using JSON")
+                self.use_database = False
+
         self._load_and_validate()
 
-    def _load_and_validate(self) -> None:
-        """Load and validate portfolio data on initialization"""
+    def _load_from_database(self) -> Optional[Dict[str, Any]]:
+        """Load portfolio data from Turso database"""
+        if not self._db or not self._db.is_available():
+            return None
+
+        try:
+            data = self._db.get_complete_portfolio()
+
+            # Validate we got data
+            if not data or not data.get("profile"):
+                logger.warning(
+                    "⚠️  No data returned from database, falling back to JSON"
+                )
+                return None
+
+            # Transform skills from database format to Pydantic format
+            # Database: {"Cloud And Mlops": [...], "Languages And Tools": [...]}
+            # Expected: {"cloud_and_mlops": [...], "languages_and_tools": [...]}
+            if "skills" in data and isinstance(data["skills"], dict):
+                transformed_skills = {}
+                for category_name, skill_list in data["skills"].items():
+                    # Convert "Cloud And Mlops" -> "cloud_and_mlops"
+                    snake_case_key = category_name.lower().replace(" ", "_")
+                    transformed_skills[snake_case_key] = skill_list
+                data["skills"] = transformed_skills
+
+            logger.info("✅ Portfolio data loaded from database")
+            return data
+        except Exception as e:
+            logger.error(f"❌ Error loading from database: {e}")
+            return None
+
+    def _load_from_json(self) -> Dict[str, Any]:
+        """Load portfolio data from JSON file"""
         try:
             # Check if file exists
             if not os.path.exists(self.data_file):
@@ -31,19 +84,10 @@ class PortfolioLoader:
 
             # Load JSON data
             with open(self.data_file, "r", encoding="utf-8") as f:
-                self._raw_data = json.load(f)
+                data = json.load(f)
 
-            # Validate using Pydantic model
-            self._portfolio_data = PortfolioData(**self._raw_data)
-
-            logger.info(
-                f"✅ Portfolio data loaded and validated successfully from {self.data_file}"
-            )
-            logger.info(
-                f"📊 Data summary: {len(self._portfolio_data.projects)} projects, "
-                f"{len(self._portfolio_data.experience)} experiences, "
-                f"{len(self._portfolio_data.publications)} publications"
-            )
+            logger.info(f"✅ Portfolio data loaded from JSON: {self.data_file}")
+            return data
 
         except FileNotFoundError as e:
             logger.error(f"❌ Portfolio data file not found: {e}")
@@ -51,6 +95,27 @@ class PortfolioLoader:
         except json.JSONDecodeError as e:
             logger.error(f"❌ Invalid JSON in portfolio data file: {e}")
             raise
+
+    def _load_and_validate(self) -> None:
+        """Load and validate portfolio data on initialization"""
+        try:
+            # Try database first if enabled
+            if self.use_database:
+                self._raw_data = self._load_from_database()
+
+            # Fall back to JSON if database didn't work
+            if not self._raw_data:
+                self._raw_data = self._load_from_json()
+
+            # Validate using Pydantic model
+            self._portfolio_data = PortfolioData(**self._raw_data)
+
+            logger.info(
+                f"📊 Data summary: {len(self._portfolio_data.projects)} projects, "
+                f"{len(self._portfolio_data.experience)} experiences, "
+                f"{len(self._portfolio_data.publications)} publications"
+            )
+
         except Exception as e:
             logger.error(f"❌ Portfolio data validation failed: {e}")
             raise
@@ -146,11 +211,11 @@ Visualization: {", ".join(skills.visualization)}
 _portfolio_loader: Optional[PortfolioLoader] = None
 
 
-def get_portfolio_loader() -> PortfolioLoader:
+def get_portfolio_loader(use_database: bool = True) -> PortfolioLoader:
     """Get the global portfolio loader instance"""
     global _portfolio_loader
     if _portfolio_loader is None:
-        _portfolio_loader = PortfolioLoader()
+        _portfolio_loader = PortfolioLoader(use_database=use_database)
     return _portfolio_loader
 
 

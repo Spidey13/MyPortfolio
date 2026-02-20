@@ -142,7 +142,7 @@ class Logger {
     if (!this.enableRemote) return;
 
     try {
-      const backendUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const backendUrl = import.meta.env.VITE_API_BASE_URL || '/api';
       
       // Only send warnings and errors to backend to reduce noise
       if (entry.level === 'warn' || entry.level === 'error') {

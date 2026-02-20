@@ -6,68 +6,58 @@ An interactive, AI-powered portfolio website that functions as a conversational 
 
 The entire website experience IS the portfolio demo - a sophisticated conversational interface that showcases technical capabilities through interaction rather than static presentation.
 
+## 📚 Documentation
+
+Detailed documentation is available in the `docs/` directory:
+
+- [**Setup Guide**](docs/SETUP.md) - Instructions for local development, database, and analytics setup.
+- [**Deployment Guide**](docs/DEPLOYMENT.md) - How to deploy to Vercel Serverless.
+- [**Architecture & Database**](docs/DATABASE.md) - Deep dive into data models and backend architecture.
+- [**Design System**](docs/DESIGN.md) - Explanation of the editorial design, typography, and layout.
+- [**Analytics & Logs**](docs/ANALYTICS.md) - Guide to PostHog analytics and monitoring.
+- [**Logging System**](docs/LOGGING.md) - Details on the backend and frontend logging infrastructure.
+- [**Image Assets**](docs/IMAGES.md) - Guidelines for project images and visualizations.
+
 ## 🏗️ Architecture
 
-This project is structured as a monorepo with two main components:
+This project uses a unified TypeScript architecture deployed on Vercel:
 
 ### Frontend (`frontend/`)
 - **Framework:** React with Vite
 - **Styling:** Tailwind CSS with custom theme
 - **Animation:** Framer Motion
-- **API Communication:** Axios
 - **Language:** TypeScript
+- **Data:** Static TypeScript files (ultra-fast loading)
 
-### Backend (`backend/`)
-- **Framework:** Python FastAPI
-- **AI Agent:** LangChain
-- **Server:** Uvicorn
-- **WebSocket:** Real-time communication
-
-## 🎨 Design System
-
-### Color Palette
-- **Background:** Off-black (#111111)
-- **Primary Text:** Off-white (#EAEAEA)
-- **Accent Color:** Electric Green (#00FF41)
-
-### Typography
-- **Primary Font:** Inter (AI & UI text)
-- **Secondary Font:** JetBrains Mono (user input & code)
+### Backend (`api/`)
+- **Platform:** Vercel Serverless Functions
+- **Language:** TypeScript
+- **AI:** Google Gemini API
+- **Multi-Agent System:** Profile, Project, Career, Demo, Strategic Fit agents
+- **Analytics:** PostHog integration
+- **Features:** Job analysis, AI chat, intelligent routing
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js 18+
-- Python 3.9+
-- npm or yarn
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd Portfolio
+    ```
 
-### Installation
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd ai-portfolio-website
-   ```
+3.  **Set up environment variables:**
+    Copy `.env.example` to `.env` and add your API keys (Gemini, Turso, PostHog). See [Setup Guide](docs/SETUP.md) for details.
 
-2. **Install all dependencies:**
-   ```bash
-   npm run install:all
-   ```
-
-3. **Set up environment variables:**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your API keys
-   ```
-
-4. **Start development servers:**
-   ```bash
-   npm run dev
-   ```
-
-This will start:
-- Frontend on `http://localhost:5173`
-- Backend on `http://localhost:8000`
+4.  **Start development server:**
+    ```bash
+    npm run dev
+    ```
+    Frontend will be available at `http://localhost:5173`.
 
 ## 📋 Available Commands
 
@@ -80,90 +70,24 @@ The conversational interface supports these commands:
 - `about_me` - Personal background and story
 - `contact_info` - Contact information and links
 
-## 🛠️ Development
-
-### Frontend Development
-```bash
-cd frontend
-npm run dev
-```
-
-### Backend Development
-```bash
-cd backend
-python -m uvicorn main:app --reload --port 8000
-```
-
-### Build for Production
-```bash
-npm run build
-```
-
-## 🧪 Testing
-
-### Frontend Tests
-```bash
-cd frontend
-npm run test
-```
-
-### Backend Tests
-```bash
-cd backend
-python -m pytest
-```
-
 ## 📁 Project Structure
 
 ```
-ai-portfolio-website/
-├── frontend/                 # React frontend
+Portfolio/
+├── api/                     # TypeScript Serverless Functions
+│   ├── chat.ts             # AI chat endpoint
+│   ├── health.ts           # Health check
+│   └── lib/                # Shared libraries (agents, router, gemini, etc.)
+├── docs/                    # Documentation
+├── frontend/               # React frontend
 │   ├── src/
-│   │   ├── components/      # UI components
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── services/       # API services
-│   │   └── styles/         # Styling
-│   ├── public/             # Static assets
-│   └── package.json
-├── backend/                 # Python backend
-│   ├── app/
-│   │   ├── api/            # API endpoints
-│   │   ├── core/           # Core logic
-│   │   ├── models/         # Data models
-│   │   └── services/       # Business logic
-│   ├── main.py             # FastAPI app
-│   └── requirements.txt
-├── .taskmaster/            # Task management
+│   │   ├── components/    # UI components
+│   │   ├── data/          # Static portfolio data
+│   │   ├── hooks/         # Custom hooks
+│   │   ├── pages/         # Page components
+│   │   └── styles/        # Styling
+├── scripts/                # Utility scripts
 └── package.json           # Root package.json
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-- `GOOGLE_API_KEY` - Google Gemini API key for LangChain AI agents
-- `ANTHROPIC_API_KEY` - Anthropic API key (optional)
-- `CORS_ORIGINS` - Allowed CORS origins
-
-### Tailwind Configuration
-Custom theme configuration is in `frontend/tailwind.config.js` with the project's color palette and typography settings.
-
-## 🚀 Deployment
-
-### Frontend
-The frontend can be deployed to any static hosting service (Vercel, Netlify, etc.):
-
-```bash
-cd frontend
-npm run build
-```
-
-### Backend
-The backend can be deployed to any Python hosting service (Railway, Heroku, etc.):
-
-```bash
-cd backend
-pip install -r requirements.txt
-python -m uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
 ## 🤝 Contributing
@@ -180,4 +104,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-Built with modern web technologies and AI capabilities to create an innovative portfolio experience. 
+Built with modern web technologies and AI capabilities to create an innovative portfolio experience.

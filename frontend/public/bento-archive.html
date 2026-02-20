@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editorial Grid: Bento Box Archive V3</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'cream-bg': '#F9F9F7',
+              'border-line': '#E5E5E5',
+              'text-dark': '#111111',
+              'text-muted': '#666666',
+              'accent-neon': '#CCFF00',
+              'accent-purple': '#7C3AED',
+              'accent-blue': '#2563EB',
+            },
+            fontFamily: {
+              serif: ['"Playfair Display"', 'serif'],
+              sans: ['"Inter"', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            backgroundImage: {
+               'mesh': 'radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%)',
+               'blueprint': 'linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px)',
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #F9F9F7;
+        }
+        .editorial-border {
+            border: 1px solid #E5E5E5;
+        }
+        .bento-card {
+            border: 1px solid #E5E5E5;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bento-card:hover {
+            border-color: #000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+        .hover-reveal-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+        }
+        .bento-card:hover .hover-reveal-content {
+            max-height: 200px; 
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="font-sans text-text-dark antialiased bg-cream-bg">
+<header class="w-full max-w-[1440px] mx-auto px-6 py-6 border-b border-border-line sticky top-0 z-50 bg-cream-bg/95 backdrop-blur-sm">
+<div class="flex flex-col md:flex-row justify-between items-center mb-6">
+<div class="text-2xl font-serif font-bold tracking-tight text-black mb-4 md:mb-0">
+            PRATHAMESH PRAVIN MORE
+        </div>
+<div class="text-xs font-mono text-gray-500 uppercase tracking-widest flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-accent-neon border border-black/10"></span>
+            AI/ML Engineer • Technical Journal
+        </div>
+</div>
+<nav class="flex flex-wrap justify-center md:justify-start gap-6 text-xs font-bold tracking-widest uppercase text-gray-500 border-t border-border-line pt-4">
+<a class="hover:text-black transition-colors" href="#">[ Index ]</a>
+<a class="text-black transition-colors" href="#">[ Work ]</a>
+<a class="hover:text-black transition-colors" href="#">[ Experience ]</a>
+<a class="hover:text-black transition-colors" href="#">[ Research ]</a>
+<a class="hover:text-black transition-colors" href="#">[ AI Chat ]</a>
+<a class="hover:text-black transition-colors" href="#">[ Job Analysis ]</a>
+</nav>
+</header>
+<main class="max-w-[1440px] mx-auto px-4 sm:px-6 py-12">
+<div class="flex flex-col lg:flex-row gap-12">
+<div class="w-full lg:w-3/4 flex flex-col gap-10">
+<div class="flex items-baseline justify-between border-b border-black pb-4 mb-2">
+<h2 class="font-sans text-xs font-bold uppercase tracking-widest">Archive Vol. 3</h2>
+<div class="flex items-center gap-4">
+<span class="font-mono text-xs text-gray-500">Bento Grid Layout</span>
+<span class="font-mono text-xs text-black border border-black px-1">Sort: Density</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-min">
+<article class="md:col-span-2 md:row-span-2 bento-card bg-white relative overflow-hidden group">
+<div class="absolute inset-0 bg-mesh opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+<div class="relative p-8 h-full flex flex-col justify-between z-10">
+<div class="flex justify-between items-start">
+<span class="font-mono text-[10px] bg-black text-white px-2 py-1 uppercase tracking-wider">Top Story</span>
+<span class="font-mono text-[10px] text-gray-500">Oct 26, 2023</span>
+</div>
+<div class="mt-auto">
+<h2 class="font-serif text-4xl font-medium mb-4 leading-tight">AI Research Assistant</h2>
+<p class="text-gray-800 text-sm leading-relaxed mb-6 font-medium max-w-md">
+                                Automating literature reviews. Reducing insight time by 85% through multi-domain query ingestion.
+                            </p>
+<div class="hover-reveal-content">
+<p class="text-xs text-gray-600 mb-4 border-l-2 border-black pl-3">
+                                    Leveraging AWS Bedrock and custom RAG pipelines to synthesize thousands of papers into coherent summaries, identifying contradictions and consensus automatically.
+                                </p>
+<div class="flex gap-2">
+<span class="text-[9px] font-bold uppercase border border-gray-400 px-2 py-1 bg-white/50">Python</span>
+<span class="text-[9px] font-bold uppercase border border-gray-400 px-2 py-1 bg-white/50">LangChain</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<article class="md:col-span-1 md:row-span-2 bento-card bg-cream-bg bg-blueprint bg-[length:20px_20px] relative group">
+<div class="p-6 h-full flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-[10px] text-blue-700 font-bold uppercase tracking-wider bg-blue-100 px-1">Hardware</span>
+<span class="material-symbols-outlined text-sm text-blue-700">memory</span>
+</div>
+<h3 class="font-serif text-xl font-bold mb-2 leading-tight">Semiconductor Defect Detection</h3>
+<div class="flex-grow flex items-center justify-center my-4 opacity-60 group-hover:opacity-100 transition-opacity">
+<svg class="w-full h-32" viewBox="0 0 100 100">
+<rect fill="none" height="80" stroke="#000" stroke-width="0.5" width="80" x="10" y="10"></rect>
+<path d="M10 50 H90 M50 10 V90" stroke="#000" stroke-width="0.5"></path>
+<circle cx="50" cy="50" fill="none" r="20" stroke="red" stroke-width="1"></circle>
+<circle cx="52" cy="48" fill="red" r="2"></circle>
+</svg>
+</div>
+<div class="border-t border-gray-300 pt-3 mt-auto">
+<div class="flex justify-between items-center">
+<span class="font-mono text-[10px] text-gray-500">Acc.</span>
+<span class="font-mono text-sm font-bold">99.2%</span>
+</div>
+<div class="hover-reveal-content mt-2">
+<p class="text-[10px] text-gray-600 leading-tight">Computer vision model deployed on edge devices for real-time quality assurance.</p>
+</div>
+</div>
+</div>
+</article>
+<article class="md:col-span-1 md:row-span-1 bento-card bg-white p-5 flex flex-col justify-between group">
+<div>
+<span class="font-mono text-[10px] text-purple-600 uppercase tracking-wider">Audio NLP</span>
+<h3 class="font-serif text-lg font-bold mt-2 leading-tight group-hover:text-purple-700 transition-colors">Lyric Alignment</h3>
+</div>
+<div class="flex items-end justify-between mt-4">
+<div class="flex gap-0.5 h-8 items-end">
+<div class="w-1 bg-purple-200 h-[40%] group-hover:h-[60%] transition-all duration-300"></div>
+<div class="w-1 bg-purple-400 h-[70%] group-hover:h-[90%] transition-all duration-300 delay-75"></div>
+<div class="w-1 bg-purple-600 h-[50%] group-hover:h-[80%] transition-all duration-300 delay-100"></div>
+<div class="w-1 bg-purple-300 h-[30%] group-hover:h-[50%] transition-all duration-300 delay-150"></div>
+</div>
+<span class="material-symbols-outlined text-lg text-gray-300 group-hover:text-purple-600 transition-colors">arrow_outward</span>
+</div>
+</article>
+<article class="md:col-span-1 md:row-span-1 bento-card bg-gray-50 p-5 flex flex-col justify-between group border-l-4 border-l-black">
+<div>
+<span class="font-mono text-[10px] text-gray-500 uppercase tracking-wider">F1 Strategy</span>
+<div class="mt-2 text-3xl font-serif font-bold text-gray-900">0.2s</div>
+<div class="text-[10px] text-gray-400 uppercase tracking-tight">Time Saved / Lap</div>
+</div>
+<div class="hover-reveal-content mt-2 pt-2 border-t border-gray-200">
+<span class="text-[10px] text-gray-600 block">Using PyTorch &amp; MLflow simulation.</span>
+</div>
+</article>
+<article class="md:col-span-2 md:row-span-1 bento-card bg-white p-6 flex flex-col md:flex-row gap-6 items-center group">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+<span class="font-mono text-[10px] text-gray-500 uppercase tracking-wider">Healthcare</span>
+</div>
+<h3 class="font-serif text-xl font-bold mb-2">Patient QA System</h3>
+<p class="text-xs text-gray-500 leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all">
+                            Parsing noisy, multi-perspective medical answers without specialized pipelines. A new approach to unstructured data in clinical settings.
+                        </p>
+</div>
+<div class="w-full md:w-auto flex flex-col items-end justify-center min-w-[100px] border-l border-gray-100 pl-4">
+<span class="font-mono text-2xl font-bold text-gray-900">4.8k</span>
+<span class="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-right">Queries / Day</span>
+<button class="mt-3 text-[10px] font-bold uppercase underline decoration-gray-300 hover:decoration-black underline-offset-4">Read Case Study</button>
+</div>
+</article>
+<article class="md:col-span-2 md:row-span-1 bento-card bg-[#111] text-white p-6 flex flex-col justify-between group relative overflow-hidden">
+<div class="absolute right-0 top-0 w-32 h-32 bg-gray-800 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
+<div class="relative z-10 flex justify-between items-start">
+<div>
+<span class="font-mono text-[10px] text-accent-neon uppercase tracking-wider border border-accent-neon/30 px-2 py-0.5 rounded-full">Paper</span>
+<h3 class="font-serif text-xl font-medium mt-3 mb-1">DEI Research Framework</h3>
+<p class="text-xs text-gray-400 font-light">Bias detection in corporate comms.</p>
+</div>
+<span class="material-symbols-outlined text-gray-600 group-hover:text-white transition-colors">description</span>
+</div>
+<div class="relative z-10 mt-4 flex items-center gap-4 hover-reveal-content">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full bg-gray-700 border border-black flex items-center justify-center text-[8px]">A</div>
+<div class="w-6 h-6 rounded-full bg-gray-600 border border-black flex items-center justify-center text-[8px]">B</div>
+</div>
+<span class="text-[10px] text-gray-500">Collaborative Research</span>
+</div>
+</article>
+</div>
+</div>
+<aside class="w-full lg:w-1/4 flex flex-col gap-8">
+<div class="bg-black text-white p-5 rounded-sm shadow-lg border border-gray-800">
+<div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-4">
+<h4 class="font-sans text-[10px] font-bold uppercase tracking-widest text-accent-neon">Activity Log</h4>
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-neon opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-accent-neon"></span>
+</span>
+</div>
+<ul class="space-y-4 font-mono text-xs">
+<li class="flex gap-3 relative pl-4 border-l border-gray-800">
+<span class="absolute left-[-1px] top-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full -translate-x-1/2"></span>
+<span class="text-gray-500 min-w-[34px]">10:42</span>
+<span class="text-gray-300 leading-tight">Deployed <span class="text-white font-bold">HealthQA v2</span> to production environment.</span>
+</li>
+<li class="flex gap-3 relative pl-4 border-l border-gray-800">
+<span class="absolute left-[-1px] top-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full -translate-x-1/2"></span>
+<span class="text-gray-500 min-w-[34px]">09:15</span>
+<span class="text-gray-300 leading-tight">Updated vector embeddings for <span class="text-accent-neon">Knowledge Base</span>.</span>
+</li>
+<li class="flex gap-3 relative pl-4 border-l border-gray-800">
+<span class="absolute left-[-1px] top-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full -translate-x-1/2"></span>
+<span class="text-gray-500 min-w-[34px]">Yest.</span>
+<span class="text-gray-300 leading-tight">Published article on <span class="text-white underline decoration-gray-600 underline-offset-2">LLM Quantization</span>.</span>
+</li>
+</ul>
+<div class="mt-6 pt-3 border-t border-gray-800 text-center">
+<a class="text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-colors flex items-center justify-center gap-1" href="#">
+                    View All Activity <span class="material-symbols-outlined text-[10px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="bg-accent-purple text-white p-6 rounded-sm relative overflow-hidden group shadow-lg transition-transform hover:-translate-y-1">
+<div class="absolute -right-4 -top-4 p-4 opacity-10 group-hover:opacity-20 transition-opacity rotate-12">
+<span class="material-symbols-outlined text-9xl">psychology</span>
+</div>
+<h4 class="font-sans text-[10px] font-bold uppercase tracking-widest text-purple-200 mb-3 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-purple-200 rounded-full"></span>
+                    Current Focus
+                </h4>
+<h3 class="font-serif text-2xl font-bold mb-4 leading-tight z-10 relative">LLM Quantization</h3>
+<p class="text-xs text-purple-100 mb-6 font-light leading-relaxed z-10 relative border-l border-purple-400/30 pl-3">
+                    Researching 4-bit quantization methods for efficient edge deployment on limited hardware.
+                </p>
+<div class="space-y-2 relative z-10">
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+<span>Research Phase</span>
+<span>69%</span>
+</div>
+<div class="w-full bg-black/20 h-1 rounded-full overflow-hidden">
+<div class="bg-white h-1 w-[69%] shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+</div>
+</div>
+</div>
+<div class="bg-white editorial-border p-5 shadow-sm">
+<h4 class="font-sans text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-5 border-b border-gray-100 pb-2">Quick Stats</h4>
+<div class="grid grid-cols-2 gap-y-6 gap-x-4">
+<div class="group cursor-default">
+<div class="text-2xl font-serif font-bold text-black group-hover:text-accent-blue transition-colors">12</div>
+<div class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Models</div>
+</div>
+<div class="group cursor-default">
+<div class="text-2xl font-serif font-bold text-black group-hover:text-accent-blue transition-colors">8.4k</div>
+<div class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Citations</div>
+</div>
+<div class="group cursor-default">
+<div class="text-2xl font-serif font-bold text-black group-hover:text-accent-blue transition-colors">99%</div>
+<div class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Uptime</div>
+</div>
+<div class="group cursor-default">
+<div class="text-2xl font-serif font-bold text-black group-hover:text-accent-blue transition-colors">4</div>
+<div class="text-[9px] text-gray-400 uppercase tracking-widest mt-1">Papers</div>
+</div>
+</div>
+</div>
+<div class="bg-cream-bg border border-dashed border-gray-300 p-6 text-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10">
+<span class="material-symbols-outlined text-gray-400 mb-2">mail</span>
+<h4 class="font-serif text-lg font-bold mb-2">Technical Digest</h4>
+<p class="text-xs text-gray-500 mb-4 max-w-[200px] mx-auto">Get monthly insights on AI engineering and system architecture.</p>
+<button class="w-full bg-black text-white text-[10px] font-bold uppercase tracking-widest py-3 hover:bg-gray-800 transition-colors shadow-md">
+                        Subscribe
+                    </button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="max-w-[1440px] mx-auto px-6 py-12 border-t border-border-line mt-12 bg-cream-bg">
+<div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 font-mono">
+<p>© 2023 Prathamesh Pravin More. All Rights Reserved.</p>
+<div class="flex gap-6 mt-4 md:mt-0">
+<a class="hover:text-black transition-colors" href="#">Twitter</a>
+<a class="hover:text-black transition-colors" href="#">LinkedIn</a>
+<a class="hover:text-black transition-colors" href="#">GitHub</a>
+</div>
+</div>
+</footer>
+</body></html>
