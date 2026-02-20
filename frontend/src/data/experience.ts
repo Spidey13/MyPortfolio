@@ -145,7 +145,7 @@ export const EXPERIENCE: Experience[] = [
       action:
         "I operationalized the high-frequency stock prediction model by architecting an end-to-end MLOps pipeline on AWS SageMaker, optimizing serialization for sub-100ms real-time inference. Simultaneously, I engineered a serverless Azure ETL pipeline integrating OCR and BERT-based NLP models to automate 90% of manual data entry for tender documents. To manage scale, I right-sized compute resources and implemented spot instance strategies, cutting cloud costs by 20%.",
       result:
-        "Achieved sub-100ms inference latency on the production stock model, scaled document processing capacity from 50 to 10,000+ documents monthly (200x increase), and reduced overall infrastructure costs by 20% ($15K+ annually).",
+        "Achieved sub-100ms inference latency on the production stock model, scaled document processing capacity from 50 to 10,000+ documents monthly (200x increase).",
       impact:
         "Enabled Dimensionless to scale operations without proportional hiring, directly contributing to 3 new enterprise client acquisitions. Demonstrated that complex AI workflows (both time-series financial models and NLP pipelines) could be deployed cost-effectively.",
       architecture:
