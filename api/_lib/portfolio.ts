@@ -4,7 +4,7 @@
  */
 
 // Import all portfolio data types and instances
-import { PORTFOLIO_DATA, type PortfolioData } from '../data/index';
+import { PORTFOLIO_DATA, type PortfolioData } from '../_data/index';
 
 /**
  * Get complete portfolio data
