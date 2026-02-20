@@ -32,11 +32,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-<<<<<<< HEAD:frontend/vite.config.ts
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:3001',
-=======
         target: 'http://localhost:3001',
->>>>>>> feature/vercel-test:frontend/vite.config.mts
         changeOrigin: true,
         rewrite: (path) => path
       }
