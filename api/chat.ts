@@ -8,6 +8,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { routeQuery } from './_lib/router';
 import { AgentFactory } from './_lib/agents';
 import { trackAIQuery, trackAgentUsage } from './_lib/analytics';
+import { checkRateLimit } from './_lib/rateLimit';
 
 const agentFactory = new AgentFactory();
 
@@ -16,9 +17,31 @@ export default async function handler(
   res: VercelResponse
 ) {
   // Add CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    'https://my-portfolio-git-feat-0f72e6-prathamesh-mores-projects-3fff7c84.vercel.app',
+    'http://localhost:5173'
+  ];
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Rate limiting check
+  const xForwardedFor = req.headers['x-forwarded-for'];
+  let ip = 'unknown';
+  if (typeof xForwardedFor === 'string') {
+    ip = xForwardedFor.split(',')[0].trim();
+  } else if (Array.isArray(xForwardedFor) && xForwardedFor.length > 0) {
+    ip = xForwardedFor[0].trim();
+  }
+  
+  const limit = checkRateLimit(ip);
+  if (!limit.allowed) {
+    res.setHeader('Retry-After', limit.retryAfter!.toString());
+    return res.status(429).json({ error: 'Too Many Requests' });
+  }
 
   // Handle preflight
   if (req.method === 'OPTIONS') {
@@ -41,6 +64,20 @@ export default async function handler(
       return res.status(400).json({
         error: 'Bad Request',
         message: 'Message is required and must be a string'
+      });
+    }
+
+    if (message.length > 500) {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: 'Message is too long'
+      });
+    }
+
+    if (context && JSON.stringify(context).length > 1000) {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: 'Context is too large'
       });
     }
 
