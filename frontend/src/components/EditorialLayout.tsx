@@ -76,9 +76,15 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
       console.error("Job analysis failed:", error);
       trackError('job_analysis_failed', (error as Error).message, 'EditorialLayout.handleAnalyzeJob');
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "/api";
-      alert(
-        `⚠️ Backend offline - Please ensure the backend server is running on ${apiBaseUrl}`,
-      );
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      
+      if (errorMessage === "Failed to fetch" || errorMessage.includes("NetworkError")) {
+        alert(
+          `⚠️ Backend offline - Please ensure the backend server is running on ${apiBaseUrl}`,
+        );
+      } else {
+        alert(`⚠️ Analysis Failed: ${errorMessage}`);
+      }
     } finally {
       setIsJobAnalyzing(false);
     }
@@ -87,38 +93,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
   // Prepare data for components
   const featuredProject = portfolioData.projects?.[0]; // F1 Race Strategy Simulator
 
-  // Map all projects for the archive (featured + others)
-  const allProjects =
-    portfolioData.projects?.map((p: any, idx: number) => ({
-      title: p.title,
-      tagline: p.star?.task,
-      description: p.star?.situation || p.star?.result || "",
-      image:
-        p.image ||
-        `https://via.placeholder.com/600x400/111827/ffffff?text=${encodeURIComponent(p.title)}`,
-      version:
-        idx === 0
-          ? "v2.0"
-          : idx === 1
-            ? "v1.8"
-            : idx === 2
-              ? "v1.5"
-              : idx === 3
-                ? "v1.2"
-                : "v1.0",
-      technologies: [...(p.technologies || [])],
-      stars:
-        idx === 0
-          ? "1.2k"
-          : idx === 1
-            ? "842"
-            : idx === 2
-              ? "654"
-              : idx === 3
-                ? "423"
-                : "312",
-      featured: idx === 0, // Only mark the first project as featured for the large card
-    })) || [];
+
 
   // Activity timeline from activities.ts
   const timelineEntries: TimelineEntry[] = ACTIVITIES;
@@ -437,19 +412,21 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
           />
 
           {/* Collaboration CTA */}
-          <CollabCTA
-            onEmailClick={() =>
-              window.open(`mailto:${portfolioData.profile?.email}`)
-            }
-            githubUrl={
-              portfolioData.profile?.links?.find((l) => l.type === "github")
-                ?.url
-            }
-            linkedinUrl={
-              portfolioData.profile?.links?.find((l) => l.type === "linkedin")
-                ?.url
-            }
-          />
+          <div id="contact">
+            <CollabCTA
+              onEmailClick={() =>
+                window.open(`mailto:${portfolioData.profile?.email}`)
+              }
+              githubUrl={
+                portfolioData.profile?.links?.find((l) => l.type === "github")
+                  ?.url
+              }
+              linkedinUrl={
+                portfolioData.profile?.links?.find((l) => l.type === "linkedin")
+                  ?.url
+              }
+            />
+          </div>
         </aside>
       </main>
 

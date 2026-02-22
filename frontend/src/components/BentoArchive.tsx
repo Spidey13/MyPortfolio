@@ -51,14 +51,14 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
       {/* Archive Header */}
       <div className="flex items-baseline justify-between border-b border-black pb-4 mb-6">
         <h2 className="font-sans text-xs font-bold uppercase tracking-widest">
-          Archive Vol. 3
+          Projects Archive
         </h2>
         <div className="flex items-center gap-4">
           <span className="font-mono text-xs text-gray-500">
-            Bento Grid Layout
+            Grid View
           </span>
           <span className="font-mono text-xs text-black border border-black px-1">
-            Sort: Density
+            Sort: Latest
           </span>
         </div>
       </div>

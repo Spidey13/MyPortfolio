@@ -81,9 +81,18 @@ function App() {
     } catch (error) {
       console.error("Chat error:", error);
       trackError('chat_error', (error as Error).message, 'App.handleSendMessage');
-      setAiMessage(
-        "Sorry, I encountered an error processing your request. Please try again.",
-      );
+      
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      
+      if (errorMessage === "Failed to fetch" || errorMessage.includes("NetworkError")) {
+        setAiMessage(
+          "Sorry, I cannot reach the server. Please ensure the backend is running."
+        );
+      } else {
+        setAiMessage(
+          `Sorry, I encountered an error: ${errorMessage}`
+        );
+      }
       setChatViewportContent(null);
     } finally {
       setIsAnalyzing(false);

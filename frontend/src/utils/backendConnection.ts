@@ -55,7 +55,14 @@ ${jobDescription}`;
     });
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      let errorMessage = `HTTP error! status: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (e) {
+        // Ignore JSON parse error
+      }
+      throw new Error(errorMessage);
     }
     
     const result = await response.json();
@@ -104,7 +111,14 @@ export const chatWithAI = async (message: string) => {
     });
     
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      let errorMessage = `HTTP error! status: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+      } catch (e) {
+        // Ignore JSON parse error
+      }
+      throw new Error(errorMessage);
     }
     
     return await response.json();

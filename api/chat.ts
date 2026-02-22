@@ -67,7 +67,10 @@ export default async function handler(
       });
     }
 
-    if (message.length > 500) {
+    const isJobAnalysis = message.trim().startsWith('Please analyze how well my profile matches this job description:');
+    const maxLength = isJobAnalysis ? 15000 : 500;
+
+    if (message.length > maxLength) {
       return res.status(400).json({
         error: 'Bad Request',
         message: 'Message is too long'
