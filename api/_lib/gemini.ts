@@ -26,14 +26,15 @@ export interface GeminiResponse {
 export async function callGemini(
   systemPrompt: string,
   userMessage: string,
-  context?: Record<string, any>
+  context?: Record<string, any>,
+  maxTokens: number = 500
 ): Promise<GeminiResponse> {
   try {
     const model = getGenAI().getGenerativeModel({ 
       model: 'gemini-2.0-flash',
       generationConfig: {
         temperature: 0.3,
-        maxOutputTokens: 500,
+        maxOutputTokens: maxTokens,
       }
     });
 

@@ -50,8 +50,12 @@ abstract class PortfolioAgent {
       // Build context for this agent
       const builtContext = await this.buildContext(query, context);
 
-      // Call Gemini API
-      const result = await callGemini(this.systemPrompt, query, builtContext);
+      // Call Gemini API. Strategic Fit Agent returns a large JSON block.
+      let maxTokens = 500;
+      if (this.name === 'Strategic Fit Agent') {
+        maxTokens = 4000;
+      }
+      const result = await callGemini(this.systemPrompt, query, builtContext, maxTokens);
 
       if (result.error) {
         return this.getFallbackResponse(query);
@@ -107,10 +111,10 @@ export class ProfileAgent extends PortfolioAgent {
 Provide information about the candidate's background, education, and skills using data from context.
 
 When users ask about the candidate:
-1. Give a warm, professional introduction
+1. Give a warm, friendly, and slightly informal introduction (like you're chatting at a meetup)
 2. Highlight relevant experience briefly
 3. Mention key technical skills
-4. Keep it conversational and engaging
+4. Keep it highly conversational, engaging, and personal
 
 Respond naturally - avoid listing everything unless asked. Focus on what the user is asking about.`;
 
@@ -227,7 +231,7 @@ export class CareerAgent extends PortfolioAgent {
   constructor() {
     const systemPrompt = `You are the Career Agent for an AI portfolio.
 
-Your role is to provide career advice, professional development guidance, and industry insights.
+Your role is to provide career advice, professional development guidance, and industry insights. Use a conversational, slightly informal, and friendly tone (like you're chatting over coffee).
 
 Expertise Areas:
 - AI/ML Career Development
@@ -242,9 +246,9 @@ When users ask about career advice, provide:
 3. Personal experience when applicable
 4. Resource recommendations
 
-Always respond in a supportive, professional tone. Focus on helping users achieve their career goals.
+Always respond in a supportive, friendly tone. Focus on helping users achieve their career goals.
 
-Keep responses encouraging and practical.`;
+Keep responses encouraging, practical, and conversational.`;
 
     super('Career Agent', 'Handles career and professional development queries', systemPrompt);
   }
@@ -293,30 +297,32 @@ CRITICAL INSTRUCTIONS:
 1. Be objective and discerning. Do not be overly optimistic.
 2. If skills are missing, PENALIZE the score significantly.
 3. "Good fit" is 70-80%. "Excellent" (>90%) is reserved for exact matches with proven expertise.
-4. If the candidate lacks specific required technologies (e.g., job asks for Java, candidate only knows Python), the score MUST be below 60%.
+4. If the candidate lacks specific required technologies, the score MUST be below 60%.
+5. Keep explanations EXTREMELY BRIEF (max 1 sentence per item).
+6. Only output a maximum of TWO (2) items per array to save tokens.
 
-Return structured JSON:
+Return structured JSON exactly in this format:
 {
   "kanban_data": {
-    "technicalSkills": [{"id": "1", "title": "[Skill]", "description": "[Evidence]", "score": "High/Medium/Low"}],
-    "relevantExperience": [{"id": "1", "title": "[Role]", "description": "[Relevance]", "score": "High/Medium/Low"}],
-    "projectEvidence": [{"id": "1", "title": "[Project]", "description": "[Proof]", "score": "High/Medium/Low"}],
-    "quantifiableImpact": [{"id": "1", "title": "[Metric]", "description": "[Impact]", "score": "High/Medium/Low"}]
+    "technicalSkills": [{"id": "1", "title": "[Skill]", "description": "[Brief 1-sentence evidence]", "score": "High/Medium/Low"}],
+    "relevantExperience": [{"id": "1", "title": "[Role]", "description": "[Brief 1-sentence relevance]", "score": "High/Medium/Low"}],
+    "projectEvidence": [{"id": "1", "title": "[Project]", "description": "[Brief 1-sentence proof]", "score": "High/Medium/Low"}],
+    "quantifiableImpact": [{"id": "1", "title": "[Metric]", "description": "[Brief 1-sentence impact]", "score": "High/Medium/Low"}]
   },
   "summary_data": {
     "overallMatch": "Excellent/Strong/Moderate/Weak",
     "matchPercentage": 75,
-    "executiveSummary": "[Brutally honest assessment of fit]",
-    "keyStrengths": ["str1", "str2"],
+    "executiveSummary": "[Brief 2-sentence candid assessment]",
+    "keyStrengths": ["str1"],
     "competitiveAdvantages": ["adv1"],
-    "criticalGaps": ["gap1", "gap2"],
-    "interviewHighlights": ["hard_question_1", "hard_question_2"]
+    "criticalGaps": ["gap1"],
+    "interviewHighlights": ["question_1"]
   },
   "match_score": "75%",
-  "analysis": "[Detailed justification of the score]"
+  "analysis": "[Brief 1-sentence logic for score]"
 }
 
-Be concise. Focus on the GAPS as much as the MATCHES.`;
+Be concise. Keep arrays to a maximum length of 2.`;
 
     super('Strategic Fit Agent', 'Handles job analysis and strategic fit queries', systemPrompt);
   }
