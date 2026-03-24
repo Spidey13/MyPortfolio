@@ -1,0 +1,6981 @@
+{
+  "workspace": "d:\\Projects\\Portfolio",
+  "files": {
+    "api-dev-server.ts": {
+      "path": "d:\\Projects\\Portfolio\\api-dev-server.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "createVercelRequest",
+          "line": 36,
+          "end_line": 44,
+          "params": [
+            "req: Request"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "createVercelResponse",
+          "line": 46,
+          "end_line": 71,
+          "params": [
+            "res: Response"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "dotenv",
+          "names": [
+            "dotenv"
+          ],
+          "line": 7,
+          "text": "import dotenv from 'dotenv';"
+        },
+        {
+          "kind": "import",
+          "module": "express",
+          "names": [
+            "express"
+          ],
+          "line": 10,
+          "text": "import express from 'express';"
+        },
+        {
+          "kind": "import",
+          "module": "express",
+          "names": [
+            "Request",
+            "Response"
+          ],
+          "line": 11,
+          "text": "import type { Request, Response } from 'express';"
+        },
+        {
+          "kind": "import",
+          "module": "./api/chat.js",
+          "names": [
+            "chatHandler"
+          ],
+          "line": 12,
+          "text": "import chatHandler from './api/chat.js';"
+        },
+        {
+          "kind": "import",
+          "module": "./api/health.js",
+          "names": [
+            "healthHandler"
+          ],
+          "line": 13,
+          "text": "import healthHandler from './api/health.js';"
+        }
+      ],
+      "line_count": 102
+    },
+    "api/chat.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\chat.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "handler",
+          "line": 15,
+          "end_line": 144,
+          "params": [
+            "req: VercelRequest",
+            "res: VercelResponse"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "@vercel/node",
+          "names": [
+            "VercelRequest",
+            "VercelResponse"
+          ],
+          "line": 7,
+          "text": "import type { VercelRequest, VercelResponse } from '@vercel/node';"
+        },
+        {
+          "kind": "import",
+          "module": "./_lib/router",
+          "names": [
+            "routeQuery"
+          ],
+          "line": 8,
+          "text": "import { routeQuery } from './_lib/router';"
+        },
+        {
+          "kind": "import",
+          "module": "./_lib/agents",
+          "names": [
+            "AgentFactory"
+          ],
+          "line": 9,
+          "text": "import { AgentFactory } from './_lib/agents';"
+        },
+        {
+          "kind": "import",
+          "module": "./_lib/analytics",
+          "names": [
+            "trackAIQuery",
+            "trackAgentUsage"
+          ],
+          "line": 10,
+          "text": "import { trackAIQuery, trackAgentUsage } from './_lib/analytics';"
+        },
+        {
+          "kind": "import",
+          "module": "./_lib/rateLimit",
+          "names": [
+            "checkRateLimit"
+          ],
+          "line": 11,
+          "text": "import { checkRateLimit } from './_lib/rateLimit';"
+        }
+      ],
+      "line_count": 145
+    },
+    "api/health.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\health.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "handler",
+          "line": 8,
+          "end_line": 40,
+          "params": [
+            "req: VercelRequest",
+            "res: VercelResponse"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "@vercel/node",
+          "names": [
+            "VercelRequest",
+            "VercelResponse"
+          ],
+          "line": 6,
+          "text": "import type { VercelRequest, VercelResponse } from '@vercel/node';"
+        }
+      ],
+      "line_count": 41
+    },
+    "api/_data/activities.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\activities.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 64
+    },
+    "api/_data/aiFallbackResponses.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\aiFallbackResponses.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "getFallbackResponse",
+          "line": 219,
+          "end_line": 237,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "getWarmupTip",
+          "line": 242,
+          "end_line": 252,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getEnhancedFallbackResponse",
+          "line": 257,
+          "end_line": 269,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "./index",
+          "names": [
+            "PORTFOLIO_DATA"
+          ],
+          "line": 6,
+          "text": "import { PORTFOLIO_DATA } from './index';"
+        }
+      ],
+      "line_count": 272
+    },
+    "api/_data/experience.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\experience.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 262
+    },
+    "api/_data/index.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\index.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "./profile",
+          "names": [
+            "PROFILE",
+            "EDUCATION"
+          ],
+          "line": 13,
+          "text": "import { PROFILE, EDUCATION } from './profile';"
+        },
+        {
+          "kind": "import",
+          "module": "./experience",
+          "names": [
+            "EXPERIENCE"
+          ],
+          "line": 14,
+          "text": "import { EXPERIENCE } from './experience';"
+        },
+        {
+          "kind": "import",
+          "module": "./projects",
+          "names": [
+            "PROJECTS"
+          ],
+          "line": 15,
+          "text": "import { PROJECTS } from './projects';"
+        },
+        {
+          "kind": "import",
+          "module": "./publications",
+          "names": [
+            "PUBLICATIONS"
+          ],
+          "line": 16,
+          "text": "import { PUBLICATIONS } from './publications';"
+        },
+        {
+          "kind": "import",
+          "module": "./skills",
+          "names": [
+            "SKILLS"
+          ],
+          "line": 17,
+          "text": "import { SKILLS } from './skills';"
+        },
+        {
+          "kind": "import",
+          "module": "./activities",
+          "names": [
+            "ACTIVITIES"
+          ],
+          "line": 18,
+          "text": "import { ACTIVITIES } from './activities';"
+        }
+      ],
+      "line_count": 44
+    },
+    "api/_data/profile.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\profile.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 62
+    },
+    "api/_data/projects.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\projects.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 317
+    },
+    "api/_data/publications.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\publications.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 35
+    },
+    "api/_data/skills.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_data\\skills.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 21
+    },
+    "api/_lib/agents.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_lib\\agents.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [
+        {
+          "name": "",
+          "line": 107,
+          "end_line": 173,
+          "bases": [],
+          "methods": [
+            {
+              "name": "constructor",
+              "line": 108,
+              "end_line": 122,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "buildContext",
+              "line": 124,
+              "end_line": 147,
+              "params": [
+                "query: string",
+                "context?: Record<string, any>"
+              ],
+              "static": false
+            },
+            {
+              "name": "getFallbackResponse",
+              "line": 149,
+              "end_line": 172,
+              "params": [
+                "query: string"
+              ],
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "",
+          "line": 179,
+          "end_line": 224,
+          "bases": [],
+          "methods": [
+            {
+              "name": "constructor",
+              "line": 180,
+              "end_line": 194,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "buildContext",
+              "line": 196,
+              "end_line": 223,
+              "params": [
+                "query: string",
+                "context?: Record<string, any>"
+              ],
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "",
+          "line": 230,
+          "end_line": 255,
+          "bases": [],
+          "methods": [
+            {
+              "name": "constructor",
+              "line": 231,
+              "end_line": 254,
+              "params": [],
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "",
+          "line": 261,
+          "end_line": 285,
+          "bases": [],
+          "methods": [
+            {
+              "name": "constructor",
+              "line": 262,
+              "end_line": 284,
+              "params": [],
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "",
+          "line": 291,
+          "end_line": 393,
+          "bases": [],
+          "methods": [
+            {
+              "name": "constructor",
+              "line": 292,
+              "end_line": 328,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "buildContext",
+              "line": 330,
+              "end_line": 355,
+              "params": [
+                "query: string",
+                "context?: Record<string, any>"
+              ],
+              "static": false
+            },
+            {
+              "name": "isJobAnalysisQuery",
+              "line": 357,
+              "end_line": 361,
+              "params": [
+                "query: string"
+              ],
+              "static": false
+            },
+            {
+              "name": "parseResponse",
+              "line": 363,
+              "end_line": 392,
+              "params": [
+                "response: string",
+                "query: string",
+                "processingTime: number"
+              ],
+              "static": false
+            }
+          ]
+        },
+        {
+          "name": "",
+          "line": 399,
+          "end_line": 419,
+          "bases": [],
+          "methods": [
+            {
+              "name": "constructor",
+              "line": 402,
+              "end_line": 409,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "getAgent",
+              "line": 411,
+              "end_line": 413,
+              "params": [
+                "agentType: string"
+              ],
+              "static": false
+            },
+            {
+              "name": "processQuery",
+              "line": 415,
+              "end_line": 418,
+              "params": [
+                "agentType: string",
+                "query: string",
+                "context?: Record<string, any>"
+              ],
+              "static": false
+            }
+          ]
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "./gemini",
+          "names": [
+            "callGemini"
+          ],
+          "line": 6,
+          "text": "import { callGemini } from './gemini';"
+        },
+        {
+          "kind": "import",
+          "module": "./portfolio",
+          "names": [
+            "getPortfolioData",
+            "getProfile",
+            "getProjects",
+            "getFeaturedProjects",
+            "getExperience",
+            "getSkills",
+            "searchProjects",
+            "searchExperience",
+            "getProfileSummary"
+          ],
+          "line": 7,
+          "text": "import {\r\n  getPortfolioData,\r\n  getProfile,\r\n  getProjects,\r\n  getFeaturedProjects,\r\n  getExperience,\r\n  getSkills,\r\n  searchProjects,\r\n  searchExperience,\r\n  getProfileSummary\r\n} from './portfolio';"
+        }
+      ],
+      "line_count": 420
+    },
+    "api/_lib/analytics.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_lib\\analytics.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "trackAIQuery",
+          "line": 14,
+          "end_line": 17,
+          "params": [
+            "params: TrackAIQueryParams"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "trackAgentUsage",
+          "line": 19,
+          "end_line": 24,
+          "params": [
+            "_agentType: string",
+            "_sessionId?: string"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "line_count": 25
+    },
+    "api/_lib/gemini.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_lib\\gemini.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "getGenAI",
+          "line": 11,
+          "end_line": 19,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "callGemini",
+          "line": 26,
+          "end_line": 65,
+          "params": [
+            "systemPrompt: string",
+            "userMessage: string",
+            "context?: Record<string, any>",
+            "maxTokens: number = 500"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "callGeminiForRouting",
+          "line": 67,
+          "end_line": 110,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "@google/generative-ai",
+          "names": [
+            "GoogleGenerativeAI"
+          ],
+          "line": 6,
+          "text": "import { GoogleGenerativeAI } from '@google/generative-ai';"
+        }
+      ],
+      "line_count": 111
+    },
+    "api/_lib/portfolio.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_lib\\portfolio.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "getPortfolioData",
+          "line": 13,
+          "end_line": 15,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getProfile",
+          "line": 20,
+          "end_line": 25,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getProjects",
+          "line": 30,
+          "end_line": 32,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getFeaturedProjects",
+          "line": 37,
+          "end_line": 39,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getExperience",
+          "line": 44,
+          "end_line": 46,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getSkills",
+          "line": 51,
+          "end_line": 53,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getPublications",
+          "line": 58,
+          "end_line": 60,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getActivities",
+          "line": 65,
+          "end_line": 67,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "searchProjects",
+          "line": 69,
+          "end_line": 84,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "searchExperience",
+          "line": 89,
+          "end_line": 106,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "getProjectById",
+          "line": 111,
+          "end_line": 113,
+          "params": [
+            "id: string"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "getProfileSummary",
+          "line": 118,
+          "end_line": 128,
+          "params": [],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "../_data/index",
+          "names": [
+            "PORTFOLIO_DATA",
+            "type PortfolioData"
+          ],
+          "line": 7,
+          "text": "import { PORTFOLIO_DATA, type PortfolioData } from '../_data/index';"
+        }
+      ],
+      "line_count": 129
+    },
+    "api/_lib/rateLimit.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_lib\\rateLimit.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "checkRateLimit",
+          "line": 5,
+          "end_line": 26,
+          "params": [
+            "ip: string"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "line_count": 27
+    },
+    "api/_lib/router.ts": {
+      "path": "d:\\Projects\\Portfolio\\api\\_lib\\router.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "getKeywordRoute",
+          "line": 51,
+          "end_line": 99,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "routeQuery",
+          "line": 105,
+          "end_line": 148,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "getAgentDescription",
+          "line": 153,
+          "end_line": 162,
+          "params": [
+            "agent: AgentType"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "./gemini",
+          "names": [
+            "callGeminiForRouting"
+          ],
+          "line": 6,
+          "text": "import { callGeminiForRouting } from './gemini';"
+        }
+      ],
+      "line_count": 163
+    },
+    "backend/main.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\main.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "global_exception_handler",
+          "line": 76,
+          "end_line": 95,
+          "params": [
+            "request: Request",
+            "exc: Exception"
+          ],
+          "return_type": null,
+          "docstring": "Global exception handler for unhandled exceptions",
+          "decorated": true
+        },
+        {
+          "name": "root",
+          "line": 169,
+          "end_line": 177,
+          "params": [],
+          "return_type": null,
+          "docstring": "Root endpoint for health check",
+          "decorated": true
+        },
+        {
+          "name": "health_check",
+          "line": 181,
+          "end_line": 198,
+          "params": [],
+          "return_type": null,
+          "docstring": "Enhanced health check endpoint",
+          "decorated": true
+        },
+        {
+          "name": "get_metrics",
+          "line": 202,
+          "end_line": 215,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get application metrics including cache statistics",
+          "decorated": true
+        },
+        {
+          "name": "get_resume",
+          "line": 219,
+          "end_line": 260,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get structured resume data for the portfolio",
+          "decorated": true
+        },
+        {
+          "name": "chat_endpoint",
+          "line": 264,
+          "end_line": 311,
+          "params": [
+            "request: MessageRequest"
+          ],
+          "return_type": null,
+          "docstring": "Main chat endpoint for processing conversational commands using LangChain agents",
+          "decorated": true
+        },
+        {
+          "name": "get_profile",
+          "line": 315,
+          "end_line": 322,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get profile data",
+          "decorated": true
+        },
+        {
+          "name": "get_projects",
+          "line": 326,
+          "end_line": 333,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get projects data",
+          "decorated": true
+        },
+        {
+          "name": "get_experience",
+          "line": 337,
+          "end_line": 344,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get experience data",
+          "decorated": true
+        },
+        {
+          "name": "get_skills",
+          "line": 348,
+          "end_line": 355,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get skills data",
+          "decorated": true
+        },
+        {
+          "name": "get_publications",
+          "line": 359,
+          "end_line": 366,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get publications data",
+          "decorated": true
+        },
+        {
+          "name": "get_portfolio_data",
+          "line": 370,
+          "end_line": 383,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get complete portfolio data from the centralized JSON source",
+          "decorated": true
+        },
+        {
+          "name": "get_query_analytics",
+          "line": 391,
+          "end_line": 422,
+          "params": [
+            "start_date: Optional[str] = None",
+            "end_date: Optional[str] = None",
+            "agent: Optional[str] = None"
+          ],
+          "return_type": null,
+          "docstring": "Get AI query analytics with optional filters\r\n    \r\n    Query Parameters:\r\n    - start_date: ISO format date (e.g., '2024-01-01')\r\n    - end_date: ISO format date (e.g., '2024-12-31')  \r\n    - agent: Filter by specific agent name",
+          "decorated": true
+        },
+        {
+          "name": "get_cache_analytics",
+          "line": 426,
+          "end_line": 442,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get cache performance metrics",
+          "decorated": true
+        },
+        {
+          "name": "log_analytics_event",
+          "line": 446,
+          "end_line": 477,
+          "params": [
+            "request: Request"
+          ],
+          "return_type": null,
+          "docstring": "Log a custom analytics event from frontend\r\n    \r\n    Body:\r\n    {\r\n        \"session_id\": \"string\",\r\n        \"event_type\": \"string\",\r\n        \"event_data\": {}\r\n    }",
+          "decorated": true
+        },
+        {
+          "name": "get_demo_info",
+          "line": 482,
+          "end_line": 510,
+          "params": [
+            "project_id: int"
+          ],
+          "return_type": null,
+          "docstring": "Get demo information for a specific project\r\n    This endpoint will be enhanced to serve or proxy live demos",
+          "decorated": true
+        }
+      ],
+      "classes": [
+        {
+          "name": "MessageRequest",
+          "line": 99,
+          "end_line": 105,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "MessageResponse",
+          "line": 108,
+          "end_line": 115,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "ResumeResponse",
+          "line": 118,
+          "end_line": 123,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "HealthResponse",
+          "line": 126,
+          "end_line": 134,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "MetricsResponse",
+          "line": 137,
+          "end_line": 161,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "from",
+          "module": "Request",
+          "names": [],
+          "line": 1,
+          "text": "from fastapi import FastAPI, HTTPException, Request"
+        },
+        {
+          "kind": "from",
+          "module": "CORSMiddleware",
+          "names": [],
+          "line": 2,
+          "text": "from fastapi.middleware.cors import CORSMiddleware"
+        },
+        {
+          "kind": "from",
+          "module": "JSONResponse",
+          "names": [],
+          "line": 3,
+          "text": "from fastapi.responses import JSONResponse"
+        },
+        {
+          "kind": "from",
+          "module": "Field",
+          "names": [],
+          "line": 4,
+          "text": "from pydantic import BaseModel, Field"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "uvicorn"
+          ],
+          "line": 5,
+          "text": "import uvicorn"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 6,
+          "text": "import logging"
+        },
+        {
+          "kind": "from",
+          "module": "Any",
+          "names": [],
+          "line": 7,
+          "text": "from typing import Optional, Dict, Any"
+        },
+        {
+          "kind": "from",
+          "module": "datetime",
+          "names": [],
+          "line": 8,
+          "text": "from datetime import datetime"
+        },
+        {
+          "kind": "from",
+          "module": "get_settings",
+          "names": [],
+          "line": 11,
+          "text": "from app.config import get_settings"
+        },
+        {
+          "kind": "from",
+          "module": "router",
+          "names": [],
+          "line": 12,
+          "text": "from app.agents import router"
+        },
+        {
+          "kind": "from",
+          "module": "PortfolioService",
+          "names": [],
+          "line": 13,
+          "text": "from app.services import PortfolioService"
+        },
+        {
+          "kind": "from",
+          "module": "get_raw_portfolio_data",
+          "names": [],
+          "line": 14,
+          "text": "from app.portfolio_loader import get_raw_portfolio_data"
+        },
+        {
+          "kind": "from",
+          "module": "query_cache",
+          "names": [],
+          "line": 15,
+          "text": "from app.cache import query_cache"
+        },
+        {
+          "kind": "from",
+          "module": "get_monitoring_metrics",
+          "names": [],
+          "line": 16,
+          "text": "from app.middleware import (\r\n    ErrorHandlingMiddleware,\r\n    RateLimitMiddleware,\r\n    SecurityMiddleware,\r\n    RequestValidationMiddleware,\r\n    MonitoringMiddleware,\r\n    get_monitoring_metrics,\r\n)"
+        },
+        {
+          "kind": "from",
+          "module": "set_request_id",
+          "names": [],
+          "line": 36,
+          "text": "from app.logger import logger, performance_logger, security_logger, set_request_id"
+        }
+      ],
+      "line_count": 526
+    },
+    "backend/api/index.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\api\\index.py",
+      "language": "python",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 6,
+          "text": "import sys"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 7,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "from",
+          "module": "app",
+          "names": [],
+          "line": 14,
+          "text": "from main import app"
+        }
+      ],
+      "line_count": 19
+    },
+    "backend/app/agents.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\agents.py",
+      "language": "python",
+      "functions": [],
+      "classes": [
+        {
+          "name": "PortfolioAgent",
+          "line": 35,
+          "end_line": 239,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 38,
+              "end_line": 43,
+              "params": [
+                "self",
+                "name: str",
+                "description: str",
+                "system_prompt: str"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "_initialize_llm",
+              "line": 45,
+              "end_line": 62,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": "Initialize the language model with error handling",
+              "decorated": false
+            },
+            {
+              "name": "process",
+              "line": 64,
+              "end_line": 115,
+              "params": [
+                "self",
+                "query: str",
+                "context: Dict[str, Any] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Process with caching (OPTIMIZED to reduce API calls)",
+              "decorated": false
+            },
+            {
+              "name": "_process_uncached",
+              "line": 117,
+              "end_line": 193,
+              "params": [
+                "self",
+                "query: str",
+                "context: Dict[str, Any] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Process a query and return structured response with enhanced error handling",
+              "decorated": false
+            },
+            {
+              "name": "_parse_response",
+              "line": 195,
+              "end_line": 239,
+              "params": [
+                "self",
+                "response: str",
+                "query: str",
+                "processing_time: float"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Parse agent response into structured format with enhanced validation",
+              "decorated": false
+            }
+          ],
+          "docstring": "Base class for portfolio agents with enhanced error handling",
+          "decorated": false
+        },
+        {
+          "name": "ProfileAgent",
+          "line": 245,
+          "end_line": 392,
+          "bases": [
+            "PortfolioAgent"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 248,
+              "end_line": 265,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "process",
+              "line": 267,
+              "end_line": 352,
+              "params": [
+                "self",
+                "query: str",
+                "context: Dict[str, Any] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Override to add targeted context and fallback",
+              "decorated": false
+            },
+            {
+              "name": "_parse_response",
+              "line": 354,
+              "end_line": 365,
+              "params": [
+                "self",
+                "response: str",
+                "query: str",
+                "processing_time: float"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Override to catch the 'error' response from the parent class",
+              "decorated": false
+            },
+            {
+              "name": "_get_fallback_response",
+              "line": 367,
+              "end_line": 392,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Generate a static response when AI is down",
+              "decorated": false
+            }
+          ],
+          "docstring": "Agent specialized in handling profile and about me queries",
+          "decorated": false
+        },
+        {
+          "name": "ProjectAgent",
+          "line": 395,
+          "end_line": 450,
+          "bases": [
+            "PortfolioAgent"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 398,
+              "end_line": 406,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "process",
+              "line": 408,
+              "end_line": 433,
+              "params": [
+                "self",
+                "query: str",
+                "context: Dict[str, Any] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Override to add relevant projects only",
+              "decorated": false
+            },
+            {
+              "name": "_parse_response",
+              "line": 435,
+              "end_line": 450,
+              "params": [
+                "self",
+                "response: str",
+                "query: str",
+                "processing_time: float"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Enhanced parsing for project-specific responses",
+              "decorated": false
+            }
+          ],
+          "docstring": "Agent specialized in handling project-related queries",
+          "decorated": false
+        },
+        {
+          "name": "CareerAgent",
+          "line": 453,
+          "end_line": 482,
+          "bases": [
+            "PortfolioAgent"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 456,
+              "end_line": 482,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Agent specialized in career advice and professional development",
+          "decorated": false
+        },
+        {
+          "name": "DemoAgent",
+          "line": 485,
+          "end_line": 511,
+          "bases": [
+            "PortfolioAgent"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 488,
+              "end_line": 511,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Agent specialized in handling demo and interactive project queries",
+          "decorated": false
+        },
+        {
+          "name": "StrategicFitAgent",
+          "line": 514,
+          "end_line": 703,
+          "bases": [
+            "PortfolioAgent"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 517,
+              "end_line": 548,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "process",
+              "line": 550,
+              "end_line": 558,
+              "params": [
+                "self",
+                "query: str",
+                "context: Dict[str, Any] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Override to inject portfolio data only when needed",
+              "decorated": false
+            },
+            {
+              "name": "_is_job_analysis_query",
+              "line": 560,
+              "end_line": 575,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": "bool",
+              "docstring": "Check if query is a job analysis request",
+              "decorated": false
+            },
+            {
+              "name": "_get_relevant_portfolio_data",
+              "line": 577,
+              "end_line": 605,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Load only relevant portfolio sections based on query",
+              "decorated": false
+            },
+            {
+              "name": "_parse_response",
+              "line": 607,
+              "end_line": 703,
+              "params": [
+                "self",
+                "response: str",
+                "query: str",
+                "processing_time: float"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Enhanced parsing for strategic fit responses",
+              "decorated": false
+            }
+          ],
+          "docstring": "Agent specialized in strategic fit analysis and job matching",
+          "decorated": false
+        },
+        {
+          "name": "RouterAgent",
+          "line": 706,
+          "end_line": 925,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 709,
+              "end_line": 718,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "_initialize_router",
+              "line": 720,
+              "end_line": 735,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": "Initialize the router's language model",
+              "decorated": false
+            },
+            {
+              "name": "_get_keyword_route",
+              "line": 737,
+              "end_line": 811,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Enhanced keyword-based routing with confidence scores",
+              "decorated": false
+            },
+            {
+              "name": "route_query",
+              "line": 813,
+              "end_line": 881,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": "str",
+              "docstring": "Multi-tier routing: keyword \u2192 LLM fallback (OPTIMIZED)",
+              "decorated": false
+            },
+            {
+              "name": "process_query",
+              "line": 883,
+              "end_line": 925,
+              "params": [
+                "self",
+                "query: str",
+                "context: Dict[str, Any] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Process query with enhanced error handling and monitoring",
+              "decorated": false
+            }
+          ],
+          "docstring": "Enhanced router agent with better query classification and error handling",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 6,
+          "text": "import logging"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 7,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "time"
+          ],
+          "line": 8,
+          "text": "import time"
+        },
+        {
+          "kind": "from",
+          "module": "Any",
+          "names": [],
+          "line": 9,
+          "text": "from typing import Dict, Any"
+        },
+        {
+          "kind": "from",
+          "module": "HumanMessage",
+          "names": [],
+          "line": 10,
+          "text": "from langchain.schema import SystemMessage, HumanMessage"
+        },
+        {
+          "kind": "from",
+          "module": "ChatGoogleGenerativeAI",
+          "names": [],
+          "line": 11,
+          "text": "from langchain_google_genai import ChatGoogleGenerativeAI"
+        },
+        {
+          "kind": "from",
+          "module": "get_settings",
+          "names": [],
+          "line": 13,
+          "text": "from .config import get_settings"
+        },
+        {
+          "kind": "from",
+          "module": "get_portfolio_loader",
+          "names": [],
+          "line": 14,
+          "text": "from .portfolio_loader import get_portfolio_loader"
+        },
+        {
+          "kind": "from",
+          "module": "query_cache",
+          "names": [],
+          "line": 15,
+          "text": "from .cache import query_cache"
+        }
+      ],
+      "line_count": 930
+    },
+    "backend/app/analytics.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\analytics.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "get_analytics_service",
+          "line": 289,
+          "end_line": 294,
+          "params": [],
+          "return_type": "AnalyticsService",
+          "docstring": "Get the global analytics service instance",
+          "decorated": false
+        },
+        {
+          "name": "track_ai_call",
+          "line": 301,
+          "end_line": 367,
+          "params": [
+            "agent_name: str"
+          ],
+          "return_type": null,
+          "docstring": "Decorator to automatically track AI agent calls\r\n    \r\n    Usage:\r\n        @track_ai_call(\"ProfileAgent\")\r\n        def process_query(self, query: str, context: Dict = None):\r\n            ...",
+          "decorated": false
+        }
+      ],
+      "classes": [
+        {
+          "name": "AnalyticsService",
+          "line": 30,
+          "end_line": 282,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 33,
+              "end_line": 51,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "_send_to_posthog",
+              "line": 53,
+              "end_line": 65,
+              "params": [
+                "self",
+                "event_name: str",
+                "distinct_id: str",
+                "properties: Dict[str, Any]"
+              ],
+              "return_type": null,
+              "docstring": "Send event to PostHog (non-blocking)",
+              "decorated": false
+            },
+            {
+              "name": "generate_query_hash",
+              "line": 67,
+              "end_line": 69,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": "str",
+              "docstring": "Generate a hash for caching purposes",
+              "decorated": false
+            },
+            {
+              "name": "log_event",
+              "line": 75,
+              "end_line": 108,
+              "params": [
+                "self",
+                "session_id: str",
+                "event_type: str",
+                "event_data: Optional[Dict[str, Any]] = None",
+                "user_agent: Optional[str] = None"
+              ],
+              "return_type": null,
+              "docstring": "Log a general analytics event\r\n        \r\n        Args:\r\n            session_id: Unique session identifier\r\n            event_type: Type of event (e.g., 'page_view', 'project_clicked')\r\n            event_data: Additional event metadata\r\n            user_agent: User agent string",
+              "decorated": false
+            },
+            {
+              "name": "log_ai_query",
+              "line": 110,
+              "end_line": 168,
+              "params": [
+                "self",
+                "session_id: str",
+                "query_text: str",
+                "agent_used: str",
+                "response_time: float",
+                "tokens_used: Optional[int] = None",
+                "cached: bool = False",
+                "error_occurred: bool = False",
+                "error_message: Optional[str] = None"
+              ],
+              "return_type": "Optional[int]",
+              "docstring": "Log an AI query interaction\r\n        \r\n        Args:\r\n            session_id: Unique session identifier\r\n            query_text: The user's query\r\n            agent_used: Which agent processed the query\r\n            response_time: Response time in seconds\r\n            tokens_used: Number of tokens consumed\r\n            cached: Whether response was cached\r\n            error_occurred: Whether an error occurred\r\n            error_message: Error message if applicable\r\n            \r\n        Returns:\r\n            Query ID from database (if available)",
+              "decorated": false
+            },
+            {
+              "name": "log_cache_hit",
+              "line": 170,
+              "end_line": 182,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": null,
+              "docstring": "Log a cache hit",
+              "decorated": false
+            },
+            {
+              "name": "log_cache_miss",
+              "line": 184,
+              "end_line": 196,
+              "params": [
+                "self",
+                "query: str"
+              ],
+              "return_type": null,
+              "docstring": "Log a cache miss",
+              "decorated": false
+            },
+            {
+              "name": "log_job_analysis",
+              "line": 202,
+              "end_line": 218,
+              "params": [
+                "self",
+                "session_id: str",
+                "match_score: int",
+                "processing_time: float",
+                "job_description_length: int"
+              ],
+              "return_type": null,
+              "docstring": "Log a job analysis event",
+              "decorated": false
+            },
+            {
+              "name": "log_project_view",
+              "line": 220,
+              "end_line": 234,
+              "params": [
+                "self",
+                "session_id: str",
+                "project_id: str",
+                "project_title: str"
+              ],
+              "return_type": null,
+              "docstring": "Log a project view event",
+              "decorated": false
+            },
+            {
+              "name": "log_contact_action",
+              "line": 236,
+              "end_line": 246,
+              "params": [
+                "self",
+                "session_id: str",
+                "contact_method: str"
+              ],
+              "return_type": null,
+              "docstring": "Log a contact action event",
+              "decorated": false
+            },
+            {
+              "name": "get_query_analytics",
+              "line": 252,
+              "end_line": 266,
+              "params": [
+                "self",
+                "start_date: Optional[str] = None",
+                "end_date: Optional[str] = None",
+                "agent: Optional[str] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get analytics for AI queries",
+              "decorated": false
+            },
+            {
+              "name": "get_cache_analytics",
+              "line": 268,
+              "end_line": 273,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get cache performance analytics",
+              "decorated": false
+            },
+            {
+              "name": "shutdown",
+              "line": 275,
+              "end_line": 282,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": "Shutdown analytics service",
+              "decorated": false
+            }
+          ],
+          "docstring": "Service for logging analytics events to database and PostHog",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 6,
+          "text": "import logging"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "hashlib"
+          ],
+          "line": 7,
+          "text": "import hashlib"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 8,
+          "text": "import json"
+        },
+        {
+          "kind": "from",
+          "module": "Optional",
+          "names": [],
+          "line": 9,
+          "text": "from typing import Dict, Any, Optional"
+        },
+        {
+          "kind": "from",
+          "module": "datetime",
+          "names": [],
+          "line": 10,
+          "text": "from datetime import datetime"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "asyncio"
+          ],
+          "line": 11,
+          "text": "import asyncio"
+        },
+        {
+          "kind": "from",
+          "module": "wraps",
+          "names": [],
+          "line": 12,
+          "text": "from functools import wraps"
+        },
+        {
+          "kind": "from",
+          "module": "get_settings",
+          "names": [],
+          "line": 24,
+          "text": "from .config import get_settings"
+        },
+        {
+          "kind": "from",
+          "module": "get_database",
+          "names": [],
+          "line": 25,
+          "text": "from .database import get_database"
+        }
+      ],
+      "line_count": 368
+    },
+    "backend/app/cache.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\cache.py",
+      "language": "python",
+      "functions": [],
+      "classes": [
+        {
+          "name": "QueryCache",
+          "line": 10,
+          "end_line": 86,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 13,
+              "end_line": 18,
+              "params": [
+                "self",
+                "max_size: int = 100",
+                "ttl_seconds: int = 3600"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "_generate_key",
+              "line": 20,
+              "end_line": 23,
+              "params": [
+                "self",
+                "query: str",
+                "agent_name: str"
+              ],
+              "return_type": "str",
+              "docstring": "Generate cache key from query and agent",
+              "decorated": false
+            },
+            {
+              "name": "get",
+              "line": 25,
+              "end_line": 45,
+              "params": [
+                "self",
+                "query: str",
+                "agent_name: str"
+              ],
+              "return_type": "Optional[Dict[str, Any]]",
+              "docstring": "Get cached response if exists and not expired",
+              "decorated": false
+            },
+            {
+              "name": "set",
+              "line": 47,
+              "end_line": 61,
+              "params": [
+                "self",
+                "query: str",
+                "agent_name: str",
+                "response: Dict[str, Any]"
+              ],
+              "return_type": null,
+              "docstring": "Cache a response",
+              "decorated": false
+            },
+            {
+              "name": "clear",
+              "line": 63,
+              "end_line": 68,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": "Clear all cache",
+              "decorated": false
+            },
+            {
+              "name": "get_stats",
+              "line": 70,
+              "end_line": 81,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get cache statistics",
+              "decorated": false
+            },
+            {
+              "name": "get_hit_rate",
+              "line": 83,
+              "end_line": 86,
+              "params": [
+                "self"
+              ],
+              "return_type": "float",
+              "docstring": "Calculate cache hit rate",
+              "decorated": false
+            }
+          ],
+          "docstring": "LRU cache for AI query responses with TTL",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "hashlib"
+          ],
+          "line": 2,
+          "text": "import hashlib"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "time"
+          ],
+          "line": 3,
+          "text": "import time"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 4,
+          "text": "import logging"
+        },
+        {
+          "kind": "from",
+          "module": "Optional",
+          "names": [],
+          "line": 5,
+          "text": "from typing import Dict, Any, Optional"
+        }
+      ],
+      "line_count": 91
+    },
+    "backend/app/config.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\config.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "_get_cors_origins",
+          "line": 13,
+          "end_line": 33,
+          "params": [],
+          "return_type": "List[str]",
+          "docstring": "Get CORS origins from environment variable or use defaults",
+          "decorated": false
+        },
+        {
+          "name": "get_settings",
+          "line": 230,
+          "end_line": 232,
+          "params": [],
+          "return_type": "Settings",
+          "docstring": "Get application settings",
+          "decorated": false
+        }
+      ],
+      "classes": [
+        {
+          "name": "Settings",
+          "line": 36,
+          "end_line": 160,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [
+            {
+              "name": "is_production",
+              "line": 138,
+              "end_line": 140,
+              "params": [
+                "self"
+              ],
+              "return_type": "bool",
+              "docstring": "Check if running in production mode",
+              "decorated": true
+            },
+            {
+              "name": "has_google_api",
+              "line": 143,
+              "end_line": 145,
+              "params": [
+                "self"
+              ],
+              "return_type": "bool",
+              "docstring": "Check if Google API is configured",
+              "decorated": true
+            },
+            {
+              "name": "has_langchain_api",
+              "line": 148,
+              "end_line": 150,
+              "params": [
+                "self"
+              ],
+              "return_type": "bool",
+              "docstring": "Check if LangChain is available (always true since we use core framework)",
+              "decorated": true
+            },
+            {
+              "name": "has_turso",
+              "line": 153,
+              "end_line": 155,
+              "params": [
+                "self"
+              ],
+              "return_type": "bool",
+              "docstring": "Check if Turso database is configured",
+              "decorated": true
+            },
+            {
+              "name": "has_posthog",
+              "line": 158,
+              "end_line": 160,
+              "params": [
+                "self"
+              ],
+              "return_type": "bool",
+              "docstring": "Check if PostHog is configured",
+              "decorated": true
+            }
+          ],
+          "docstring": "Application settings",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 5,
+          "text": "import os"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 6,
+          "text": "import logging"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 7,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "from",
+          "module": "List",
+          "names": [],
+          "line": 8,
+          "text": "from typing import List"
+        },
+        {
+          "kind": "from",
+          "module": "Field",
+          "names": [],
+          "line": 9,
+          "text": "from pydantic import BaseModel, Field"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 10,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 233
+    },
+    "backend/app/database.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\database.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "get_database",
+          "line": 597,
+          "end_line": 602,
+          "params": [],
+          "return_type": "TursoDatabase",
+          "docstring": "Get the global database instance",
+          "decorated": false
+        }
+      ],
+      "classes": [
+        {
+          "name": "TursoDatabase",
+          "line": 23,
+          "end_line": 590,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 26,
+              "end_line": 50,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "is_available",
+              "line": 52,
+              "end_line": 54,
+              "params": [
+                "self"
+              ],
+              "return_type": "bool",
+              "docstring": "Check if database connection is available",
+              "decorated": false
+            },
+            {
+              "name": "_execute_query",
+              "line": 56,
+              "end_line": 59,
+              "params": [
+                "self",
+                "query: str",
+                "params: tuple = ()"
+              ],
+              "return_type": "List[tuple]",
+              "docstring": "Execute query and return results as list of tuples",
+              "decorated": false
+            },
+            {
+              "name": "_execute_single",
+              "line": 61,
+              "end_line": 64,
+              "params": [
+                "self",
+                "query: str",
+                "params: tuple = ()"
+              ],
+              "return_type": "Optional[tuple]",
+              "docstring": "Execute query and return single result",
+              "decorated": false
+            },
+            {
+              "name": "get_profile",
+              "line": 70,
+              "end_line": 109,
+              "params": [
+                "self"
+              ],
+              "return_type": "Optional[Dict[str, Any]]",
+              "docstring": "Get profile data with links and highlights",
+              "decorated": false
+            },
+            {
+              "name": "get_education",
+              "line": 111,
+              "end_line": 142,
+              "params": [
+                "self"
+              ],
+              "return_type": "Optional[Dict[str, Any]]",
+              "docstring": "Get education data with coursework",
+              "decorated": false
+            },
+            {
+              "name": "get_experience",
+              "line": 144,
+              "end_line": 213,
+              "params": [
+                "self"
+              ],
+              "return_type": "List[Dict[str, Any]]",
+              "docstring": "Get all experience entries with related data",
+              "decorated": false
+            },
+            {
+              "name": "get_projects",
+              "line": 215,
+              "end_line": 271,
+              "params": [
+                "self",
+                "featured_only: bool = False"
+              ],
+              "return_type": "List[Dict[str, Any]]",
+              "docstring": "Get all projects with technologies",
+              "decorated": false
+            },
+            {
+              "name": "get_skills",
+              "line": 273,
+              "end_line": 293,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, List[str]]",
+              "docstring": "Get all skills grouped by category",
+              "decorated": false
+            },
+            {
+              "name": "get_publications",
+              "line": 295,
+              "end_line": 317,
+              "params": [
+                "self"
+              ],
+              "return_type": "List[Dict[str, Any]]",
+              "docstring": "Get all publications",
+              "decorated": false
+            },
+            {
+              "name": "get_activities",
+              "line": 319,
+              "end_line": 347,
+              "params": [
+                "self"
+              ],
+              "return_type": "List[Dict[str, Any]]",
+              "docstring": "Get all activities for timeline",
+              "decorated": false
+            },
+            {
+              "name": "get_complete_portfolio",
+              "line": 349,
+              "end_line": 359,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get all portfolio data in one call",
+              "decorated": false
+            },
+            {
+              "name": "log_analytics_event",
+              "line": 365,
+              "end_line": 388,
+              "params": [
+                "self",
+                "session_id: str",
+                "event_type: str",
+                "event_data: Optional[Dict[str, Any]] = None",
+                "user_agent: Optional[str] = None"
+              ],
+              "return_type": "bool",
+              "docstring": "Log a general analytics event",
+              "decorated": false
+            },
+            {
+              "name": "log_ai_query",
+              "line": 390,
+              "end_line": 426,
+              "params": [
+                "self",
+                "session_id: str",
+                "query_text: str",
+                "agent_used: str",
+                "response_time: float",
+                "tokens_used: Optional[int] = None",
+                "cached: bool = False",
+                "error_occurred: bool = False",
+                "error_message: Optional[str] = None"
+              ],
+              "return_type": "Optional[int]",
+              "docstring": "Log an AI query with details. Returns query ID.",
+              "decorated": false
+            },
+            {
+              "name": "update_cache_performance",
+              "line": 428,
+              "end_line": 470,
+              "params": [
+                "self",
+                "query_hash: str",
+                "hit: bool"
+              ],
+              "return_type": "bool",
+              "docstring": "Update cache hit/miss counts for a query",
+              "decorated": false
+            },
+            {
+              "name": "get_query_analytics",
+              "line": 476,
+              "end_line": 557,
+              "params": [
+                "self",
+                "start_date: Optional[str] = None",
+                "end_date: Optional[str] = None",
+                "agent: Optional[str] = None"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get analytics for AI queries",
+              "decorated": false
+            },
+            {
+              "name": "get_cache_analytics",
+              "line": 559,
+              "end_line": 590,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get cache performance analytics",
+              "decorated": false
+            }
+          ],
+          "docstring": "Turso database client for portfolio data and analytics",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 6,
+          "text": "import os"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 7,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 8,
+          "text": "import logging"
+        },
+        {
+          "kind": "from",
+          "module": "Optional",
+          "names": [],
+          "line": 9,
+          "text": "from typing import Dict, List, Any, Optional"
+        },
+        {
+          "kind": "from",
+          "module": "datetime",
+          "names": [],
+          "line": 10,
+          "text": "from datetime import datetime"
+        },
+        {
+          "kind": "from",
+          "module": "get_settings",
+          "names": [],
+          "line": 17,
+          "text": "from .config import get_settings"
+        }
+      ],
+      "line_count": 603
+    },
+    "backend/app/logger.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\logger.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "setup_structured_logging",
+          "line": 90,
+          "end_line": 162,
+          "params": [],
+          "return_type": null,
+          "docstring": "Setup professional structured logging with JSON output",
+          "decorated": false
+        },
+        {
+          "name": "set_request_id",
+          "line": 250,
+          "end_line": 255,
+          "params": [
+            "request_id: str = None"
+          ],
+          "return_type": null,
+          "docstring": "Set request ID for correlation",
+          "decorated": false
+        },
+        {
+          "name": "set_user_context",
+          "line": 258,
+          "end_line": 260,
+          "params": [
+            "user_id: str"
+          ],
+          "return_type": null,
+          "docstring": "Set user context for correlation",
+          "decorated": false
+        },
+        {
+          "name": "clear_context",
+          "line": 263,
+          "end_line": 266,
+          "params": [],
+          "return_type": null,
+          "docstring": "Clear all context variables",
+          "decorated": false
+        }
+      ],
+      "classes": [
+        {
+          "name": "RequestCorrelationProcessor",
+          "line": 30,
+          "end_line": 42,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__call__",
+              "line": 33,
+              "end_line": 42,
+              "params": [
+                "self",
+                "logger",
+                "method_name",
+                "event_dict"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Add request correlation ID to all logs",
+          "decorated": false
+        },
+        {
+          "name": "SecurityEventFilter",
+          "line": 45,
+          "end_line": 70,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__call__",
+              "line": 63,
+              "end_line": 70,
+              "params": [
+                "self",
+                "logger",
+                "method_name",
+                "event_dict"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Filter and flag security-related events",
+          "decorated": false
+        },
+        {
+          "name": "PerformanceMetricsProcessor",
+          "line": 73,
+          "end_line": 87,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__call__",
+              "line": 76,
+              "end_line": 87,
+              "params": [
+                "self",
+                "logger",
+                "method_name",
+                "event_dict"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Add performance metrics to relevant logs",
+          "decorated": false
+        },
+        {
+          "name": "SecurityLogger",
+          "line": 165,
+          "end_line": 203,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 168,
+              "end_line": 169,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "auth_failure",
+              "line": 171,
+              "end_line": 180,
+              "params": [
+                "self",
+                "ip_address: str",
+                "reason: str",
+                "**kwargs"
+              ],
+              "return_type": null,
+              "docstring": "Log authentication failures",
+              "decorated": false
+            },
+            {
+              "name": "rate_limit_exceeded",
+              "line": 182,
+              "end_line": 191,
+              "params": [
+                "self",
+                "ip_address: str",
+                "endpoint: str",
+                "**kwargs"
+              ],
+              "return_type": null,
+              "docstring": "Log rate limit violations",
+              "decorated": false
+            },
+            {
+              "name": "suspicious_activity",
+              "line": 193,
+              "end_line": 203,
+              "params": [
+                "self",
+                "ip_address: str",
+                "activity: str",
+                "**kwargs"
+              ],
+              "return_type": null,
+              "docstring": "Log suspicious activities",
+              "decorated": false
+            }
+          ],
+          "docstring": "Specialized logger for security events",
+          "decorated": false
+        },
+        {
+          "name": "PerformanceLogger",
+          "line": 206,
+          "end_line": 246,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 209,
+              "end_line": 210,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "api_request",
+              "line": 212,
+              "end_line": 224,
+              "params": [
+                "self",
+                "method: str",
+                "path: str",
+                "duration: float",
+                "status_code: int",
+                "**kwargs"
+              ],
+              "return_type": null,
+              "docstring": "Log API request performance",
+              "decorated": false
+            },
+            {
+              "name": "ai_processing",
+              "line": 226,
+              "end_line": 236,
+              "params": [
+                "self",
+                "agent: str",
+                "duration: float",
+                "success: bool",
+                "**kwargs"
+              ],
+              "return_type": null,
+              "docstring": "Log AI processing performance",
+              "decorated": false
+            },
+            {
+              "name": "slow_query",
+              "line": 238,
+              "end_line": 246,
+              "params": [
+                "self",
+                "operation: str",
+                "duration: float",
+                "**kwargs"
+              ],
+              "return_type": null,
+              "docstring": "Log slow operations",
+              "decorated": false
+            }
+          ],
+          "docstring": "Specialized logger for performance metrics",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 6,
+          "text": "import logging"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 7,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "time"
+          ],
+          "line": 8,
+          "text": "import time"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "uuid"
+          ],
+          "line": 9,
+          "text": "import uuid"
+        },
+        {
+          "kind": "from",
+          "module": "Optional",
+          "names": [],
+          "line": 10,
+          "text": "from typing import Dict, Any, Optional"
+        },
+        {
+          "kind": "from",
+          "module": "datetime",
+          "names": [],
+          "line": 11,
+          "text": "from datetime import datetime"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 12,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "from",
+          "module": "ContextVar",
+          "names": [],
+          "line": 13,
+          "text": "from contextvars import ContextVar"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "structlog"
+          ],
+          "line": 14,
+          "text": "import structlog"
+        },
+        {
+          "kind": "from",
+          "module": "JSONRenderer",
+          "names": [],
+          "line": 15,
+          "text": "from structlog.processors import TimeStamper, JSONRenderer"
+        },
+        {
+          "kind": "from",
+          "module": "add_log_level",
+          "names": [],
+          "line": 16,
+          "text": "from structlog.stdlib import LoggerFactory, add_log_level"
+        },
+        {
+          "kind": "from",
+          "module": "RotatingFileHandler",
+          "names": [],
+          "line": 17,
+          "text": "from logging.handlers import RotatingFileHandler"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 18,
+          "text": "import sys"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 19,
+          "text": "import os"
+        },
+        {
+          "kind": "from",
+          "module": "get_settings",
+          "names": [],
+          "line": 21,
+          "text": "from .config import get_settings"
+        }
+      ],
+      "line_count": 283
+    },
+    "backend/app/middleware.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\middleware.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "get_monitoring_metrics",
+          "line": 293,
+          "end_line": 295,
+          "params": [],
+          "return_type": "Dict[str, Any]",
+          "docstring": "Get monitoring metrics",
+          "decorated": false
+        },
+        {
+          "name": "track_tokens",
+          "line": 298,
+          "end_line": 301,
+          "params": [
+            "tokens: int"
+          ],
+          "return_type": null,
+          "docstring": "Track token usage for monitoring",
+          "decorated": false
+        }
+      ],
+      "classes": [
+        {
+          "name": "ErrorHandlingMiddleware",
+          "line": 27,
+          "end_line": 122,
+          "bases": [
+            "BaseHTTPMiddleware"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 30,
+              "end_line": 31,
+              "params": [
+                "self",
+                "app: ASGIApp"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "dispatch",
+              "line": 33,
+              "end_line": 122,
+              "params": [
+                "self",
+                "request: Request",
+                "call_next"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Comprehensive error handling middleware",
+          "decorated": false
+        },
+        {
+          "name": "RateLimitMiddleware",
+          "line": 125,
+          "end_line": 165,
+          "bases": [
+            "BaseHTTPMiddleware"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 128,
+              "end_line": 132,
+              "params": [
+                "self",
+                "app: ASGIApp",
+                "requests_per_minute: int = 20"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "dispatch",
+              "line": 134,
+              "end_line": 165,
+              "params": [
+                "self",
+                "request: Request",
+                "call_next"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Rate limiting middleware",
+          "decorated": false
+        },
+        {
+          "name": "SecurityMiddleware",
+          "line": 168,
+          "end_line": 186,
+          "bases": [
+            "BaseHTTPMiddleware"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 171,
+              "end_line": 172,
+              "params": [
+                "self",
+                "app: ASGIApp"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "dispatch",
+              "line": 174,
+              "end_line": 186,
+              "params": [
+                "self",
+                "request: Request",
+                "call_next"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Security middleware for headers and validation",
+          "decorated": false
+        },
+        {
+          "name": "RequestValidationMiddleware",
+          "line": 189,
+          "end_line": 224,
+          "bases": [
+            "BaseHTTPMiddleware"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 192,
+              "end_line": 194,
+              "params": [
+                "self",
+                "app: ASGIApp",
+                "max_request_size: int = 10 * 1024 * 1024"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "dispatch",
+              "line": 196,
+              "end_line": 224,
+              "params": [
+                "self",
+                "request: Request",
+                "call_next"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            }
+          ],
+          "docstring": "Request validation and sanitization middleware",
+          "decorated": false
+        },
+        {
+          "name": "MonitoringMiddleware",
+          "line": 227,
+          "end_line": 286,
+          "bases": [
+            "BaseHTTPMiddleware"
+          ],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 230,
+              "end_line": 236,
+              "params": [
+                "self",
+                "app: ASGIApp"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "dispatch",
+              "line": 238,
+              "end_line": 266,
+              "params": [
+                "self",
+                "request: Request",
+                "call_next"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "get_metrics",
+              "line": 268,
+              "end_line": 286,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get current metrics",
+              "decorated": false
+            }
+          ],
+          "docstring": "Monitoring and metrics middleware",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "time"
+          ],
+          "line": 6,
+          "text": "import time"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 7,
+          "text": "import logging"
+        },
+        {
+          "kind": "from",
+          "module": "Optional",
+          "names": [],
+          "line": 8,
+          "text": "from typing import Dict, Any, Optional"
+        },
+        {
+          "kind": "from",
+          "module": "HTTPException",
+          "names": [],
+          "line": 9,
+          "text": "from fastapi import Request, Response, HTTPException"
+        },
+        {
+          "kind": "from",
+          "module": "JSONResponse",
+          "names": [],
+          "line": 10,
+          "text": "from fastapi.responses import JSONResponse"
+        },
+        {
+          "kind": "from",
+          "module": "BaseHTTPMiddleware",
+          "names": [],
+          "line": 11,
+          "text": "from starlette.middleware.base import BaseHTTPMiddleware"
+        },
+        {
+          "kind": "from",
+          "module": "ASGIApp",
+          "names": [],
+          "line": 12,
+          "text": "from starlette.types import ASGIApp"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 13,
+          "text": "import json"
+        },
+        {
+          "kind": "from",
+          "module": "defaultdict",
+          "names": [],
+          "line": 14,
+          "text": "from collections import defaultdict"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "asyncio"
+          ],
+          "line": 15,
+          "text": "import asyncio"
+        },
+        {
+          "kind": "from",
+          "module": "timedelta",
+          "names": [],
+          "line": 16,
+          "text": "from datetime import datetime, timedelta"
+        },
+        {
+          "kind": "from",
+          "module": "clear_context",
+          "names": [],
+          "line": 18,
+          "text": "from .logger import (\r\n    logger,\r\n    performance_logger,\r\n    security_logger,\r\n    set_request_id,\r\n    clear_context,\r\n)"
+        }
+      ],
+      "line_count": 302
+    },
+    "backend/app/models.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\models.py",
+      "language": "python",
+      "functions": [],
+      "classes": [
+        {
+          "name": "LinkType",
+          "line": 10,
+          "end_line": 15,
+          "bases": [
+            "str",
+            "Enum"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Link",
+          "line": 18,
+          "end_line": 20,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Profile",
+          "line": 23,
+          "end_line": 30,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Education",
+          "line": 33,
+          "end_line": 38,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "StarFormat",
+          "line": 41,
+          "end_line": 47,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Experience",
+          "line": 50,
+          "end_line": 59,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "ProjectMetrics",
+          "line": 62,
+          "end_line": 71,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Project",
+          "line": 74,
+          "end_line": 80,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Skill",
+          "line": 83,
+          "end_line": 86,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "SkillCategory",
+          "line": 89,
+          "end_line": 91,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "CompetencyCategory",
+          "line": 94,
+          "end_line": 96,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Skills",
+          "line": 99,
+          "end_line": 104,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "CoreCompetencies",
+          "line": 107,
+          "end_line": 111,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "SoftSkills",
+          "line": 114,
+          "end_line": 118,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "Publication",
+          "line": 121,
+          "end_line": 126,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "PortfolioData",
+          "line": 129,
+          "end_line": 141,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": "Complete portfolio data model with validation",
+          "decorated": false
+        },
+        {
+          "name": "KanbanCard",
+          "line": 145,
+          "end_line": 150,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "KanbanData",
+          "line": 153,
+          "end_line": 157,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "SummaryData",
+          "line": 160,
+          "end_line": 168,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": null,
+          "decorated": false
+        },
+        {
+          "name": "AnalysisResult",
+          "line": 171,
+          "end_line": 178,
+          "bases": [
+            "BaseModel"
+          ],
+          "methods": [],
+          "docstring": "Complete analysis result from AI",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "from",
+          "module": "HttpUrl",
+          "names": [],
+          "line": 5,
+          "text": "from pydantic import BaseModel, Field, HttpUrl"
+        },
+        {
+          "kind": "from",
+          "module": "Any",
+          "names": [],
+          "line": 6,
+          "text": "from typing import List, Optional, Dict, Any"
+        },
+        {
+          "kind": "from",
+          "module": "Enum",
+          "names": [],
+          "line": 7,
+          "text": "from enum import Enum"
+        }
+      ],
+      "line_count": 179
+    },
+    "backend/app/portfolio_loader.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\portfolio_loader.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "get_portfolio_loader",
+          "line": 214,
+          "end_line": 219,
+          "params": [
+            "use_database: bool = True"
+          ],
+          "return_type": "PortfolioLoader",
+          "docstring": "Get the global portfolio loader instance",
+          "decorated": false
+        },
+        {
+          "name": "get_portfolio_data",
+          "line": 222,
+          "end_line": 224,
+          "params": [],
+          "return_type": "PortfolioData",
+          "docstring": "Get validated portfolio data",
+          "decorated": false
+        },
+        {
+          "name": "get_raw_portfolio_data",
+          "line": 227,
+          "end_line": 229,
+          "params": [],
+          "return_type": "Dict[str, Any]",
+          "docstring": "Get raw portfolio data as dictionary",
+          "decorated": false
+        }
+      ],
+      "classes": [
+        {
+          "name": "PortfolioLoader",
+          "line": 15,
+          "end_line": 207,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 18,
+              "end_line": 42,
+              "params": [
+                "self",
+                "data_file: str = \"app/data/portfolio_data.json\"",
+                "use_database: bool = True"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "_load_from_database",
+              "line": 44,
+              "end_line": 74,
+              "params": [
+                "self"
+              ],
+              "return_type": "Optional[Dict[str, Any]]",
+              "docstring": "Load portfolio data from Turso database",
+              "decorated": false
+            },
+            {
+              "name": "_load_from_json",
+              "line": 76,
+              "end_line": 97,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Load portfolio data from JSON file",
+              "decorated": false
+            },
+            {
+              "name": "_load_and_validate",
+              "line": 99,
+              "end_line": 121,
+              "params": [
+                "self"
+              ],
+              "return_type": "None",
+              "docstring": "Load and validate portfolio data on initialization",
+              "decorated": false
+            },
+            {
+              "name": "portfolio_data",
+              "line": 124,
+              "end_line": 128,
+              "params": [
+                "self"
+              ],
+              "return_type": "PortfolioData",
+              "docstring": "Get validated portfolio data",
+              "decorated": true
+            },
+            {
+              "name": "raw_data",
+              "line": 131,
+              "end_line": 135,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get raw portfolio data as dictionary",
+              "decorated": true
+            },
+            {
+              "name": "get_profile_summary",
+              "line": 137,
+              "end_line": 155,
+              "params": [
+                "self"
+              ],
+              "return_type": "str",
+              "docstring": "Get a formatted profile summary for AI agents",
+              "decorated": false
+            },
+            {
+              "name": "get_skills_summary",
+              "line": 157,
+              "end_line": 166,
+              "params": [
+                "self"
+              ],
+              "return_type": "str",
+              "docstring": "Get a formatted skills summary for AI agents",
+              "decorated": false
+            },
+            {
+              "name": "get_core_competencies_summary",
+              "line": 168,
+              "end_line": 176,
+              "params": [
+                "self"
+              ],
+              "return_type": "str",
+              "docstring": "Get a formatted core competencies summary for AI agents",
+              "decorated": false
+            },
+            {
+              "name": "get_soft_skills_summary",
+              "line": 178,
+              "end_line": 186,
+              "params": [
+                "self"
+              ],
+              "return_type": "str",
+              "docstring": "Get a formatted soft skills summary for AI agents",
+              "decorated": false
+            },
+            {
+              "name": "get_projects_summary",
+              "line": 188,
+              "end_line": 202,
+              "params": [
+                "self"
+              ],
+              "return_type": "str",
+              "docstring": "Get a formatted projects summary for AI agents",
+              "decorated": false
+            },
+            {
+              "name": "reload",
+              "line": 204,
+              "end_line": 207,
+              "params": [
+                "self"
+              ],
+              "return_type": "None",
+              "docstring": "Reload and revalidate portfolio data",
+              "decorated": false
+            }
+          ],
+          "docstring": "Loads and validates portfolio data from JSON file or database",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 6,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 7,
+          "text": "import os"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "logging"
+          ],
+          "line": 8,
+          "text": "import logging"
+        },
+        {
+          "kind": "from",
+          "module": "Optional",
+          "names": [],
+          "line": 9,
+          "text": "from typing import Dict, Any, Optional"
+        },
+        {
+          "kind": "from",
+          "module": "PortfolioData",
+          "names": [],
+          "line": 10,
+          "text": "from .models import PortfolioData"
+        }
+      ],
+      "line_count": 230
+    },
+    "backend/app/services.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\services.py",
+      "language": "python",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ResumeService",
+          "line": 13,
+          "end_line": 302,
+          "bases": [],
+          "methods": [
+            {
+              "name": "get_profile_data",
+              "line": 17,
+              "end_line": 50,
+              "params": [],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get structured profile data",
+              "decorated": true
+            },
+            {
+              "name": "get_experience_data",
+              "line": 53,
+              "end_line": 120,
+              "params": [],
+              "return_type": "List[Dict[str, Any]]",
+              "docstring": "Get structured work experience data",
+              "decorated": true
+            },
+            {
+              "name": "get_projects_data",
+              "line": 123,
+              "end_line": 209,
+              "params": [],
+              "return_type": "List[Dict[str, Any]]",
+              "docstring": "Get structured projects data",
+              "decorated": true
+            },
+            {
+              "name": "get_skills_data",
+              "line": 212,
+              "end_line": 257,
+              "params": [],
+              "return_type": "Dict[str, List[Dict[str, Any]]]",
+              "docstring": "Get structured skills data by category",
+              "decorated": true
+            },
+            {
+              "name": "get_publications_data",
+              "line": 260,
+              "end_line": 302,
+              "params": [],
+              "return_type": "List[Dict[str, Any]]",
+              "docstring": "Get structured publications data",
+              "decorated": true
+            }
+          ],
+          "docstring": "Service for handling resume data and PDF generation",
+          "decorated": false
+        },
+        {
+          "name": "PortfolioService",
+          "line": 305,
+          "end_line": 320,
+          "bases": [],
+          "methods": [
+            {
+              "name": "__init__",
+              "line": 308,
+              "end_line": 309,
+              "params": [
+                "self"
+              ],
+              "return_type": null,
+              "docstring": null,
+              "decorated": false
+            },
+            {
+              "name": "get_complete_portfolio_data",
+              "line": 311,
+              "end_line": 320,
+              "params": [
+                "self"
+              ],
+              "return_type": "Dict[str, Any]",
+              "docstring": "Get all portfolio data in a structured format",
+              "decorated": false
+            }
+          ],
+          "docstring": "Main portfolio service orchestrator",
+          "decorated": false
+        }
+      ],
+      "imports": [
+        {
+          "kind": "from",
+          "module": "List",
+          "names": [],
+          "line": 5,
+          "text": "from typing import Dict, Any, List"
+        },
+        {
+          "kind": "from",
+          "module": "datetime",
+          "names": [],
+          "line": 6,
+          "text": "from datetime import datetime"
+        },
+        {
+          "kind": "from",
+          "module": "get_settings",
+          "names": [],
+          "line": 8,
+          "text": "from .config import get_settings"
+        }
+      ],
+      "line_count": 321
+    },
+    "backend/app/__init__.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\app\\__init__.py",
+      "language": "python",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 2
+    },
+    "backend/archive/migrate_to_turso.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\archive\\migrate_to_turso.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "load_json_data",
+          "line": 30,
+          "end_line": 39,
+          "params": [],
+          "return_type": null,
+          "docstring": "Load portfolio data from JSON file",
+          "decorated": false
+        },
+        {
+          "name": "run_migration",
+          "line": 42,
+          "end_line": 406,
+          "params": [],
+          "return_type": null,
+          "docstring": "Run the complete migration",
+          "decorated": false
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 6,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 7,
+          "text": "import sys"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 8,
+          "text": "import os"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 9,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "from",
+          "module": "get_settings",
+          "names": [],
+          "line": 21,
+          "text": "from app.config import get_settings"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 22,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 421
+    },
+    "backend/scripts/apply_migration.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\scripts\\apply_migration.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "get_db_connection",
+          "line": 27,
+          "end_line": 43,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get Turso database connection",
+          "decorated": false
+        },
+        {
+          "name": "apply_migration",
+          "line": 46,
+          "end_line": 105,
+          "params": [
+            "migration_file: Path",
+            "dry_run: bool = False"
+          ],
+          "return_type": null,
+          "docstring": "Apply a migration file to the database",
+          "decorated": false
+        },
+        {
+          "name": "main",
+          "line": 108,
+          "end_line": 150,
+          "params": [],
+          "return_type": null,
+          "docstring": "Main function",
+          "decorated": false
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 6,
+          "text": "import sys"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 7,
+          "text": "import os"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 8,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "argparse"
+          ],
+          "line": 9,
+          "text": "import argparse"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 15,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 155
+    },
+    "backend/scripts/import_from_claude.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\scripts\\import_from_claude.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "get_db_connection",
+          "line": 29,
+          "end_line": 45,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get Turso database connection",
+          "decorated": false
+        },
+        {
+          "name": "import_project",
+          "line": 48,
+          "end_line": 105,
+          "params": [
+            "client",
+            "data: Dict[str, Any]",
+            "dry_run: bool = False"
+          ],
+          "return_type": null,
+          "docstring": "Import a new project",
+          "decorated": false
+        },
+        {
+          "name": "import_experience",
+          "line": 108,
+          "end_line": 191,
+          "params": [
+            "client",
+            "data: Dict[str, Any]",
+            "dry_run: bool = False"
+          ],
+          "return_type": null,
+          "docstring": "Import a new work experience",
+          "decorated": false
+        },
+        {
+          "name": "import_publication",
+          "line": 194,
+          "end_line": 227,
+          "params": [
+            "client",
+            "data: Dict[str, Any]",
+            "dry_run: bool = False"
+          ],
+          "return_type": null,
+          "docstring": "Import a new publication",
+          "decorated": false
+        },
+        {
+          "name": "update_profile_summary",
+          "line": 230,
+          "end_line": 247,
+          "params": [
+            "client",
+            "summary: str",
+            "dry_run: bool = False"
+          ],
+          "return_type": null,
+          "docstring": "Update profile summary",
+          "decorated": false
+        },
+        {
+          "name": "import_activity",
+          "line": 250,
+          "end_line": 292,
+          "params": [
+            "client",
+            "data: Dict[str, Any]",
+            "dry_run: bool = False"
+          ],
+          "return_type": null,
+          "docstring": "Import a new activity",
+          "decorated": false
+        },
+        {
+          "name": "main",
+          "line": 295,
+          "end_line": 386,
+          "params": [],
+          "return_type": null,
+          "docstring": "Main function",
+          "decorated": false
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 6,
+          "text": "import sys"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 7,
+          "text": "import os"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 8,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 9,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "argparse"
+          ],
+          "line": 10,
+          "text": "import argparse"
+        },
+        {
+          "kind": "from",
+          "module": "List",
+          "names": [],
+          "line": 11,
+          "text": "from typing import Dict, Any, List"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 17,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 391
+    },
+    "backend/scripts/seed_from_typescript.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\scripts\\seed_from_typescript.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "get_db_connection",
+          "line": 31,
+          "end_line": 46,
+          "params": [],
+          "return_type": null,
+          "docstring": "Get Turso database connection",
+          "decorated": false
+        },
+        {
+          "name": "parse_typescript_const",
+          "line": 49,
+          "end_line": 71,
+          "params": [
+            "content: str",
+            "const_name: str"
+          ],
+          "return_type": "Any",
+          "docstring": "Extract a TypeScript const export value\r\n    Example: export const PROFILE: Profile = { ... }",
+          "decorated": false
+        },
+        {
+          "name": "convert_ts_to_json",
+          "line": 74,
+          "end_line": 91,
+          "params": [
+            "ts_code: str"
+          ],
+          "return_type": "str",
+          "docstring": "Convert TypeScript object/array to valid JSON",
+          "decorated": false
+        },
+        {
+          "name": "parse_all_typescript_files",
+          "line": 94,
+          "end_line": 149,
+          "params": [],
+          "return_type": "Dict[str, Any]",
+          "docstring": "Parse all TypeScript data files",
+          "decorated": false
+        },
+        {
+          "name": "show_summary",
+          "line": 152,
+          "end_line": 184,
+          "params": [
+            "data: Dict[str, Any]"
+          ],
+          "return_type": null,
+          "docstring": "Show summary of parsed data",
+          "decorated": false
+        },
+        {
+          "name": "backup_database",
+          "line": 187,
+          "end_line": 217,
+          "params": [
+            "client"
+          ],
+          "return_type": null,
+          "docstring": "Create backup of current database",
+          "decorated": false
+        },
+        {
+          "name": "clear_portfolio_data",
+          "line": 220,
+          "end_line": 248,
+          "params": [
+            "client"
+          ],
+          "return_type": null,
+          "docstring": "Clear existing portfolio data from database",
+          "decorated": false
+        },
+        {
+          "name": "insert_profile",
+          "line": 251,
+          "end_line": 289,
+          "params": [
+            "client",
+            "profile_data: Dict[str, Any]"
+          ],
+          "return_type": null,
+          "docstring": "Insert profile data",
+          "decorated": false
+        },
+        {
+          "name": "insert_education",
+          "line": 292,
+          "end_line": 321,
+          "params": [
+            "client",
+            "edu_data: Dict[str, Any]"
+          ],
+          "return_type": null,
+          "docstring": "Insert education data",
+          "decorated": false
+        },
+        {
+          "name": "insert_experience",
+          "line": 324,
+          "end_line": 379,
+          "params": [
+            "client",
+            "exp_list: List[Dict[str, Any]]"
+          ],
+          "return_type": null,
+          "docstring": "Insert experience data",
+          "decorated": false
+        },
+        {
+          "name": "insert_projects",
+          "line": 382,
+          "end_line": 422,
+          "params": [
+            "client",
+            "proj_list: List[Dict[str, Any]]"
+          ],
+          "return_type": null,
+          "docstring": "Insert projects data",
+          "decorated": false
+        },
+        {
+          "name": "insert_skills",
+          "line": 425,
+          "end_line": 444,
+          "params": [
+            "client",
+            "skills_data: Dict[str, List[str]]"
+          ],
+          "return_type": null,
+          "docstring": "Insert skills data",
+          "decorated": false
+        },
+        {
+          "name": "insert_publications",
+          "line": 447,
+          "end_line": 471,
+          "params": [
+            "client",
+            "pubs_list: List[Dict[str, Any]]"
+          ],
+          "return_type": null,
+          "docstring": "Insert publications data",
+          "decorated": false
+        },
+        {
+          "name": "insert_activities",
+          "line": 474,
+          "end_line": 498,
+          "params": [
+            "client",
+            "act_list: List[Dict[str, Any]]"
+          ],
+          "return_type": null,
+          "docstring": "Insert activities data",
+          "decorated": false
+        },
+        {
+          "name": "verify_seeded_data",
+          "line": 501,
+          "end_line": 520,
+          "params": [
+            "client"
+          ],
+          "return_type": null,
+          "docstring": "Verify data was inserted correctly",
+          "decorated": false
+        },
+        {
+          "name": "main",
+          "line": 523,
+          "end_line": 602,
+          "params": [],
+          "return_type": null,
+          "docstring": "Main function",
+          "decorated": false
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 6,
+          "text": "import sys"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 7,
+          "text": "import os"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 8,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 9,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "re"
+          ],
+          "line": 10,
+          "text": "import re"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "argparse"
+          ],
+          "line": 11,
+          "text": "import argparse"
+        },
+        {
+          "kind": "from",
+          "module": "List",
+          "names": [],
+          "line": 12,
+          "text": "from typing import Dict, Any, List"
+        },
+        {
+          "kind": "from",
+          "module": "datetime",
+          "names": [],
+          "line": 13,
+          "text": "from datetime import datetime"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 19,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 607
+    },
+    "backend/scripts/sync_new_items.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\scripts\\sync_new_items.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "extract_ids_from_typescript",
+          "line": 32,
+          "end_line": 43,
+          "params": [
+            "ts_file: Path",
+            "pattern: str"
+          ],
+          "return_type": "Set[str]",
+          "docstring": "Extract IDs from TypeScript file\r\n    pattern example: r'id:\\s*\"(p\\d+)\"' for projects\r\n                     r'id:\\s*(\\d+),' for experience",
+          "decorated": false
+        },
+        {
+          "name": "format_string_for_ts",
+          "line": 46,
+          "end_line": 54,
+          "params": [
+            "s: str"
+          ],
+          "return_type": "str",
+          "docstring": "Escape and format string for TypeScript",
+          "decorated": false
+        },
+        {
+          "name": "format_project_as_typescript",
+          "line": 57,
+          "end_line": 76,
+          "params": [
+            "proj: Dict[str, Any]",
+            "indent: str = \"  \""
+          ],
+          "return_type": "str",
+          "docstring": "Convert database project to TypeScript format",
+          "decorated": false
+        },
+        {
+          "name": "format_experience_as_typescript",
+          "line": 79,
+          "end_line": 102,
+          "params": [
+            "exp: Dict[str, Any]",
+            "indent: str = \"  \""
+          ],
+          "return_type": "str",
+          "docstring": "Convert database experience to TypeScript format",
+          "decorated": false
+        },
+        {
+          "name": "format_publication_as_typescript",
+          "line": 105,
+          "end_line": 119,
+          "params": [
+            "pub: Dict[str, Any]",
+            "indent: str = \"  \""
+          ],
+          "return_type": "str",
+          "docstring": "Convert database publication to TypeScript format",
+          "decorated": false
+        },
+        {
+          "name": "format_activity_as_typescript",
+          "line": 122,
+          "end_line": 130,
+          "params": [
+            "act: Dict[str, Any]",
+            "indent: str = \"  \""
+          ],
+          "return_type": "str",
+          "docstring": "Convert database activity to TypeScript format",
+          "decorated": false
+        },
+        {
+          "name": "append_to_typescript_array",
+          "line": 133,
+          "end_line": 194,
+          "params": [
+            "ts_file: Path",
+            "new_items_ts: str",
+            "backup: bool = True"
+          ],
+          "return_type": "bool",
+          "docstring": "Append new items to TypeScript array\r\n    Finds the closing ]; and inserts new items before it",
+          "decorated": false
+        },
+        {
+          "name": "sync_projects",
+          "line": 197,
+          "end_line": 241,
+          "params": [
+            "dry_run: bool = False"
+          ],
+          "return_type": "int",
+          "docstring": "Sync new projects from database to TypeScript",
+          "decorated": false
+        },
+        {
+          "name": "sync_experience",
+          "line": 244,
+          "end_line": 289,
+          "params": [
+            "dry_run: bool = False"
+          ],
+          "return_type": "int",
+          "docstring": "Sync new experience from database to TypeScript",
+          "decorated": false
+        },
+        {
+          "name": "sync_publications",
+          "line": 292,
+          "end_line": 339,
+          "params": [
+            "dry_run: bool = False"
+          ],
+          "return_type": "int",
+          "docstring": "Sync new publications from database to TypeScript",
+          "decorated": false
+        },
+        {
+          "name": "sync_activities",
+          "line": 342,
+          "end_line": 368,
+          "params": [
+            "dry_run: bool = False"
+          ],
+          "return_type": "int",
+          "docstring": "Sync new activities from database to TypeScript",
+          "decorated": false
+        },
+        {
+          "name": "main",
+          "line": 371,
+          "end_line": 460,
+          "params": [],
+          "return_type": null,
+          "docstring": "Main function",
+          "decorated": false
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 6,
+          "text": "import sys"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 7,
+          "text": "import os"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 8,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "re"
+          ],
+          "line": 9,
+          "text": "import re"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 10,
+          "text": "import json"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "argparse"
+          ],
+          "line": 11,
+          "text": "import argparse"
+        },
+        {
+          "kind": "from",
+          "module": "Set",
+          "names": [],
+          "line": 12,
+          "text": "from typing import Dict, Any, List, Set"
+        },
+        {
+          "kind": "from",
+          "module": "datetime",
+          "names": [],
+          "line": 13,
+          "text": "from datetime import datetime"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "shutil"
+          ],
+          "line": 14,
+          "text": "import shutil"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 20,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 465
+    },
+    "backend/scripts/view_portfolio.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\scripts\\view_portfolio.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "print_section",
+          "line": 29,
+          "end_line": 33,
+          "params": [
+            "title: str",
+            "char: str = \"=\""
+          ],
+          "return_type": null,
+          "docstring": "Print a formatted section header",
+          "decorated": false
+        },
+        {
+          "name": "view_profile",
+          "line": 36,
+          "end_line": 60,
+          "params": [],
+          "return_type": null,
+          "docstring": "View profile information",
+          "decorated": false
+        },
+        {
+          "name": "view_education",
+          "line": 63,
+          "end_line": 81,
+          "params": [],
+          "return_type": null,
+          "docstring": "View education information",
+          "decorated": false
+        },
+        {
+          "name": "view_experience",
+          "line": 84,
+          "end_line": 117,
+          "params": [],
+          "return_type": null,
+          "docstring": "View work experience",
+          "decorated": false
+        },
+        {
+          "name": "view_projects",
+          "line": 120,
+          "end_line": 146,
+          "params": [],
+          "return_type": null,
+          "docstring": "View projects",
+          "decorated": false
+        },
+        {
+          "name": "view_skills",
+          "line": 149,
+          "end_line": 162,
+          "params": [],
+          "return_type": null,
+          "docstring": "View skills",
+          "decorated": false
+        },
+        {
+          "name": "view_publications",
+          "line": 165,
+          "end_line": 181,
+          "params": [],
+          "return_type": null,
+          "docstring": "View publications",
+          "decorated": false
+        },
+        {
+          "name": "export_to_json",
+          "line": 184,
+          "end_line": 200,
+          "params": [
+            "output_file: str"
+          ],
+          "return_type": null,
+          "docstring": "Export all data to JSON file",
+          "decorated": false
+        },
+        {
+          "name": "export_for_claude",
+          "line": 203,
+          "end_line": 282,
+          "params": [
+            "output_file: str"
+          ],
+          "return_type": null,
+          "docstring": "Export data in a format optimized for Claude to review and improve",
+          "decorated": false
+        },
+        {
+          "name": "main",
+          "line": 285,
+          "end_line": 368,
+          "params": [],
+          "return_type": null,
+          "docstring": "Main function",
+          "decorated": false
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "sys"
+          ],
+          "line": 6,
+          "text": "import sys"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 7,
+          "text": "import os"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 8,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "json"
+          ],
+          "line": 9,
+          "text": "import json"
+        },
+        {
+          "kind": "from",
+          "module": "Any",
+          "names": [],
+          "line": 10,
+          "text": "from typing import Optional, Dict, Any"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 16,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 373
+    },
+    "backend/scripts/utilities/check_models.py": {
+      "path": "d:\\Projects\\Portfolio\\backend\\scripts\\utilities\\check_models.py",
+      "language": "python",
+      "functions": [
+        {
+          "name": "list_available_models",
+          "line": 71,
+          "end_line": 172,
+          "params": [],
+          "return_type": null,
+          "docstring": "List all available Gemini models",
+          "decorated": false
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "os"
+          ],
+          "line": 7,
+          "text": "import os"
+        },
+        {
+          "kind": "import",
+          "module": null,
+          "names": [
+            "requests"
+          ],
+          "line": 8,
+          "text": "import requests"
+        },
+        {
+          "kind": "from",
+          "module": "Path",
+          "names": [],
+          "line": 9,
+          "text": "from pathlib import Path"
+        },
+        {
+          "kind": "from",
+          "module": "load_dotenv",
+          "names": [],
+          "line": 10,
+          "text": "from dotenv import load_dotenv"
+        }
+      ],
+      "line_count": 177
+    },
+    "frontend/eslint.config.js": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\eslint.config.js",
+      "language": "javascript",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "@eslint/js",
+          "names": [
+            "js"
+          ],
+          "line": 1,
+          "text": "import js from '@eslint/js'"
+        },
+        {
+          "kind": "import",
+          "module": "globals",
+          "names": [
+            "globals"
+          ],
+          "line": 2,
+          "text": "import globals from 'globals'"
+        },
+        {
+          "kind": "import",
+          "module": "eslint-plugin-react-hooks",
+          "names": [
+            "reactHooks"
+          ],
+          "line": 3,
+          "text": "import reactHooks from 'eslint-plugin-react-hooks'"
+        },
+        {
+          "kind": "import",
+          "module": "eslint-plugin-react-refresh",
+          "names": [
+            "reactRefresh"
+          ],
+          "line": 4,
+          "text": "import reactRefresh from 'eslint-plugin-react-refresh'"
+        },
+        {
+          "kind": "import",
+          "module": "typescript-eslint",
+          "names": [
+            "tseslint"
+          ],
+          "line": 5,
+          "text": "import tseslint from 'typescript-eslint'"
+        },
+        {
+          "kind": "import",
+          "module": "eslint/config",
+          "names": [
+            "globalIgnores"
+          ],
+          "line": 6,
+          "text": "import { globalIgnores } from 'eslint/config'"
+        }
+      ],
+      "line_count": 24
+    },
+    "frontend/postcss.config.js": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\postcss.config.js",
+      "language": "javascript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 6
+    },
+    "frontend/tailwind.config.js": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\tailwind.config.js",
+      "language": "javascript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 161
+    },
+    "frontend/src/App.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\App.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "App",
+          "line": 24,
+          "end_line": 346,
+          "params": [],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "useState",
+            "useEffect"
+          ],
+          "line": 1,
+          "text": "import { useState, useEffect } from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "Routes",
+            "Route",
+            "useLocation"
+          ],
+          "line": 2,
+          "text": "import { Routes, Route, useLocation } from \"react-router-dom\";"
+        },
+        {
+          "kind": "import",
+          "module": "./utils/analytics",
+          "names": [
+            "trackPageView",
+            "trackEvent",
+            "trackChatMessage",
+            "trackError"
+          ],
+          "line": 3,
+          "text": "import { trackPageView, trackEvent, trackChatMessage, trackError } from \"./utils/analytics\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "AnimatePresence"
+          ],
+          "line": 4,
+          "text": "import { AnimatePresence } from \"framer-motion\";"
+        },
+        {
+          "kind": "import",
+          "module": "./components/ScrollProgress",
+          "names": [
+            "ScrollProgress"
+          ],
+          "line": 6,
+          "text": "import ScrollProgress from \"./components/ScrollProgress\";"
+        },
+        {
+          "kind": "import",
+          "module": "./components/SmoothScroll",
+          "names": [
+            "SmoothScroll"
+          ],
+          "line": 7,
+          "text": "import SmoothScroll from \"./components/SmoothScroll\";"
+        },
+        {
+          "kind": "import",
+          "module": "./components/ParallaxBackground",
+          "names": [
+            "ParallaxBackground"
+          ],
+          "line": 8,
+          "text": "import ParallaxBackground from \"./components/ParallaxBackground\";"
+        },
+        {
+          "kind": "import",
+          "module": "./components/EditorialLayout",
+          "names": [
+            "EditorialLayout"
+          ],
+          "line": 9,
+          "text": "import EditorialLayout from \"./components/EditorialLayout\";"
+        },
+        {
+          "kind": "import",
+          "module": "./components/PageWrapper",
+          "names": [
+            "PageWrapper"
+          ],
+          "line": 10,
+          "text": "import PageWrapper from \"./components/PageWrapper\";"
+        },
+        {
+          "kind": "import",
+          "module": "./components/ProjectDetailModal",
+          "names": [
+            "ProjectDetailModal"
+          ],
+          "line": 12,
+          "text": "import ProjectDetailModal from \"./components/ProjectDetailModal\";"
+        },
+        {
+          "kind": "import",
+          "module": "./components/StrategicFitAnalysisSection",
+          "names": [
+            "StrategicFitAnalysisSection"
+          ],
+          "line": 13,
+          "text": "import StrategicFitAnalysisSection from \"./components/StrategicFitAnalysisSection\";"
+        },
+        {
+          "kind": "import",
+          "module": "./pages/ExperiencePage",
+          "names": [
+            "ExperiencePage"
+          ],
+          "line": 16,
+          "text": "import ExperiencePage from \"./pages/ExperiencePage\";"
+        },
+        {
+          "kind": "import",
+          "module": "./pages/ProjectCaseStudyPage",
+          "names": [
+            "ProjectCaseStudyPage"
+          ],
+          "line": 17,
+          "text": "import ProjectCaseStudyPage from \"./pages/ProjectCaseStudyPage\";"
+        },
+        {
+          "kind": "import",
+          "module": "./pages/ProjectsArchivePage",
+          "names": [
+            "ProjectsArchivePage"
+          ],
+          "line": 18,
+          "text": "import ProjectsArchivePage from \"./pages/ProjectsArchivePage\";"
+        },
+        {
+          "kind": "import",
+          "module": "./data",
+          "names": [
+            "PORTFOLIO_DATA",
+            "type PortfolioData"
+          ],
+          "line": 21,
+          "text": "import { PORTFOLIO_DATA, type PortfolioData } from './data';"
+        },
+        {
+          "kind": "import",
+          "module": "./utils/backendConnection",
+          "names": [
+            "chatWithAI"
+          ],
+          "line": 22,
+          "text": "import { chatWithAI } from './utils/backendConnection';"
+        }
+      ],
+      "line_count": 349
+    },
+    "frontend/src/main.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\main.tsx",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "StrictMode"
+          ],
+          "line": 1,
+          "text": "import { StrictMode } from 'react'"
+        },
+        {
+          "kind": "import",
+          "module": "react-dom/client",
+          "names": [
+            "createRoot"
+          ],
+          "line": 2,
+          "text": "import { createRoot } from 'react-dom/client'"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "BrowserRouter"
+          ],
+          "line": 3,
+          "text": "import { BrowserRouter } from 'react-router-dom'"
+        },
+        {
+          "kind": "import",
+          "module": "posthog-js",
+          "names": [
+            "posthog"
+          ],
+          "line": 4,
+          "text": "import posthog from 'posthog-js'"
+        },
+        {
+          "kind": "import",
+          "module": "./index.css",
+          "names": [],
+          "line": 5,
+          "text": "import './index.css'"
+        },
+        {
+          "kind": "import",
+          "module": "./App.tsx",
+          "names": [
+            "App"
+          ],
+          "line": 6,
+          "text": "import App from './App.tsx'"
+        },
+        {
+          "kind": "import",
+          "module": "./contexts/ThemeContext",
+          "names": [
+            "ThemeProvider"
+          ],
+          "line": 7,
+          "text": "import { ThemeProvider } from './contexts/ThemeContext'"
+        }
+      ],
+      "line_count": 36
+    },
+    "frontend/src/vite-env.d.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\vite-env.d.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 2
+    },
+    "frontend/src/components/ActiveFocusCard.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\ActiveFocusCard.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "ActiveFocusCard",
+          "line": 11,
+          "end_line": 51,
+          "params": [
+            "{\r\n  title = 'LLM Quantization',\r\n  description = 'Exploring quantization methods for edge deployment',\r\n  phase = 'Research Phase',\r\n  progress = 65\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "lucide-react",
+          "names": [
+            "Zap"
+          ],
+          "line": 2,
+          "text": "import { Zap } from 'lucide-react';"
+        }
+      ],
+      "line_count": 54
+    },
+    "frontend/src/components/ActivityTimeline.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\ActivityTimeline.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "getIconForCategory",
+          "line": 48,
+          "end_line": 56,
+          "params": [
+            "category: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "getColorForCategory",
+          "line": 58,
+          "end_line": 66,
+          "params": [
+            "category: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "ActivityTimeline",
+          "line": 68,
+          "end_line": 129,
+          "params": [
+            "{ \r\n  entries = defaultEntries,\r\n  isDark = false\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 2,
+          "text": "import { motion } from 'framer-motion';"
+        }
+      ],
+      "line_count": 132
+    },
+    "frontend/src/components/AIChatCard.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\AIChatCard.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "TypewriterText",
+          "line": 16,
+          "end_line": 41,
+          "params": [
+            "{ text }: { text: string }"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "AIChatCard",
+          "line": 43,
+          "end_line": 209,
+          "params": [
+            "{\r\n  onSendMessage,\r\n  aiMessage,\r\n  isAnalyzing,\r\n  viewportContent\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React",
+            "useState"
+          ],
+          "line": 1,
+          "text": "import React, { useState } from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion",
+            "AnimatePresence"
+          ],
+          "line": 2,
+          "text": "import { motion, AnimatePresence } from 'framer-motion';"
+        }
+      ],
+      "line_count": 212
+    },
+    "frontend/src/components/BentoArchive.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\BentoArchive.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "BentoArchive",
+          "line": 10,
+          "end_line": 346,
+          "params": [
+            "{\r\n  onProjectClick,\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data/projects",
+          "names": [
+            "PROJECTS",
+            "type Project"
+          ],
+          "line": 2,
+          "text": "import { PROJECTS, type Project } from \"../data/projects\";"
+        },
+        {
+          "kind": "import",
+          "module": "./ui/SpotlightCard",
+          "names": [
+            "SpotlightCard"
+          ],
+          "line": 3,
+          "text": "import SpotlightCard from \"./ui/SpotlightCard\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion",
+            "type Variants"
+          ],
+          "line": 4,
+          "text": "import { motion, type Variants } from \"framer-motion\";"
+        }
+      ],
+      "line_count": 349
+    },
+    "frontend/src/components/CollabCTA.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\CollabCTA.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "CollabCTA",
+          "line": 11,
+          "end_line": 73,
+          "params": [
+            "{\r\n  onEmailClick,\r\n  githubUrl,\r\n  linkedinUrl,\r\n  websiteUrl\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "lucide-react",
+          "names": [
+            "Mail",
+            "Github",
+            "Linkedin",
+            "Link as LinkIcon"
+          ],
+          "line": 2,
+          "text": "import { Mail, Github, Linkedin, Link as LinkIcon } from 'lucide-react';"
+        }
+      ],
+      "line_count": 76
+    },
+    "frontend/src/components/DashboardJobAnalysis.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\DashboardJobAnalysis.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "DashboardJobAnalysis",
+          "line": 27,
+          "end_line": 210,
+          "params": [
+            "{\r\n  isVisible,\r\n  matchScore = 0,\r\n  summaryData,\r\n  onClose\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 2,
+          "text": "import { motion } from 'framer-motion';"
+        },
+        {
+          "kind": "import",
+          "module": "lucide-react",
+          "names": [
+            "X"
+          ],
+          "line": 3,
+          "text": "import { X } from 'lucide-react';"
+        },
+        {
+          "kind": "import",
+          "module": "../utils/analytics",
+          "names": [
+            "trackEvent"
+          ],
+          "line": 4,
+          "text": "import { trackEvent } from '../utils/analytics';"
+        }
+      ],
+      "line_count": 213
+    },
+    "frontend/src/components/EditorialLayout.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\EditorialLayout.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "EditorialLayout",
+          "line": 35,
+          "end_line": 445,
+          "params": [
+            "{\r\n  portfolioData,\r\n  onProjectClick,\r\n  onJobAnalysisComplete,\r\n  aiMessage,\r\n  isAnalyzing,\r\n  onSendMessage,\r\n  chatViewportContent,\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "Link"
+          ],
+          "line": 2,
+          "text": "import { Link } from \"react-router-dom\";"
+        },
+        {
+          "kind": "import",
+          "module": "./AIChatCard",
+          "names": [
+            "AIChatCard"
+          ],
+          "line": 3,
+          "text": "import AIChatCard from \"./AIChatCard\";"
+        },
+        {
+          "kind": "import",
+          "module": "./JobAnalysisCard",
+          "names": [
+            "JobAnalysisCard"
+          ],
+          "line": 4,
+          "text": "import JobAnalysisCard from \"./JobAnalysisCard\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data",
+          "names": [
+            "PortfolioData"
+          ],
+          "line": 5,
+          "text": "import type { PortfolioData } from \"../data\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data/activities",
+          "names": [
+            "ACTIVITIES"
+          ],
+          "line": 6,
+          "text": "import { ACTIVITIES } from \"../data/activities\";"
+        },
+        {
+          "kind": "import",
+          "module": "../utils/backendConnection",
+          "names": [
+            "analyzeJobMatch"
+          ],
+          "line": 7,
+          "text": "import { analyzeJobMatch } from \"../utils/backendConnection\";"
+        },
+        {
+          "kind": "import",
+          "module": "../utils/analytics",
+          "names": [
+            "trackEvent",
+            "trackJobAnalysis",
+            "trackError"
+          ],
+          "line": 8,
+          "text": "import { trackEvent, trackJobAnalysis, trackError } from \"../utils/analytics\";"
+        },
+        {
+          "kind": "import",
+          "module": "./JournalNavbar",
+          "names": [
+            "JournalNavbar"
+          ],
+          "line": 11,
+          "text": "import JournalNavbar from \"./JournalNavbar\";"
+        },
+        {
+          "kind": "import",
+          "module": "./JournalMasthead",
+          "names": [
+            "JournalMasthead"
+          ],
+          "line": 12,
+          "text": "import JournalMasthead from \"./JournalMasthead\";"
+        },
+        {
+          "kind": "import",
+          "module": "./FeaturedArticle",
+          "names": [
+            "FeaturedArticle"
+          ],
+          "line": 13,
+          "text": "import FeaturedArticle from \"./FeaturedArticle\";"
+        },
+        {
+          "kind": "import",
+          "module": "./ActivityTimeline",
+          "names": [
+            "ActivityTimeline",
+            "type TimelineEntry"
+          ],
+          "line": 14,
+          "text": "import ActivityTimeline, { type TimelineEntry } from \"./ActivityTimeline\";"
+        },
+        {
+          "kind": "import",
+          "module": "./TechStackBadges",
+          "names": [
+            "TechStackBadges"
+          ],
+          "line": 15,
+          "text": "import TechStackBadges from \"./TechStackBadges\";"
+        },
+        {
+          "kind": "import",
+          "module": "./ActiveFocusCard",
+          "names": [
+            "ActiveFocusCard"
+          ],
+          "line": 16,
+          "text": "import ActiveFocusCard from \"./ActiveFocusCard\";"
+        },
+        {
+          "kind": "import",
+          "module": "./CollabCTA",
+          "names": [
+            "CollabCTA"
+          ],
+          "line": 17,
+          "text": "import CollabCTA from \"./CollabCTA\";"
+        },
+        {
+          "kind": "import",
+          "module": "./BentoArchive",
+          "names": [
+            "BentoArchive"
+          ],
+          "line": 18,
+          "text": "import BentoArchive from \"./BentoArchive\";"
+        }
+      ],
+      "line_count": 448
+    },
+    "frontend/src/components/FeaturedArticle.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\FeaturedArticle.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "FeaturedArticle",
+          "line": 14,
+          "end_line": 75,
+          "params": [
+            "{\r\n  title,\r\n  quote,\r\n  description,\r\n  image,\r\n  onClick,\r\n  updatedAgo = '14M AGO'\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 2,
+          "text": "import { motion } from 'framer-motion';"
+        },
+        {
+          "kind": "import",
+          "module": "lucide-react",
+          "names": [
+            "ArrowRight"
+          ],
+          "line": 3,
+          "text": "import { ArrowRight } from 'lucide-react';"
+        }
+      ],
+      "line_count": 78
+    },
+    "frontend/src/components/JobAnalysisCard.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\JobAnalysisCard.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "JobAnalysisCard",
+          "line": 12,
+          "end_line": 163,
+          "params": [
+            "{\r\n  onAnalyze,\r\n  matchScore,\r\n  analysisResult,\r\n  isAnalyzing,\r\n  onViewReport\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React",
+            "useState"
+          ],
+          "line": 1,
+          "text": "import React, { useState } from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 2,
+          "text": "import { motion } from 'framer-motion';"
+        }
+      ],
+      "line_count": 166
+    },
+    "frontend/src/components/JournalMasthead.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\JournalMasthead.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "JournalMasthead",
+          "line": 10,
+          "end_line": 65,
+          "params": [
+            "{\r\n  volume = '02',\r\n  issue = '43',\r\n  date,\r\n  categories = [\r\n    'Machine Learning Engineering',\r\n    'Large Language Models',\r\n    'System Architecture',\r\n    'Data Science'\r\n  ]\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        }
+      ],
+      "line_count": 68
+    },
+    "frontend/src/components/JournalNavbar.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\JournalNavbar.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "JournalNavbar",
+          "line": 7,
+          "end_line": 40,
+          "params": [
+            "{ \r\n  userName = 'PRATHAMESH PRAVIN MORE'\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        }
+      ],
+      "line_count": 43
+    },
+    "frontend/src/components/PageWrapper.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\PageWrapper.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "PageWrapper",
+          "line": 10,
+          "end_line": 33,
+          "params": [
+            "{ children, className }"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React",
+            "type ReactNode"
+          ],
+          "line": 1,
+          "text": "import React, { type ReactNode } from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 2,
+          "text": "import { motion } from \"framer-motion\";"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "useLocation"
+          ],
+          "line": 3,
+          "text": "import { useLocation } from \"react-router-dom\";"
+        }
+      ],
+      "line_count": 36
+    },
+    "frontend/src/components/ParallaxBackground.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\ParallaxBackground.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "ParallaxBackground",
+          "line": 4,
+          "end_line": 155,
+          "params": [],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React",
+            "useEffect",
+            "useState"
+          ],
+          "line": 1,
+          "text": "import React, { useEffect, useState } from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion",
+            "useScroll",
+            "useTransform",
+            "useSpring"
+          ],
+          "line": 2,
+          "text": "import { motion, useScroll, useTransform, useSpring } from \"framer-motion\";"
+        }
+      ],
+      "line_count": 158
+    },
+    "frontend/src/components/ProjectDetailModal.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\ProjectDetailModal.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "ProjectDetailModal",
+          "line": 11,
+          "end_line": 226,
+          "params": [
+            "{\r\n  project,\r\n  isOpen,\r\n  onClose,\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "Link"
+          ],
+          "line": 2,
+          "text": "import { Link } from \"react-router-dom\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion",
+            "AnimatePresence"
+          ],
+          "line": 3,
+          "text": "import { motion, AnimatePresence } from \"framer-motion\";"
+        }
+      ],
+      "line_count": 229
+    },
+    "frontend/src/components/ScrollProgress.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\ScrollProgress.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "ScrollProgress",
+          "line": 4,
+          "end_line": 27,
+          "params": [],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion",
+            "useScroll",
+            "useSpring"
+          ],
+          "line": 2,
+          "text": "import { motion, useScroll, useSpring } from 'framer-motion';"
+        }
+      ],
+      "line_count": 29
+    },
+    "frontend/src/components/SmoothScroll.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\SmoothScroll.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "SmoothScroll",
+          "line": 7,
+          "end_line": 160,
+          "params": [
+            "{ children }"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React",
+            "useEffect",
+            "useRef"
+          ],
+          "line": 1,
+          "text": "import React, { useEffect, useRef } from 'react';"
+        }
+      ],
+      "line_count": 162
+    },
+    "frontend/src/components/StatisticsCard.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\StatisticsCard.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "StatisticsCard",
+          "line": 18,
+          "end_line": 40,
+          "params": [
+            "{\r\n  stats = defaultStats\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        }
+      ],
+      "line_count": 43
+    },
+    "frontend/src/components/StrategicFitAnalysisSection.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\StrategicFitAnalysisSection.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "StrategicFitAnalysisSection",
+          "line": 37,
+          "end_line": 66,
+          "params": [
+            "{\r\n  analysisResult,\r\n  isVisible,\r\n  onClose\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion",
+            "AnimatePresence"
+          ],
+          "line": 2,
+          "text": "import { motion, AnimatePresence } from 'framer-motion';"
+        },
+        {
+          "kind": "import",
+          "module": "./DashboardJobAnalysis",
+          "names": [
+            "DashboardJobAnalysis"
+          ],
+          "line": 3,
+          "text": "import DashboardJobAnalysis from './DashboardJobAnalysis';"
+        }
+      ],
+      "line_count": 68
+    },
+    "frontend/src/components/TechStackBadges.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\TechStackBadges.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "TechStackBadges",
+          "line": 8,
+          "end_line": 29,
+          "params": [
+            "{ \r\n  technologies = ['Python', 'TensorFlow', 'PyTorch', 'React', 'AWS', 'Docker', 'NLP', 'Kubernetes']\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "lucide-react",
+          "names": [
+            "Layers"
+          ],
+          "line": 2,
+          "text": "import { Layers } from 'lucide-react';"
+        }
+      ],
+      "line_count": 32
+    },
+    "frontend/src/components/ui/SpotlightCard.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\components\\ui\\SpotlightCard.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "SpotlightCard",
+          "line": 15,
+          "end_line": 65,
+          "params": [
+            "{\r\n  children,\r\n  className = \"\",\r\n  spotlightColor = \"rgba(255, 255, 255, 0.15)\",\r\n  onClick,\r\n  onKeyDown,\r\n  tabIndex,\r\n  role,\r\n  ariaLabel,\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion",
+            "useMotionTemplate",
+            "useMotionValue"
+          ],
+          "line": 2,
+          "text": "import { motion, useMotionTemplate, useMotionValue } from \"framer-motion\";"
+        }
+      ],
+      "line_count": 68
+    },
+    "frontend/src/contexts/ThemeContext.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\contexts\\ThemeContext.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "useTheme",
+          "line": 14,
+          "end_line": 20,
+          "params": [],
+          "kind": "arrow"
+        },
+        {
+          "name": "ThemeProvider",
+          "line": 26,
+          "end_line": 87,
+          "params": [
+            "{ children }"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React",
+            "createContext",
+            "useContext",
+            "useEffect",
+            "useState"
+          ],
+          "line": 1,
+          "text": "import React, { createContext, useContext, useEffect, useState } from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "ReactNode"
+          ],
+          "line": 2,
+          "text": "import type { ReactNode } from 'react';"
+        }
+      ],
+      "line_count": 87
+    },
+    "frontend/src/data/activities.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\activities.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 64
+    },
+    "frontend/src/data/aiFallbackResponses.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\aiFallbackResponses.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "getFallbackResponse",
+          "line": 219,
+          "end_line": 237,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        },
+        {
+          "name": "getWarmupTip",
+          "line": 242,
+          "end_line": 252,
+          "params": [],
+          "kind": "function"
+        },
+        {
+          "name": "getEnhancedFallbackResponse",
+          "line": 257,
+          "end_line": 269,
+          "params": [
+            "query: string"
+          ],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "./index",
+          "names": [
+            "PORTFOLIO_DATA"
+          ],
+          "line": 6,
+          "text": "import { PORTFOLIO_DATA } from './index';"
+        }
+      ],
+      "line_count": 272
+    },
+    "frontend/src/data/experience.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\experience.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 262
+    },
+    "frontend/src/data/index.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\index.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "./profile",
+          "names": [
+            "PROFILE",
+            "EDUCATION"
+          ],
+          "line": 13,
+          "text": "import { PROFILE, EDUCATION } from './profile';"
+        },
+        {
+          "kind": "import",
+          "module": "./experience",
+          "names": [
+            "EXPERIENCE"
+          ],
+          "line": 14,
+          "text": "import { EXPERIENCE } from './experience';"
+        },
+        {
+          "kind": "import",
+          "module": "./projects",
+          "names": [
+            "PROJECTS"
+          ],
+          "line": 15,
+          "text": "import { PROJECTS } from './projects';"
+        },
+        {
+          "kind": "import",
+          "module": "./publications",
+          "names": [
+            "PUBLICATIONS"
+          ],
+          "line": 16,
+          "text": "import { PUBLICATIONS } from './publications';"
+        },
+        {
+          "kind": "import",
+          "module": "./skills",
+          "names": [
+            "SKILLS"
+          ],
+          "line": 17,
+          "text": "import { SKILLS } from './skills';"
+        },
+        {
+          "kind": "import",
+          "module": "./activities",
+          "names": [
+            "ACTIVITIES"
+          ],
+          "line": 18,
+          "text": "import { ACTIVITIES } from './activities';"
+        }
+      ],
+      "line_count": 44
+    },
+    "frontend/src/data/profile.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\profile.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 62
+    },
+    "frontend/src/data/projects.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\projects.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 317
+    },
+    "frontend/src/data/publications.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\publications.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 35
+    },
+    "frontend/src/data/skills.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\data\\skills.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 21
+    },
+    "frontend/src/hooks/useBackendStatus.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\hooks\\useBackendStatus.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "useBackendStatus",
+          "line": 42,
+          "end_line": 327,
+          "params": [],
+          "kind": "function"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "useState",
+            "useEffect",
+            "useCallback",
+            "useRef"
+          ],
+          "line": 6,
+          "text": "import { useState, useEffect, useCallback, useRef } from 'react';"
+        },
+        {
+          "kind": "import",
+          "module": "../utils/logger",
+          "names": [
+            "log"
+          ],
+          "line": 7,
+          "text": "import { log } from '../utils/logger';"
+        },
+        {
+          "kind": "import",
+          "module": "../utils/analytics",
+          "names": [
+            "trackBackendStatus"
+          ],
+          "line": 8,
+          "text": "import { trackBackendStatus } from '../utils/analytics';"
+        }
+      ],
+      "line_count": 328
+    },
+    "frontend/src/pages/ExperiencePage.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\pages\\ExperiencePage.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "CompetenciesList",
+          "line": 7,
+          "end_line": 34,
+          "params": [
+            "{ items }"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "SoftSkillsList",
+          "line": 37,
+          "end_line": 64,
+          "params": [
+            "{ items }"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "ExperiencePage",
+          "line": 66,
+          "end_line": 547,
+          "params": [],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React",
+            "useState"
+          ],
+          "line": 1,
+          "text": "import React, { useState } from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "useParams",
+            "Link"
+          ],
+          "line": 2,
+          "text": "import { useParams, Link } from \"react-router-dom\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 3,
+          "text": "import { motion } from \"framer-motion\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data/experience",
+          "names": [
+            "EXPERIENCE"
+          ],
+          "line": 4,
+          "text": "import { EXPERIENCE } from \"../data/experience\";"
+        }
+      ],
+      "line_count": 550
+    },
+    "frontend/src/pages/ProjectCaseStudyPage.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\pages\\ProjectCaseStudyPage.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "ProjectCaseStudyPage",
+          "line": 6,
+          "end_line": 342,
+          "params": [],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "useParams",
+            "Link"
+          ],
+          "line": 2,
+          "text": "import { useParams, Link } from \"react-router-dom\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 3,
+          "text": "import { motion } from \"framer-motion\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data/projects",
+          "names": [
+            "PROJECTS"
+          ],
+          "line": 4,
+          "text": "import { PROJECTS } from \"../data/projects\";"
+        }
+      ],
+      "line_count": 345
+    },
+    "frontend/src/pages/ProjectsArchivePage.tsx": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\pages\\ProjectsArchivePage.tsx",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "ProjectsArchivePage",
+          "line": 17,
+          "end_line": 225,
+          "params": [
+            "{\r\n  onProjectClick,\r\n}"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "react",
+          "names": [
+            "React"
+          ],
+          "line": 1,
+          "text": "import React from \"react\";"
+        },
+        {
+          "kind": "import",
+          "module": "react-router-dom",
+          "names": [
+            "Link"
+          ],
+          "line": 2,
+          "text": "import { Link } from \"react-router-dom\";"
+        },
+        {
+          "kind": "import",
+          "module": "../components/BentoArchive",
+          "names": [
+            "BentoArchive"
+          ],
+          "line": 3,
+          "text": "import BentoArchive from \"../components/BentoArchive\";"
+        },
+        {
+          "kind": "import",
+          "module": "../components/ActivityTimeline",
+          "names": [
+            "ActivityTimeline"
+          ],
+          "line": 4,
+          "text": "import ActivityTimeline from \"../components/ActivityTimeline\";"
+        },
+        {
+          "kind": "import",
+          "module": "../components/ActiveFocusCard",
+          "names": [
+            "ActiveFocusCard"
+          ],
+          "line": 5,
+          "text": "import ActiveFocusCard from \"../components/ActiveFocusCard\";"
+        },
+        {
+          "kind": "import",
+          "module": "../components/StatisticsCard",
+          "names": [
+            "StatisticsCard"
+          ],
+          "line": 6,
+          "text": "import StatisticsCard from \"../components/StatisticsCard\";"
+        },
+        {
+          "kind": "import",
+          "module": "../components/CollabCTA",
+          "names": [
+            "CollabCTA"
+          ],
+          "line": 7,
+          "text": "import CollabCTA from \"../components/CollabCTA\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data/activities",
+          "names": [
+            "ACTIVITIES"
+          ],
+          "line": 8,
+          "text": "import { ACTIVITIES } from \"../data/activities\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data",
+          "names": [
+            "PORTFOLIO_DATA"
+          ],
+          "line": 9,
+          "text": "import { PORTFOLIO_DATA } from \"../data\";"
+        },
+        {
+          "kind": "import",
+          "module": "../data/projects",
+          "names": [
+            "Project"
+          ],
+          "line": 10,
+          "text": "import type { Project } from \"../data/projects\";"
+        },
+        {
+          "kind": "import",
+          "module": "framer-motion",
+          "names": [
+            "motion"
+          ],
+          "line": 11,
+          "text": "import { motion } from \"framer-motion\";"
+        }
+      ],
+      "line_count": 228
+    },
+    "frontend/src/types/global.d.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\types\\global.d.ts",
+      "language": "typescript",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "line_count": 7
+    },
+    "frontend/src/utils/analytics.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\utils\\analytics.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "getSessionId",
+          "line": 15,
+          "end_line": 15,
+          "params": [
+            "sessionId"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackEvent",
+          "line": 18,
+          "end_line": 33,
+          "params": [
+            "eventName: string",
+            "parameters?: Record<string, any>"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackPageView",
+          "line": 36,
+          "end_line": 55,
+          "params": [
+            "pagePath: string",
+            "pageTitle?: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackAIChat",
+          "line": 58,
+          "end_line": 65,
+          "params": [
+            "queryType: string",
+            "responseTime?: number",
+            "cached?: boolean"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackJobAnalysis",
+          "line": 67,
+          "end_line": 73,
+          "params": [
+            "matchScore?: number",
+            "processingTime?: number"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackSectionView",
+          "line": 75,
+          "end_line": 82,
+          "params": [
+            "sectionName: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackBackendStatus",
+          "line": 84,
+          "end_line": 90,
+          "params": [
+            "status: 'offline' | 'warming' | 'ready'",
+            "warmupTime?: number"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackFallbackResponse",
+          "line": 92,
+          "end_line": 97,
+          "params": [
+            "query: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackContactAction",
+          "line": 99,
+          "end_line": 104,
+          "params": [
+            "method: 'email' | 'linkedin' | 'github'"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackProjectInteraction",
+          "line": 106,
+          "end_line": 112,
+          "params": [
+            "projectName: string",
+            "action: 'view' | 'download' | 'demo' | 'github'"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackChatMessage",
+          "line": 115,
+          "end_line": 122,
+          "params": [
+            "messageLength: number",
+            "agentUsed?: string",
+            "isCached?: boolean"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackAnalysisExpanded",
+          "line": 124,
+          "end_line": 129,
+          "params": [
+            "section: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "trackError",
+          "line": 131,
+          "end_line": 149,
+          "params": [
+            "errorType: string",
+            "errorMessage: string",
+            "context?: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "sendAnalyticsToBackend",
+          "line": 152,
+          "end_line": 170,
+          "params": [
+            "eventType: string",
+            "eventData: Record<string, any>"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "posthog-js",
+          "names": [
+            "posthog"
+          ],
+          "line": 3,
+          "text": "import posthog from 'posthog-js';"
+        }
+      ],
+      "line_count": 171
+    },
+    "frontend/src/utils/backendConnection.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\utils\\backendConnection.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "testBackendConnection",
+          "line": 7,
+          "end_line": 37,
+          "params": [],
+          "kind": "arrow"
+        },
+        {
+          "name": "analyzeJobMatch",
+          "line": 39,
+          "end_line": 97,
+          "params": [
+            "jobDescription: string"
+          ],
+          "kind": "arrow"
+        },
+        {
+          "name": "chatWithAI",
+          "line": 99,
+          "end_line": 129,
+          "params": [
+            "message: string"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "kind": "import",
+          "module": "./logger",
+          "names": [
+            "log",
+            "withPerformance"
+          ],
+          "line": 2,
+          "text": "import { log, withPerformance } from './logger';"
+        }
+      ],
+      "line_count": 129
+    },
+    "frontend/src/utils/logger.ts": {
+      "path": "d:\\Projects\\Portfolio\\frontend\\src\\utils\\logger.ts",
+      "language": "typescript",
+      "functions": [
+        {
+          "name": "withPerformance",
+          "line": 324,
+          "end_line": 340,
+          "params": [
+            "operation: string",
+            "fn: () => Promise<T> | T",
+            "context?: LogContext"
+          ],
+          "kind": "arrow"
+        }
+      ],
+      "classes": [
+        {
+          "name": "",
+          "line": 34,
+          "end_line": 305,
+          "bases": [],
+          "methods": [
+            {
+              "name": "constructor",
+              "line": 42,
+              "end_line": 50,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "generateSessionId",
+              "line": 52,
+              "end_line": 54,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "createLogEntry",
+              "line": 56,
+              "end_line": 89,
+              "params": [
+                "level: LogEntry['level']",
+                "message: string",
+                "context?: LogContext",
+                "error?: Error",
+                "performance?: { duration: number; operation: string }"
+              ],
+              "static": false
+            },
+            {
+              "name": "outputToConsole",
+              "line": 91,
+              "end_line": 112,
+              "params": [
+                "entry: LogEntry"
+              ],
+              "static": false
+            },
+            {
+              "name": "getConsoleStyle",
+              "line": 114,
+              "end_line": 122,
+              "params": [
+                "level: LogEntry['level']"
+              ],
+              "static": false
+            },
+            {
+              "name": "storeLog",
+              "line": 124,
+              "end_line": 139,
+              "params": [
+                "entry: LogEntry"
+              ],
+              "static": false
+            },
+            {
+              "name": "sendToRemote",
+              "line": 141,
+              "end_line": 161,
+              "params": [
+                "entry: LogEntry"
+              ],
+              "static": false
+            },
+            {
+              "name": "log",
+              "line": 163,
+              "end_line": 169,
+              "params": [
+                "level: LogEntry['level']",
+                "message: string",
+                "context?: LogContext",
+                "error?: Error"
+              ],
+              "static": false
+            },
+            {
+              "name": "debug",
+              "line": 171,
+              "end_line": 173,
+              "params": [
+                "message: string",
+                "context?: LogContext"
+              ],
+              "static": false
+            },
+            {
+              "name": "info",
+              "line": 175,
+              "end_line": 177,
+              "params": [
+                "message: string",
+                "context?: LogContext"
+              ],
+              "static": false
+            },
+            {
+              "name": "warn",
+              "line": 179,
+              "end_line": 181,
+              "params": [
+                "message: string",
+                "context?: LogContext"
+              ],
+              "static": false
+            },
+            {
+              "name": "error",
+              "line": 183,
+              "end_line": 185,
+              "params": [
+                "message: string",
+                "error?: Error",
+                "context?: LogContext"
+              ],
+              "static": false
+            },
+            {
+              "name": "performance",
+              "line": 188,
+              "end_line": 201,
+              "params": [
+                "operation: string",
+                "duration: number",
+                "context?: LogContext"
+              ],
+              "static": false
+            },
+            {
+              "name": "userAction",
+              "line": 204,
+              "end_line": 210,
+              "params": [
+                "action: string",
+                "component: string",
+                "details?: Record<string, any>"
+              ],
+              "static": false
+            },
+            {
+              "name": "apiCall",
+              "line": 213,
+              "end_line": 225,
+              "params": [
+                "method: string",
+                "url: string",
+                "duration: number",
+                "status: number",
+                "error?: Error"
+              ],
+              "static": false
+            },
+            {
+              "name": "componentMount",
+              "line": 228,
+              "end_line": 234,
+              "params": [
+                "componentName: string",
+                "props?: Record<string, any>"
+              ],
+              "static": false
+            },
+            {
+              "name": "componentUnmount",
+              "line": 236,
+              "end_line": 241,
+              "params": [
+                "componentName: string"
+              ],
+              "static": false
+            },
+            {
+              "name": "getLogs",
+              "line": 244,
+              "end_line": 249,
+              "params": [
+                "level?: LogEntry['level']"
+              ],
+              "static": false
+            },
+            {
+              "name": "clearLogs",
+              "line": 252,
+              "end_line": 255,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "exportLogs",
+              "line": 258,
+              "end_line": 260,
+              "params": [],
+              "static": false
+            },
+            {
+              "name": "setupGlobalErrorHandling",
+              "line": 263,
+              "end_line": 304,
+              "params": [],
+              "static": false
+            }
+          ]
+        }
+      ],
+      "imports": [],
+      "line_count": 343
+    }
+  },
+  "file_counts": {
+    "typescript": 57,
+    "python": 20,
+    "javascript": 3
+  },
+  "total_lines": 15423,
+  "patterns": [
+    "Express",
+    "JavaScript",
+    "Python",
+    "React",
+    "TypeScript",
+    "asyncio"
+  ]
+}

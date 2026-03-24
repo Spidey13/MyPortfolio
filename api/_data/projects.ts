@@ -30,55 +30,63 @@ export interface Project {
   id: string;
   title: string;
   github_url: string;
-  deployed_url?: string; // Optional: link to live demo/webapp
+  deployed_url?: string;
+  image?: string;
+  video?: string;
   star: ProjectSTAR;
   technologies: string[];
   featured: boolean;
   modalPreview: ProjectModalPreview;
-  metrics: ProjectMetric[]; // For case study page
+  metrics: ProjectMetric[];
 }
 
 export const PROJECTS: Project[] = [
   {
-    id: "p1",
-    title: "Autonomous Research Agent (Scientific Discovery System)",
-    github_url: "https://github.com/YASHY2K/scientific-discovery-agent",
+    id: "p6",
+    title: "Codiey - Voice-First AI Coding Partner",
+    github_url: "https://github.com/Spidey13/Codiey",
+    video: "/codiey-demo.mp4",
     star: {
       situation:
-        "Literature reviews traditionally take researchers months to complete for complex academic queries spanning multiple research domains. Manual review processes are time-consuming, inconsistent, and struggle with interdisciplinary synthesis.",
-      task: "Develop an autonomous research tool that accelerates literature reviews to within minutes, design hierarchical agent orchestration with specialized roles for different research phases, and implement comprehensive transparency system for real-time visibility into agent workflows.",
+        "Traditional text-based AI coding assistants create friction in developer workflows, requiring constant context-switching between typing, reading responses, and navigating code. Real-time collaboration with AI over voice remains largely unexplored, and existing tools lack deep codebase intelligence combining static analysis with live visualization.",
+      task: "Build a voice-native AI coding partner using Gemini 2.5 Flash native audio for bidirectional real-time communication, implement comprehensive codebase intelligence with tree-sitter AST parsing and PageRank-based file ranking, create live dependency graph visualization, and ensure session resilience with context window compression and resumption capabilities.",
       action:
-        "I developed an autonomous research tool using AWS Strands Agents and Amazon Bedrock, completing comprehensive literature reviews within minutes instead of months. Designed hierarchical multi-agent architecture with five specialist agents (Research Planner, Paper Searcher, Paper Analyzer, Research Critique, Report Generator) managing the complete five-phase workflow (Planning → Search → Analysis → Critique → Reporting). Implemented 'Glass Box' transparency system providing real-time visibility into agent decision chains with live activity streams, and integrated multi-database search capabilities across arXiv and Semantic Scholar. Deployed Research Critique Agent to validate accuracy and eliminate hallucinations in final reports.",
+        "I developed Codiey, a voice-first AI coding partner that enables natural spoken conversation about codebases using Gemini 2.5 Flash's native audio capabilities over WebSocket. Implemented end-to-end real-time audio pipeline with AudioWorklet for PCM streaming (16 kHz in, 24 kHz out) and integrated Silero-style neural VAD (ONNX Runtime) in the browser to replace brittle energy thresholds. Designed two-tier tool system: Tier 1 blocking tools (read, search, AST introspection with tree-sitter) with TOOL_PENDING gate preventing audio leaks during execution, and Tier 2 silent tools (write_to_rules, mark_as_discussed) for non-intrusive side effects. Built comprehensive codebase intelligence using tree-sitter for parsing Python/JavaScript/TypeScript, extracted import/require dependency graphs, and applied PageRank with personalization for intelligent file ranking. Created D3 force-directed graph visualization with live pulses showing active files during model interaction. Implemented session resilience with context window compression, resumption tokens in localStorage, and goAway handling to maintain audio connection across reconnects.",
       result:
-        "Eliminated hallucinations in research reports through automated validation, achieved 100% coverage of relevant research papers, accelerated literature reviews from months to minutes, successfully processed interdisciplinary queries requiring cross-domain synthesis, and achieved full transparency with real-time workflow visibility.",
+        "Successfully created production-ready voice-native AI coding assistant with real-time bidirectional audio achieving <200ms latency, built robust codebase intelligence system processing AST and dependency graphs with PageRank ranking, delivered interactive D3 visualization showing live model focus, implemented neural VAD eliminating 1008 WebSocket errors, and achieved session resilience with automatic context compression and resumption.",
       impact:
-        "Transformed research workflows by eliminating months of manual literature review, enabled researchers to focus on analysis rather than data gathering, demonstrated successful hierarchical multi-agent orchestration for complex knowledge synthesis tasks, and provided unprecedented transparency into AI research processes.",
+        "Transformed developer-AI interaction by enabling natural voice-based codebase exploration eliminating context-switching overhead, demonstrated cutting-edge integration of Gemini's native audio with function calling and repository tools, provided unprecedented transparency into AI reasoning through live dependency graph visualization, and established robust patterns for real-time audio AI applications with proper state management and resilience.",
       architecture:
-        "Hierarchical multi-agent system built on AWS Strands Agents and Amazon Bedrock with five specialist agents: Research Planner, Paper Searcher, Paper Analyzer, Research Critique, and Report Generator. Five-phase workflow orchestration (Planning → Search → Analysis → Critique → Reporting) with self-critique and refinement capabilities. 'Glass Box' transparency system with real-time activity streams and phase tracking. Multi-database integration with arXiv and Semantic Scholar. Professional report generation with executive summaries, methodology reviews, comparative analysis, and academic citations. Streamlit dashboard for real-time monitoring with comprehensive logging and performance tracking.",
+        "FastAPI backend serving static assets and tool execution endpoints. Browser-side AudioWorklet for PCM processing with Web Audio API. Gemini 2.5 Flash BidiGenerateContent WebSocket with native audio support. Two-tier tool architecture: blocking tools (read_file, search_codebase, get_class_functions, list_directory) with TOOL_PENDING state gate, and silent scheduled tools (write_to_rules, mark_as_discussed) running on thread pool. Tree-sitter parsers for Python/JavaScript/TypeScript with AST-aware introspection. Dependency graph extraction with PageRank ranking using NumPy/SciPy. D3.js force-directed graph with real-time emphasis on active files. Neural VAD using Silero ONNX model. Session management with context compression, resumption tokens, and goAway recovery. Persistent project memory in .codiey/rules for cross-session learning.",
     },
     technologies: [
-      "AWS Strands Agents",
-      "Amazon Bedrock",
       "Python",
-      "Streamlit",
-      "Multi-Agent Systems",
-      "arXiv API",
-      "Semantic Scholar API",
+      "FastAPI",
+      "Google Gemini",
+      "Tree-sitter",
+      "D3.js",
+      "WebSocket",
+      "ONNX Runtime",
+      "Web Audio API",
+      "Pydantic",
+      "Click",
+      "NumPy",
+      "SciPy",
     ],
     featured: true,
     modalPreview: {
-      hook: "Autonomous AI agent eliminates hallucinations while completing literature reviews in minutes",
+      hook: "Voice-native AI coding partner with real-time audio and codebase intelligence",
       problemTeaser:
-        "Imagine 5 specialized AI agents collaborating autonomously to conduct literature reviews. See how this breakthrough system revolutionizes academic research.",
+        "Talk naturally with AI about your code while watching live dependency graphs reveal what the model understands. Real-time bidirectional audio meets PageRank-powered codebase intelligence.",
       heroMetric: {
-        label: "Accuracy Validation",
-        value: "Glass Box Transparency",
+        label: "Voice Interface",
+        value: "Real-time Bidi",
       },
     },
     metrics: [
-      { label: "Research Coverage", value: "100%" },
-      { label: "Review Speed", value: "Minutes" },
-      { label: "Specialist Agents", value: "5" },
+      { label: "Tier 1 Tools", value: "6 Blocking" },
+      { label: "Audio Latency", value: "<200ms" },
+      { label: "File Ranking", value: "PageRank" },
     ],
   },
   {
@@ -311,6 +319,48 @@ export const PROJECTS: Project[] = [
       { label: "Alignment Rate", value: "63.10%" },
       { label: "Segments", value: "712+" },
       { label: "Modalities", value: "Audio + Text" },
+    ],
+  },
+  {
+    id: "p1",
+    title: "Autonomous Research Agent (Scientific Discovery System)",
+    github_url: "https://github.com/YASHY2K/scientific-discovery-agent",
+    star: {
+      situation:
+        "Literature reviews traditionally take researchers months to complete for complex academic queries spanning multiple research domains. Manual review processes are time-consuming, inconsistent, and struggle with interdisciplinary synthesis.",
+      task: "Develop an autonomous research tool that accelerates literature reviews to within minutes, design hierarchical agent orchestration with specialized roles for different research phases, and implement comprehensive transparency system for real-time visibility into agent workflows.",
+      action:
+        "I developed an autonomous research tool using AWS Strands Agents and Amazon Bedrock, completing comprehensive literature reviews within minutes instead of months. Designed hierarchical multi-agent architecture with five specialist agents (Research Planner, Paper Searcher, Paper Analyzer, Research Critique, Report Generator) managing the complete five-phase workflow (Planning → Search → Analysis → Critique → Reporting). Implemented 'Glass Box' transparency system providing real-time visibility into agent decision chains with live activity streams, and integrated multi-database search capabilities across arXiv and Semantic Scholar. Deployed Research Critique Agent to validate accuracy and eliminate hallucinations in final reports.",
+      result:
+        "Eliminated hallucinations in research reports through automated validation, achieved 100% coverage of relevant research papers, accelerated literature reviews from months to minutes, successfully processed interdisciplinary queries requiring cross-domain synthesis, and achieved full transparency with real-time workflow visibility.",
+      impact:
+        "Transformed research workflows by eliminating months of manual literature review, enabled researchers to focus on analysis rather than data gathering, demonstrated successful hierarchical multi-agent orchestration for complex knowledge synthesis tasks, and provided unprecedented transparency into AI research processes.",
+      architecture:
+        "Hierarchical multi-agent system built on AWS Strands Agents and Amazon Bedrock with five specialist agents: Research Planner, Paper Searcher, Paper Analyzer, Research Critique, and Report Generator. Five-phase workflow orchestration (Planning → Search → Analysis → Critique → Reporting) with self-critique and refinement capabilities. 'Glass Box' transparency system with real-time activity streams and phase tracking. Multi-database integration with arXiv and Semantic Scholar. Professional report generation with executive summaries, methodology reviews, comparative analysis, and academic citations. Streamlit dashboard for real-time monitoring with comprehensive logging and performance tracking.",
+    },
+    technologies: [
+      "AWS Strands Agents",
+      "Amazon Bedrock",
+      "Python",
+      "Streamlit",
+      "Multi-Agent Systems",
+      "arXiv API",
+      "Semantic Scholar API",
+    ],
+    featured: true,
+    modalPreview: {
+      hook: "Autonomous AI agent eliminates hallucinations while completing literature reviews in minutes",
+      problemTeaser:
+        "Imagine 5 specialized AI agents collaborating autonomously to conduct literature reviews. See how this breakthrough system revolutionizes academic research.",
+      heroMetric: {
+        label: "Accuracy Validation",
+        value: "Glass Box Transparency",
+      },
+    },
+    metrics: [
+      { label: "Research Coverage", value: "100%" },
+      { label: "Review Speed", value: "Minutes" },
+      { label: "Specialist Agents", value: "5" },
     ],
   },
 ];

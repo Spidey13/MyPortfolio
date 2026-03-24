@@ -136,6 +136,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
             quote={(featuredProject as any)?.star?.impact}
             description={(featuredProject as any)?.star?.situation || ""}
             image={(featuredProject as any)?.image}
+            video={(featuredProject as any)?.video}
             onClick={() => featuredProject && onProjectClick(featuredProject)}
           />
 
@@ -405,10 +406,10 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
 
           {/* Active Focus */}
           <ActiveFocusCard
-            title="Google build with AI"
-            description="Building and experimenting with AI-powered tools and workflows."
-            phase="Research Phase"
-            progress={65}
+            title="Codiey - Voice AI"
+            description="Building a voice-first AI coding partner with real-time audio and codebase intelligence."
+            phase="Active Development"
+            progress={80}
           />
 
           {/* Collaboration CTA */}

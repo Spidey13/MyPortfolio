@@ -70,7 +70,7 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
         initial="hidden"
         animate="visible"
       >
-        {/* TOP STORY - Autonomous Research Agent (2x2) - CUSTOM RESTORED HOVER */}
+        {/* TOP STORY - Codiey Voice AI (2x2) - CUSTOM RESTORED HOVER */}
         <motion.div 
             className="md:col-span-2 md:row-span-2 relative group overflow-hidden cursor-pointer bg-white border border-[#E5E5E5]"
             variants={itemVariants}
@@ -81,7 +81,39 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
             aria-label={`View project: ${projects[0].title}`}
         >
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-200/20 via-cyan-200/20 to-pink-200/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-200/20 via-cyan-200/20 to-violet-200/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></div>
+            
+            {/* Background SVG Illustration - Audio Waveform + Graph Nodes */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+                <svg className="w-full h-full" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+                    {/* Audio Waveform Bars */}
+                    <g transform="translate(50, 120)">
+                        <rect x="0" y="20" width="4" height="40" fill="currentColor" opacity="0.6" />
+                        <rect x="12" y="10" width="4" height="60" fill="currentColor" opacity="0.8" />
+                        <rect x="24" y="25" width="4" height="30" fill="currentColor" opacity="0.5" />
+                        <rect x="36" y="5" width="4" height="70" fill="currentColor" opacity="0.9" />
+                        <rect x="48" y="15" width="4" height="50" fill="currentColor" opacity="0.7" />
+                        <rect x="60" y="30" width="4" height="20" fill="currentColor" opacity="0.4" />
+                        <rect x="72" y="12" width="4" height="56" fill="currentColor" opacity="0.75" />
+                        <rect x="84" y="22" width="4" height="36" fill="currentColor" opacity="0.6" />
+                    </g>
+                    
+                    {/* Graph Nodes - Connected Network */}
+                    <g transform="translate(250, 140)">
+                        {/* Nodes */}
+                        <circle cx="0" cy="0" r="8" fill="currentColor" opacity="0.6" />
+                        <circle cx="45" cy="-20" r="6" fill="currentColor" opacity="0.5" />
+                        <circle cx="50" cy="25" r="7" fill="currentColor" opacity="0.5" />
+                        <circle cx="90" cy="5" r="5" fill="currentColor" opacity="0.4" />
+                        
+                        {/* Connection Lines */}
+                        <line x1="0" y1="0" x2="45" y2="-20" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                        <line x1="0" y1="0" x2="50" y2="25" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                        <line x1="45" y1="-20" x2="90" y2="5" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                        <line x1="50" y1="25" x2="90" y2="5" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                    </g>
+                </svg>
+            </div>
             
             {/* Fixed Top Section - Does not move */}
             <div className="absolute top-0 left-0 right-0 p-8 flex justify-between items-start z-20 pointer-events-none">
@@ -89,18 +121,17 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
                     Top Story
                 </span>
                 <span className="font-mono text-[10px] text-gray-500">
-                    Oct 26, 2023
+                    Mar 2026
                 </span>
             </div>
 
             {/* Moving Bottom Section - Title & Desc */}
             <div className="absolute bottom-0 left-0 right-0 p-8 transition-transform duration-500 group-hover:-translate-y-12 z-20 pointer-events-none">
                <h2 className="font-serif text-4xl font-medium mb-4 leading-tight text-balance">
-                    AI Research Assistant
+                    Talk to Your Codebase
                 </h2>
                 <p className="text-gray-800 text-sm leading-relaxed font-medium max-w-md text-balance">
-                    Automating literature reviews. Reducing insight time by 85%
-                    through multi-domain query ingestion.
+                    Voice-native AI with real-time audio, codebase tools, and live dependency visualization powered by PageRank.
                 </p> 
             </div>
 
@@ -340,6 +371,65 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
             </div>
             </SpotlightCard>
         </motion.div>
+
+        {/* RESEARCH AGENT - Multi-Agent System (4x1 banner) */}
+        <motion.article
+          variants={itemVariants}
+          className="md:col-span-4 md:row-span-1 bg-white flex gap-6 items-center group cursor-pointer border border-[#E5E5E5] overflow-hidden"
+          onClick={() => handleCardClick(projects[6])}
+          onKeyDown={(e) => handleKeyDown(e, projects[6])}
+          tabIndex={0}
+          role="button"
+          aria-label={`View project: ${projects[6].title}`}
+          whileHover={{ y: -4, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        >
+          {/* Left accent bar */}
+          <div className="w-1 self-stretch bg-gradient-to-b from-orange-500 to-amber-400 group-hover:w-1.5 transition-[width] duration-300"></div>
+          
+          {/* Content section */}
+          <div className="flex-1 py-6 pr-6">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+              <span className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">
+                Multi-Agent AI
+              </span>
+            </div>
+            <h3 className="font-serif text-xl font-bold mb-2 text-balance group-hover:text-orange-600 transition-colors">
+              {projects[6].title}
+            </h3>
+            <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+              {projects[6].modalPreview.problemTeaser}
+            </p>
+          </div>
+          
+          {/* Metrics section */}
+          <div className="flex gap-8 pr-6 border-l border-gray-100 pl-6">
+            <div className="flex flex-col items-center">
+              <span className="font-mono text-3xl font-bold text-gray-900">
+                5
+              </span>
+              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                Specialist<br/>Agents
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-mono text-3xl font-bold text-gray-900">
+                100%
+              </span>
+              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                Research<br/>Coverage
+              </span>
+            </div>
+          </div>
+
+          {/* Arrow indicator */}
+          <div className="pr-6">
+            <span className="material-symbols-outlined text-gray-300 group-hover:text-orange-500 transition-colors">
+              arrow_forward
+            </span>
+          </div>
+        </motion.article>
       </motion.div>
     </section>
   );
