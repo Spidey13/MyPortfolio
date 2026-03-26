@@ -117,7 +117,7 @@ class Settings(BaseModel):
         default="Prathamesh Pravin More", description="Portfolio owner name"
     )
     portfolio_title: str = Field(
-        default="AI/ML Engineer & Data Scientist", description="Portfolio title"
+        default="AI Engineer · Full Stack · RAG & Agentic Systems", description="Portfolio title"
     )
 
     # Logging Configuration

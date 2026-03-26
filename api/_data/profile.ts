@@ -28,7 +28,7 @@ export interface Education {
 
 export const PROFILE: Profile = {
   name: "Prathamesh Pravin More",
-  title: "AI/ML Engineer & Data Scientist",
+  title: "AI Engineer · Full Stack · RAG & Agentic Systems",
   summary: "M.S. Data Science graduate specializing in productionizing end-to-end Generative AI and Agentic AI solutions. Proven experience architecting advanced RAG pipelines and deploying full-stack ML applications using Python, LangChain, and MLOps best practices.",
   location: "Currently seeking full-time opportunities",
   email: "prpmore@gmail.com",

@@ -69,7 +69,7 @@ const queryPatterns = {
 
 const fallbackResponses = {
   about: {
-    response: `Hi! I'm Prathamesh Pravin More, an AI/ML Engineer & Data Scientist with an M.S. in Data Science from Indiana University (3.7 GPA). I specialize in productionizing end-to-end Generative AI and Agentic AI solutions.
+    response: `Hi! I'm Prathamesh Pravin More, an AI Engineer & Full Stack developer with an M.S. in Data Science from Indiana University (3.6 GPA). I specialize in productionizing end-to-end Generative AI and Agentic AI solutions.
 
 🎯 **Key Highlights:**
 • Architected MLOps pipelines that slashed model retraining time by 10x
@@ -112,20 +112,20 @@ Each project demonstrates end-to-end MLOps, from data engineering to production 
   experience: {
     response: `My professional experience spans AI/ML engineering and full-stack development:
 
-📊 **Data Science Intern - Indiana University** (May 2024 - Aug 2024)
-• Analyzed 550+ design publications using advanced topic modeling
-• Built interactive dashboards with Plotly/Dash
-• Achieved 93% Topic Coherence, published in The Design Journal
+🔬 **Applied AI Engineer - Indiana University** (May 2024 - Present)
+• Architected an Agentic RAG platform on Python + Pinecone, cutting literature review time by 95% (3 weeks → 4 hours) across 550+ publications
+• Engineered FastAPI/Docker async microservices + spaCy/NMF pipelines serving multiple university departments
+• Integrated MLflow for 100% reproducibility; 98% retrieval accuracy validated in peer-reviewed Design Journal publication
 
-🤖 **ML Engineer Intern - Dimensionless Technologies** (May 2023 - Jul 2023)
-• Solo technical lead handling client communications
-• Built OCR + QA system (70% speed improvement)
-• BERT-based trend analysis pipeline on AWS (0.84 precision)
+🤖 **Machine Learning Engineer - Dimensionless Technologies** (May 2023 - Jul 2023)
+• Deployed AWS SageMaker MLOps pipeline for real-time stock prediction with sub-100ms inference latency
+• Built PropelPro — Azure Functions + Tesseract OCR pipeline scaling document processing from 50 to 10,000+/month
+• Reduced cloud infrastructure costs by 20% ($15K+ annually) via spot instance optimization
 
-💻 **Full Stack Developer - Benchmark Computer Solutions** (Aug 2022 - Oct 2022)
-• Automated resume screening for 1000+ applications
-• Flask API with SpaCy/Transformers NLP
-• Improved F1-score from 0.78 to 0.91, reduced screening time by 30%
+💻 **Full Stack Engineer - Benchmark Computer Solutions** (Jun 2022 - Dec 2022)
+• Rebuilt production API with FastAPI + Docker + Redis, reducing P99 latency by 40% (500ms → 300ms) at 10,000+ daily requests
+• Fine-tuned Hugging Face Transformer NER model, improving candidate matching F1-score from 78% to 91%
+• Implemented active learning loop cutting manual labeling costs by 40%
 
 *⚡ AI co-pilot is warming up to provide deeper insights about my experience and how it relates to your needs...*`,
     confidence: 'high' as const,

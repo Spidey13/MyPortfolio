@@ -56,8 +56,8 @@ class ResumeService:
             {
                 "id": 1,
                 "company": "Indiana University",
-                "position": "Data Science Intern",
-                "duration": "05/2024 to 10/2024",
+                "position": "Applied AI Engineer",
+                "duration": "05/2024 to Present",
                 "description": "Architected modular text-mining frameworks and developed self-service analytics dashboards for large-scale academic research.",
                 "technologies": [
                     "Python",
@@ -78,7 +78,7 @@ class ResumeService:
             {
                 "id": 2,
                 "company": "Dimensionless Technologies",
-                "position": "ML Engineer Intern",
+                "position": "Machine Learning Engineer",
                 "duration": "04/2023 to 08/2023",
                 "description": "Built and deployed scalable NLP pipelines on AWS, optimizing BERT models for production environments.",
                 "technologies": [
@@ -100,7 +100,7 @@ class ResumeService:
             {
                 "id": 3,
                 "company": "Benchmark Computer Solutions",
-                "position": "Full Stack Developer Intern",
+                "position": "Full Stack Engineer",
                 "duration": "08/2022 to 12/2022",
                 "description": "Developed end-to-end data processing pipelines and improved machine learning model performance for resume parsing applications.",
                 "technologies": [

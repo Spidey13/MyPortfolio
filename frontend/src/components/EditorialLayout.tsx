@@ -191,7 +191,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
             </div>
 
             <div className="grid gap-5 md:grid-cols-1 lg:grid-cols-3">
-              {/* Data Scientist Card */}
+              {/* Applied AI Engineer Card */}
               {portfolioData.experience?.[0] && (
                 <Link
                   to={`/experience/${portfolioData.experience[0].id}`}
@@ -216,22 +216,19 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
                           </span>
                         </div>
                         <h4 className="font-serif font-bold text-xl text-ink leading-tight mb-1.5 group-hover:text-editorial-red transition-colors">
-                          Data Scientist
+                          {portfolioData.experience?.[0]?.role || "Applied AI Engineer"}
                         </h4>
                         <p className="font-sans text-sm text-ink font-semibold mb-1">
-                          Indiana University
+                          {portfolioData.experience?.[0]?.company || "Indiana University"}
                         </p>
                         <p className="font-mono text-[10px] text-ink/50 uppercase tracking-wider">
-                          May 2024 — Present
+                          {portfolioData.experience?.[0]?.duration || "May 2024 — Present"}
                         </p>
                       </div>
                     </div>
 
                     <p className="font-sans text-sm text-ink/70 leading-relaxed mb-4">
-                      Processed 550+ academic publications to identify diversity
-                      trends, creating the 100% reproducible data framework that
-                      secured a peer-reviewed publication in{" "}
-                      <i>The Design Journal</i>.
+                      Replaced 3 weeks of manual research with a 4-hour AI pipeline — processing 550+ publications with 98% accuracy. Results rigorous enough to get published.
                     </p>
 
                     <div className="flex items-center gap-2 text-ink/50 group-hover:text-editorial-red transition-colors text-xs font-mono uppercase tracking-wider">
@@ -269,21 +266,19 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
                           </span>
                         </div>
                         <h4 className="font-serif font-bold text-xl text-ink leading-tight mb-1.5 group-hover:text-editorial-red transition-colors">
-                          Machine Learning Engineer
+                          {portfolioData.experience?.[1]?.role || "Machine Learning Engineer"}
                         </h4>
                         <p className="font-sans text-sm text-ink font-semibold mb-1">
-                          Dimensionless Technologies
+                          {portfolioData.experience?.[1]?.company || "Dimensionless Technologies"}
                         </p>
                         <p className="font-mono text-[10px] text-ink/50 uppercase tracking-wider">
-                          May — Jul 2023
+                          {portfolioData.experience?.[1]?.duration || "Feb — Jul 2023"}
                         </p>
                       </div>
                     </div>
 
                     <p className="font-sans text-sm text-ink/70 leading-relaxed mb-4">
-                      Successfully managed requirements for concurrent clients,
-                      translating vague business goals into deployed, scalable
-                      ML products.
+                      Shipped PropelPro — scaled enterprise document processing 200× in 3 months. Also ran real-time stock prediction on AWS at sub-100ms, while cutting cloud costs by $15K/yr.
                     </p>
 
                     <div className="flex items-center gap-2 text-ink/50 group-hover:text-editorial-red transition-colors text-xs font-mono uppercase tracking-wider">
@@ -321,21 +316,19 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
                           </span>
                         </div>
                         <h4 className="font-serif font-bold text-xl text-ink leading-tight mb-1.5 group-hover:text-editorial-red transition-colors">
-                          Full Stack Developer
+                          {portfolioData.experience?.[2]?.role || "Full Stack Engineer"}
                         </h4>
                         <p className="font-sans text-sm text-ink font-semibold mb-1">
-                          Benchmark Computer Solutions
+                          {portfolioData.experience?.[2]?.company || "Benchmark Computer Solutions"}
                         </p>
                         <p className="font-mono text-[10px] text-ink/50 uppercase tracking-wider">
-                          Jun — Dec 2022
+                          {portfolioData.experience?.[2]?.duration || "Jun — Dec 2022"}
                         </p>
                       </div>
                     </div>
 
                     <p className="font-sans text-sm text-ink/70 leading-relaxed mb-4">
-                      Built an intelligent candidate screening engine that
-                      increased matching accuracy to 91%, drastically reducing
-                      the manual effort required to filter resumes.
+                      Rebuilt a hiring platform's core API from scratch — 40% faster, 99.9% uptime, and a candidate matching model that jumped from 78% to 91% F1. Secured $500K in at-risk contracts.
                     </p>
 
                     <div className="flex items-center gap-2 text-ink/50 group-hover:text-editorial-red transition-colors text-xs font-mono uppercase tracking-wider">

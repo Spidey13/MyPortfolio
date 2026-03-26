@@ -1,7 +1,7 @@
 {
   "profile": {
     "name": "Prathamesh Pravin More",
-    "title": "AI/ML Engineer & Data Scientist",
+    "title": "AI Engineer · Full Stack · RAG & Agentic Systems",
     "summary": "M.S. Data Science graduate specializing in productionizing end-to-end Generative AI and Agentic AI solutions. Proven experience architecting advanced RAG pipelines and deploying full-stack ML applications using Python, LangChain, and MLOps best practices.",
     "location": "Currently seeking full-time opportunities",
     "email": "pramore@iu.edu",
@@ -22,7 +22,7 @@
     "degree": "M.S. in Data Science",
     "university": "Indiana University",
     "graduation": "2025",
-    "gpa": "3.7/4.0",
+    "gpa": "3.6/4.0",
     "coursework": [
       "Applied Machine Learning",
       "Statistical Learning",
@@ -34,7 +34,7 @@
   "experience": [
     {
       "id": 1,
-      "role": "Data Science Intern",
+      "role": "Applied AI Engineer",
       "company": "Indiana University",
       "duration": "05/2024 to Present",
       "location": "Bloomington, IN",
@@ -60,9 +60,9 @@
     },
     {
       "id": 2,
-      "role": "Machine Learning Engineer Intern",
+      "role": "Machine Learning Engineer",
       "company": "Dimensionless Technologies",
-      "duration": "03/2023 to 07/2023",
+      "duration": "02/2023 to 07/2023",
       "location": "Mumbai, India",
       "star": {
         "situation": "As the only technical team member at Dimensionless Technologies, I was responsible for both technical development and direct client communication. The company needed to streamline the processing of industrial documents for tender creation and monitor market trends from news articles.",
@@ -86,8 +86,8 @@
     },
     {
       "id": 3,
-      "role": "Full Stack Developer Intern",
-      "company": "Benchmark Computer Solutions Pvt. Ltd.",
+      "role": "Full Stack Engineer",
+      "company": "Benchmark Computer Solutions",
       "duration": "06/2022 to 12/2022",
       "location": "Mumbai, India",
       "star": {
