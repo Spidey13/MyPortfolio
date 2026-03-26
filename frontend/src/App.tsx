@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { trackPageView, trackEvent, trackChatMessage, trackError } from "./utils/analytics";
+import { trackPageView, trackEvent, trackError, generateQueryHash, trackProjectInteraction, trackFallbackResponse } from "./utils/analytics";
 import { AnimatePresence } from "framer-motion";
 
 import ScrollProgress from "./components/ScrollProgress";
@@ -58,7 +58,7 @@ function App() {
 
     // Track chat query
     trackEvent('chat_query_submitted', {
-      query: message,
+      query_hash: generateQueryHash(message),
       query_length: message.length,
     });
 
@@ -71,12 +71,13 @@ function App() {
 
       // Track successful response
       const responseTime = Date.now() - startTime;
-      trackChatMessage(message.length, result.viewport_content?.agent, false);
       trackEvent('chat_response_received', {
-        query: message,
+        query_hash: generateQueryHash(message),
         agent_used: result.viewport_content?.agent || result.agent_used,
         response_time_ms: responseTime,
         response_length: result.response?.length || 0,
+        message_length: message.length,
+        is_cached: false,
       });
     } catch (error) {
       console.error("Chat error:", error);
@@ -101,6 +102,7 @@ function App() {
 
   // Handle project modal
   const handleProjectClick = (project: any) => {
+    trackProjectInteraction(project.title, 'view');
     setSelectedProject(project);
     setShowProjectModal(true);
   };
@@ -169,6 +171,7 @@ function App() {
     console.warn(
       "No structured kanban_data found in AI response, using fallback",
     );
+    trackFallbackResponse('job_analysis_structured_data_missing');
     return {
       technicalSkills: [
         {
@@ -254,6 +257,7 @@ function App() {
     console.warn(
       "No structured summary_data found in AI response, using fallback",
     );
+    trackFallbackResponse('job_analysis_summary_missing');
     return {
       overallMatch: "Analysis Incomplete",
       matchPercentage: matchScoreNum || parseInt(matchScoreStr.replace("%", "")) || 0,

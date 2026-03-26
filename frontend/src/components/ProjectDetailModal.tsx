@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackProjectInteraction } from "../utils/analytics";
 
 interface ProjectDetailModalProps {
   project: any;
@@ -156,6 +157,7 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                             href={project.deployed_url}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => trackProjectInteraction(project.title, 'demo')}
                             className="flex-1 group flex items-center justify-center gap-3 px-4 py-3 border border-ink/10 hover:border-editorial-red/50 bg-white hover:bg-editorial-red/5 transition-all duration-300 min-h-[50px]"
                          >
                             <span className="relative flex h-2 w-2">
@@ -175,6 +177,7 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                          href={project.github_url}
                          target="_blank"
                          rel="noopener noreferrer"
+                         onClick={() => trackProjectInteraction(project.title, 'github')}
                          className="flex-1 group flex items-center justify-center gap-3 px-4 py-3 border border-ink/10 hover:border-ink/30 bg-white hover:bg-ink/5 transition-all duration-300 min-h-[50px]"
                       >
                          <span className="material-symbols-outlined text-[18px] text-ink/40 group-hover:text-ink transition-colors">

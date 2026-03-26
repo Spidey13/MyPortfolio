@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { trackAnalysisExpanded } from '../utils/analytics';
 
 interface JobAnalysisCardProps {
   onAnalyze: (jobDescription: string) => void;
@@ -128,7 +129,10 @@ export const JobAnalysisCard: React.FC<JobAnalysisCardProps> = ({
             </div>
 
             <button
-              onClick={onViewReport}
+              onClick={() => {
+                trackAnalysisExpanded('full_strategic_report');
+                onViewReport?.();
+              }}
               className="w-full flex items-center justify-between group cursor-pointer bg-ink/5 hover:bg-ink/10 rounded-sm p-3 transition-colors"
             >
               <span className="font-mono text-[10px] font-bold text-ink uppercase tracking-wider">

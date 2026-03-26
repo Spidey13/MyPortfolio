@@ -11,14 +11,23 @@ if (import.meta.env.VITE_POSTHOG_API_KEY) {
   posthog.init(import.meta.env.VITE_POSTHOG_API_KEY, {
     api_host: import.meta.env.VITE_POSTHOG_HOST || 'https://app.posthog.com',
     autocapture: true,
-    capture_pageview: true,
+    capture_pageview: false,
     capture_pageleave: true,
     session_recording: {
-      maskAllInputs: false,
+      maskAllInputs: true,
       maskTextSelector: '.sensitive, .password-input',
     },
     disable_session_recording: false,
   })
+
+  // Generate or retrieve persistent visitor ID for cross-session tracking
+  let visitorId = localStorage.getItem('portfolio_visitor_id') || '';
+  if (!visitorId) {
+    visitorId = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('portfolio_visitor_id', visitorId);
+  }
+  posthog.identify(visitorId);
+
   console.log('✅ PostHog analytics initialized')
 } else {
   console.log('ℹ️  PostHog not configured (VITE_POSTHOG_API_KEY missing)')

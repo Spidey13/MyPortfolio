@@ -3,6 +3,8 @@ import { Mail, Github, Linkedin, Link as LinkIcon } from 'lucide-react';
 
 interface CollabCTAProps {
   onEmailClick?: () => void;
+  onGithubClick?: () => void;
+  onLinkedinClick?: () => void;
   githubUrl?: string;
   linkedinUrl?: string;
   websiteUrl?: string;
@@ -10,6 +12,8 @@ interface CollabCTAProps {
 
 export const CollabCTA: React.FC<CollabCTAProps> = ({
   onEmailClick,
+  onGithubClick,
+  onLinkedinClick,
   githubUrl,
   linkedinUrl,
   websiteUrl
@@ -38,6 +42,9 @@ export const CollabCTA: React.FC<CollabCTAProps> = ({
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => {
+                onGithubClick?.();
+              }}
               className="text-white/60 hover:text-white transition-colors"
               aria-label="GitHub profile"
             >
@@ -49,6 +56,9 @@ export const CollabCTA: React.FC<CollabCTAProps> = ({
               href={linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => {
+                onLinkedinClick?.();
+              }}
               className="text-white/60 hover:text-white transition-colors"
               aria-label="LinkedIn profile"
             >

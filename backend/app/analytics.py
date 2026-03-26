@@ -177,7 +177,7 @@ class AnalyticsService:
         if self.posthog:
             self._send_to_posthog(
                 event_name="cache_hit",
-                distinct_id="system",
+                distinct_id="sys::cache",
                 properties={"query_hash": query_hash}
             )
     
@@ -191,7 +191,7 @@ class AnalyticsService:
         if self.posthog:
             self._send_to_posthog(
                 event_name="cache_miss",
-                distinct_id="system",
+                distinct_id="sys::cache",
                 properties={"query_hash": query_hash}
             )
     

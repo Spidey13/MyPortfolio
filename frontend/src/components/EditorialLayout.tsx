@@ -5,7 +5,7 @@ import JobAnalysisCard from "./JobAnalysisCard";
 import type { PortfolioData } from "../data";
 import { ACTIVITIES } from "../data/activities";
 import { analyzeJobMatch } from "../utils/backendConnection";
-import { trackEvent, trackJobAnalysis, trackError } from "../utils/analytics";
+import { trackEvent, trackError, trackSectionView, trackContactAction } from "../utils/analytics";
 
 // New Journal Components
 import JournalNavbar from "./JournalNavbar";
@@ -44,6 +44,41 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
   const [jobAnalysisResult, setJobAnalysisResult] = React.useState<any>(null);
   const [isJobAnalyzing, setIsJobAnalyzing] = React.useState(false);
 
+  // Section refs for IntersectionObserver
+  const workSectionRef = React.useRef<HTMLDivElement>(null);
+  const experienceSectionRef = React.useRef<HTMLDivElement>(null);
+  const researchSectionRef = React.useRef<HTMLDivElement>(null);
+  const contactSectionRef = React.useRef<HTMLDivElement>(null);
+
+  // Track section views with IntersectionObserver
+  React.useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.3, // Fire when 30% of section is visible
+    };
+
+    const trackedSections = new Set<string>();
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !trackedSections.has(entry.target.id)) {
+          trackSectionView(entry.target.id);
+          trackedSections.add(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    if (workSectionRef.current) observer.observe(workSectionRef.current);
+    if (experienceSectionRef.current) observer.observe(experienceSectionRef.current);
+    if (researchSectionRef.current) observer.observe(researchSectionRef.current);
+    if (contactSectionRef.current) observer.observe(contactSectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   // Handle job analysis
   const handleAnalyzeJob = async (jobDescription: string) => {
     setIsJobAnalyzing(true);
@@ -62,7 +97,6 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
 
       // Track completion with results
       const processingTime = Date.now() - startTime;
-      trackJobAnalysis(result?.matchScore, processingTime);
       trackEvent('job_analysis_completed', {
         match_score: result?.matchScore,
         processing_time_ms: processingTime,
@@ -141,12 +175,12 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
           />
 
           {/* Project Archive - Bento Grid */}
-          <section id="work">
+          <section id="work" ref={workSectionRef}>
             <BentoArchive onProjectClick={onProjectClick} />
           </section>
 
           {/* Experience Section - Compact & Clean */}
-          <section id="experience">
+          <section id="experience" ref={experienceSectionRef}>
             <div className="flex items-center justify-between border-b border-ink mb-8 pb-3">
               <h3 className="font-mono font-bold text-sm text-ink uppercase tracking-wider flex items-center gap-2">
                 <span className="material-symbols-outlined text-base">
@@ -317,7 +351,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
           </section>
 
           {/* Micro-Experiments */}
-          <section className="border-t border-ink/10 pt-6" id="research">
+          <section className="border-t border-ink/10 pt-6" id="research" ref={researchSectionRef}>
             <div className="flex items-center justify-between mb-4">
               <h5 className="font-mono text-xs font-bold text-ink uppercase tracking-widest">
                 Research
@@ -413,11 +447,14 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
           />
 
           {/* Collaboration CTA */}
-          <div id="contact">
+          <div id="contact" ref={contactSectionRef}>
             <CollabCTA
-              onEmailClick={() =>
-                window.open(`mailto:${portfolioData.profile?.email}`)
-              }
+              onEmailClick={() => {
+                trackContactAction('email');
+                window.open(`mailto:${portfolioData.profile?.email}`);
+              }}
+              onGithubClick={() => trackContactAction('github')}
+              onLinkedinClick={() => trackContactAction('linkedin')}
               githubUrl={
                 portfolioData.profile?.links?.find((l) => l.type === "github")
                   ?.url

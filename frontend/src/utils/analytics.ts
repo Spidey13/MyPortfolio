@@ -2,17 +2,26 @@
 
 import posthog from 'posthog-js';
 
-// Generate or retrieve session ID
+// Generate or retrieve persistent visitor ID
 let sessionId: string = '';
 if (typeof window !== 'undefined') {
-  sessionId = sessionStorage.getItem('portfolio_session_id') || '';
+  sessionId = localStorage.getItem('portfolio_visitor_id') || '';
   if (!sessionId) {
-    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    sessionStorage.setItem('portfolio_session_id', sessionId);
+    sessionId = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('portfolio_visitor_id', sessionId);
   }
 }
 
 export const getSessionId = () => sessionId;
+
+// Generate hash for query anonymization (djb2 algorithm)
+export const generateQueryHash = (query: string): string => {
+  let hash = 5381;
+  for (let i = 0; i < query.length; i++) {
+    hash = ((hash << 5) + hash) + query.charCodeAt(i);
+  }
+  return Math.abs(hash).toString(36);
+};
 
 // Dual tracking: Send to both GA4 and PostHog
 export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
@@ -55,15 +64,6 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
 };
 
 // Portfolio-specific tracking functions with enhanced metadata
-export const trackAIChat = (queryType: string, responseTime?: number, cached?: boolean) => {
-  trackEvent('ai_chat_initiated', {
-    query_type: queryType,
-    response_time: responseTime,
-    cached: cached,
-    timestamp: new Date().toISOString()
-  });
-};
-
 export const trackJobAnalysis = (matchScore?: number, processingTime?: number) => {
   trackEvent('job_analysis_started', {
     match_score: matchScore,
