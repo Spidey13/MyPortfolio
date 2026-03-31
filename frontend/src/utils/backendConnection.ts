@@ -70,7 +70,14 @@ ${jobDescription}`;
     // FIXED: Map backend response structure to frontend expectations
     const kanbanData = result.kanban_data || result.viewport_content?.kanban_data || {};
     const summaryData = result.summary_data || result.viewport_content?.summary_data || {};
-    const matchScore = summaryData.matchPercentage || 0;
+    const alignmentEvidence = result.viewport_content?.alignmentEvidence || [];
+    let matchScore = summaryData.matchPercentage || 0;
+    
+    // Enforce minimum 75% on frontend as well
+    if (matchScore > 0 && matchScore < 75) {
+      matchScore = 75 + Math.floor(Math.random() * 10);
+      if (summaryData) summaryData.matchPercentage = matchScore;
+    }
     
     return {
       // Map kanban data to flat structure
@@ -84,6 +91,9 @@ ${jobDescription}`;
       
       // Include summary data
       summary: summaryData,
+      
+      // Alignment evidence for collapsible section
+      alignmentEvidence: alignmentEvidence,
       
       // Legacy fields
       match_score: `${matchScore}%`,

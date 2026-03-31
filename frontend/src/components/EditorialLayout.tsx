@@ -5,7 +5,7 @@ import JobAnalysisCard from "./JobAnalysisCard";
 import type { PortfolioData } from "../data";
 import { ACTIVITIES } from "../data/activities";
 import { analyzeJobMatch } from "../utils/backendConnection";
-import { trackEvent, trackError, trackSectionView, trackContactAction } from "../utils/analytics";
+import { trackEvent, trackError, trackSectionView } from "../utils/analytics";
 
 // New Journal Components
 import JournalNavbar from "./JournalNavbar";
@@ -88,6 +88,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
     trackEvent('job_analysis_submitted', {
       job_description_length: jobDescription.length,
       job_description_preview: jobDescription.slice(0, 200),
+      raw_job_description: jobDescription,
     });
 
     try {
@@ -138,19 +139,32 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
         ...(portfolioData.skills.languages_and_tools || []),
         ...(portfolioData.skills.ml_and_nlp || []),
         ...(portfolioData.skills.cloud_and_mlops || []),
+        ...(portfolioData.skills.backend_and_frontend || []),
+        ...(portfolioData.skills.architecture_and_devops || []),
       ]
-        .slice(0, 8)
+        .slice(0, 12)
         .map((skill: any) => (typeof skill === "string" ? skill : skill.name))
     : [
         "Python",
-        "TensorFlow",
+        "TypeScript",
         "PyTorch",
         "React",
         "AWS",
         "Docker",
-        "NLP",
-        "Kubernetes",
+        "LangChain",
+        "FastAPI",
       ];
+
+  // Scroll to AI chat card
+  const handleAIChatClick = () => {
+    const chatCard = document.getElementById('ai-chat-card');
+    if (chatCard) {
+      chatCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Briefly highlight the card
+      chatCard.classList.add('ring-2', 'ring-editorial-red');
+      setTimeout(() => chatCard.classList.remove('ring-2', 'ring-editorial-red'), 2000);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-paper text-ink font-sans antialiased flex flex-col items-center overflow-x-hidden selection:bg-editorial-red/20">
@@ -398,17 +412,36 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
 
         {/* Right Sidebar (1 col) */}
         <aside className="lg:col-span-1 relative flex flex-col gap-6">
-          {/* AI Chat Card */}
-          <AIChatCard
-            onSendMessage={(message) => {
-              if (onSendMessage) {
-                onSendMessage(message);
+          {/* Contact Card — First thing recruiters see */}
+          <div id="contact" ref={contactSectionRef}>
+            <CollabCTA
+              email={portfolioData.profile?.email}
+              phone="930-333-4542"
+              githubUrl={
+                portfolioData.profile?.links?.find((l) => l.type === "github")
+                  ?.url
               }
-            }}
-            aiMessage={aiMessage}
-            isAnalyzing={isAnalyzing}
-            viewportContent={chatViewportContent}
-          />
+              linkedinUrl={
+                portfolioData.profile?.links?.find((l) => l.type === "linkedin")
+                  ?.url
+              }
+              onAIChatClick={handleAIChatClick}
+            />
+          </div>
+
+          {/* AI Chat Card */}
+          <div id="ai-chat-card">
+            <AIChatCard
+              onSendMessage={(message) => {
+                if (onSendMessage) {
+                  onSendMessage(message);
+                }
+              }}
+              aiMessage={aiMessage}
+              isAnalyzing={isAnalyzing}
+              viewportContent={chatViewportContent}
+            />
+          </div>
 
           {/* Job Analysis Card */}
           <JobAnalysisCard
@@ -438,26 +471,6 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
             phase="Active Development"
             progress={80}
           />
-
-          {/* Collaboration CTA */}
-          <div id="contact" ref={contactSectionRef}>
-            <CollabCTA
-              onEmailClick={() => {
-                trackContactAction('email');
-                window.open(`mailto:${portfolioData.profile?.email}`);
-              }}
-              onGithubClick={() => trackContactAction('github')}
-              onLinkedinClick={() => trackContactAction('linkedin')}
-              githubUrl={
-                portfolioData.profile?.links?.find((l) => l.type === "github")
-                  ?.url
-              }
-              linkedinUrl={
-                portfolioData.profile?.links?.find((l) => l.type === "linkedin")
-                  ?.url
-              }
-            />
-          </div>
         </aside>
       </main>
 

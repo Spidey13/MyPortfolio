@@ -96,9 +96,15 @@ export const trackFallbackResponse = (query: string) => {
   });
 };
 
-export const trackContactAction = (method: 'email' | 'linkedin' | 'github') => {
+export const trackContactAction = (method: 'email' | 'linkedin' | 'github' | 'phone') => {
   trackEvent('contact_initiated', {
     method,
+    timestamp: new Date().toISOString()
+  });
+  // Granular PostHog event for contact link clicks
+  trackEvent('contact_link_clicked', {
+    link_type: method,
+    source: 'contact_card',
     timestamp: new Date().toISOString()
   });
 };

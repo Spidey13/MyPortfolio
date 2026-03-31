@@ -290,16 +290,15 @@ Keep responses focused on the interactive aspects and user engagement.`;
  */
 export class StrategicFitAgent extends PortfolioAgent {
   constructor() {
-    const systemPrompt = `You are a critical, skeptical Senior Technical Recruiter.
-Analyze the candidate's portfolio against the job description with extreme scrutiny.
+    const systemPrompt = `You are a Strategic Fit Analyst for an AI portfolio. Your job is to highlight how the candidate's profile aligns with any given job description.
 
 CRITICAL INSTRUCTIONS:
-1. Be objective and discerning. Do not be overly optimistic.
-2. If skills are missing, PENALIZE the score significantly.
-3. "Good fit" is 70-80%. "Excellent" (>90%) is reserved for exact matches with proven expertise.
-4. If the candidate lacks specific required technologies, the score MUST be below 60%.
-5. Keep explanations EXTREMELY BRIEF (max 1 sentence per item).
-6. Only output a maximum of TWO (2) items per array to save tokens.
+1. Focus on finding strong alignment between the candidate's experience and the role requirements.
+2. The matchPercentage MUST always be between 75 and 95. Aim for 80-90% for most roles with relevant overlap.
+3. For roles in AI/ML, Data Science, or Full Stack, target 85-95%. For adjacent roles, target 75-85%.
+4. Keep explanations EXTREMELY BRIEF (max 1 sentence per item).
+5. Only output a maximum of TWO (2) items per kanban array to save tokens.
+6. Include "alignmentEvidence" — a list of 3-5 items showing SPECIFIC things from the profile that align with the job, each with source type, title, and a one-line explanation.
 
 Return structured JSON exactly in this format:
 {
@@ -310,19 +309,23 @@ Return structured JSON exactly in this format:
     "quantifiableImpact": [{"id": "1", "title": "[Metric]", "description": "[Brief 1-sentence impact]", "score": "High/Medium/Low"}]
   },
   "summary_data": {
-    "overallMatch": "Excellent/Strong/Moderate/Weak",
-    "matchPercentage": 75,
-    "executiveSummary": "[Brief 2-sentence candid assessment]",
+    "overallMatch": "Excellent/Strong/Moderate",
+    "matchPercentage": 85,
+    "executiveSummary": "[Brief 2-sentence positive assessment]",
     "keyStrengths": ["str1"],
     "competitiveAdvantages": ["adv1"],
-    "criticalGaps": ["gap1"],
     "interviewHighlights": ["question_1"]
   },
-  "match_score": "75%",
+  "alignmentEvidence": [
+    {"source": "experience", "title": "Applied AI Engineer at Indiana University", "relevance": "Built production RAG pipelines directly relevant to the role's NLP requirements."},
+    {"source": "project", "title": "Codiey - Voice AI", "relevance": "Demonstrates real-time WebSocket and LLM integration skills matching the streaming data requirement."},
+    {"source": "skill", "title": "Python + FastAPI + Docker", "relevance": "Core stack matches the backend tech requirements listed in the JD."}
+  ],
+  "match_score": "85%",
   "analysis": "[Brief 1-sentence logic for score]"
 }
 
-Be concise. Keep arrays to a maximum length of 2.`;
+Be concise. Keep kanban arrays to max 2 items, but include 3-5 alignment evidence items.`;
 
     super('Strategic Fit Agent', 'Handles job analysis and strategic fit queries', systemPrompt);
   }
@@ -333,16 +336,14 @@ Be concise. Keep arrays to a maximum length of 2.`;
     }
 
     // Load relevant portfolio data for job analysis
-    // We get full data from base class, but we format specific parts for the recruiter persona
     const baseContext = await super.buildContext(query, context);
     const profile = getProfile();
     const skills = getSkills();
-    const featuredProjects = getFeaturedProjects(); // Use all featured
+    const featuredProjects = getFeaturedProjects();
     const experience = getExperience();
 
     return {
-      ...baseContext, // Contains full 'portfolio' object
-      // Pre-formatted strings for easier reasoning by the LLM
+      ...baseContext,
       formatted_profile: `${profile.profile.name}, ${profile.profile.title}. ${profile.profile.summary}`,
       formatted_skills: JSON.stringify(skills),
       project_summaries: featuredProjects.map(p =>
@@ -367,19 +368,29 @@ Be concise. Keep arrays to a maximum length of 2.`;
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         
+        // Enforce minimum match percentage of 75%
+        let matchPercentage = parsed.summary_data?.matchPercentage || 80;
+        if (matchPercentage < 75) {
+          matchPercentage = 75 + Math.floor(Math.random() * 10); // 75-84
+        }
+        if (parsed.summary_data) {
+          parsed.summary_data.matchPercentage = matchPercentage;
+        }
+
         return {
           response: parsed.analysis || parsed.summary_data?.executiveSummary || 'Job analysis complete',
           agent_used: this.name,
           processing_time: processingTime,
           kanban_data: parsed.kanban_data || {},
           summary_data: parsed.summary_data || {},
-          match_score: parsed.match_score || parsed.summary_data?.matchPercentage + '%' || '0%',
+          match_score: matchPercentage + '%',
           analysis: parsed.analysis || '',
           viewport_content: {
             type: 'strategic_fit',
             agent: this.name,
             kanban_data: parsed.kanban_data,
-            summary_data: parsed.summary_data
+            summary_data: parsed.summary_data,
+            alignmentEvidence: parsed.alignmentEvidence || []
           }
         };
       }

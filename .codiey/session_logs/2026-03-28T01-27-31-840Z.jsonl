@@ -1,0 +1,1 @@
+{"ts": "2026-03-28T01:27:31.840Z", "elapsedMs": 1, "category": "SESSION_START", "detail": "Session started", "extra": {"model": "gemini-2.5-flash-native-audio-preview-12-2025", "hasTools": true, "hasSummary": true, "summaryLength": 2508}}

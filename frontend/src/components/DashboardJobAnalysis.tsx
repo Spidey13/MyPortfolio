@@ -1,9 +1,13 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, ChevronDown, Briefcase, FolderKanban, Wrench } from 'lucide-react';
 import { trackEvent } from '../utils/analytics';
 
-
+interface AlignmentEvidence {
+  source: 'experience' | 'project' | 'skill';
+  title: string;
+  relevance: string;
+}
 
 interface SummaryData {
   executiveSummary?: string;
@@ -21,15 +25,31 @@ interface DashboardJobAnalysisProps {
   isVisible: boolean;
   matchScore?: number;
   summaryData?: SummaryData;
+  alignmentEvidence?: AlignmentEvidence[];
   onClose?: () => void;
 }
+
+const sourceIcons: Record<string, React.ReactNode> = {
+  experience: <Briefcase size={13} className="text-purple-500 shrink-0" />,
+  project: <FolderKanban size={13} className="text-blue-500 shrink-0" />,
+  skill: <Wrench size={13} className="text-emerald-500 shrink-0" />,
+};
+
+const sourceLabels: Record<string, string> = {
+  experience: 'Experience',
+  project: 'Project',
+  skill: 'Skill',
+};
 
 export const DashboardJobAnalysis: React.FC<DashboardJobAnalysisProps> = ({
   isVisible,
   matchScore = 0,
   summaryData,
+  alignmentEvidence = [],
   onClose
 }) => {
+  const [expandedItem, setExpandedItem] = React.useState<number | null>(null);
+
   const getMatchLabel = () => {
     if (matchScore >= 85) return 'EXCELLENT MATCH';
     if (matchScore >= 70) return 'STRONG MATCH';
@@ -46,6 +66,17 @@ export const DashboardJobAnalysis: React.FC<DashboardJobAnalysisProps> = ({
       });
     }
   }, [isVisible, matchScore]);
+
+  const handleItemToggle = (index: number) => {
+    const newExpanded = expandedItem === index ? null : index;
+    setExpandedItem(newExpanded);
+    if (newExpanded !== null && alignmentEvidence[index]) {
+      trackEvent('alignment_evidence_expanded', {
+        source: alignmentEvidence[index].source,
+        title: alignmentEvidence[index].title,
+      });
+    }
+  };
 
   if (!isVisible) return null;
 
@@ -127,6 +158,61 @@ export const DashboardJobAnalysis: React.FC<DashboardJobAnalysisProps> = ({
           </motion.div>
         )}
 
+        {/* ── Alignment Evidence — Collapsible ─────────────────────── */}
+        {alignmentEvidence.length > 0 && (
+          <motion.div
+            className="mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <h4 className="font-mono text-[10px] font-bold uppercase tracking-widest text-primary/40 mb-3 pb-2 border-b border-primary/5">
+              Why This Is a Match
+            </h4>
+            <div className="flex flex-col gap-1.5">
+              {alignmentEvidence.map((item, index) => (
+                <div key={index} className="border border-primary/5 rounded-sm overflow-hidden bg-white">
+                  <button
+                    onClick={() => handleItemToggle(index)}
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-primary/[0.02] transition-colors text-left group"
+                  >
+                    {sourceIcons[item.source] || sourceIcons.skill}
+                    <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-primary/30 w-20 shrink-0">
+                      {sourceLabels[item.source] || 'Info'}
+                    </span>
+                    <span className="font-sans text-sm font-medium text-primary flex-1 truncate">
+                      {item.title}
+                    </span>
+                    <ChevronDown 
+                      size={14} 
+                      className={`text-primary/30 transition-transform duration-200 shrink-0 ${
+                        expandedItem === index ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {expandedItem === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-4 pb-3 pt-0 border-t border-primary/5">
+                          <p className="font-sans text-sm text-primary/60 leading-relaxed pl-[calc(13px+0.75rem+5rem+0.75rem)]">
+                            {item.relevance}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* ── Three-Column Insights ───────────────────────────────── */}
         {summaryData && (summaryData.keyStrengths?.length || summaryData.competitiveAdvantages?.length || summaryData.interviewHighlights?.length) && (
           <motion.div
@@ -179,9 +265,6 @@ export const DashboardJobAnalysis: React.FC<DashboardJobAnalysisProps> = ({
             )}
           </motion.div>
         )}
-
-
-
 
         {/* ── Footer ──────────────────────────────────────────────── */}
         {(summaryData?.processingTime || summaryData?.agentUsed) && (

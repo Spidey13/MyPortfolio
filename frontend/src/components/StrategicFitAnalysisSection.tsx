@@ -9,6 +9,12 @@ interface AnalysisCard {
   score: string;
 }
 
+interface AlignmentEvidence {
+  source: 'experience' | 'project' | 'skill';
+  title: string;
+  relevance: string;
+}
+
 interface AnalysisResult {
   kanbanData: {
     technicalSkills: AnalysisCard[];
@@ -26,6 +32,7 @@ interface AnalysisResult {
     processingTime: string;
     agentUsed: string;
   };
+  alignmentEvidence?: AlignmentEvidence[];
 }
 
 interface StrategicFitAnalysisSectionProps {
@@ -57,6 +64,7 @@ const StrategicFitAnalysisSection: React.FC<StrategicFitAnalysisSectionProps> = 
             analysisData={analysisResult.kanbanData}
             matchScore={analysisResult.summaryData?.matchPercentage}
             summaryData={analysisResult.summaryData}
+            alignmentEvidence={analysisResult.alignmentEvidence || []}
             onClose={onClose}
           />
         </motion.div>

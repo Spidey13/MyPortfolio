@@ -59,6 +59,7 @@ function App() {
     // Track chat query
     trackEvent('chat_query_submitted', {
       query_hash: generateQueryHash(message),
+      raw_query: message,
       query_length: message.length,
     });
 
@@ -73,6 +74,7 @@ function App() {
       const responseTime = Date.now() - startTime;
       trackEvent('chat_response_received', {
         query_hash: generateQueryHash(message),
+        raw_query: message,
         agent_used: result.viewport_content?.agent || result.agent_used,
         response_time_ms: responseTime,
         response_length: result.response?.length || 0,
@@ -125,6 +127,7 @@ function App() {
     setStrategicAnalysisResult({
       kanbanData,
       summaryData,
+      alignmentEvidence: analysisResult.alignmentEvidence || [],
     });
     setShowStrategicAnalysis(true);
 
