@@ -16,6 +16,7 @@ import StrategicFitAnalysisSection from "./components/StrategicFitAnalysisSectio
 import ExperiencePage from "./pages/ExperiencePage";
 import ProjectCaseStudyPage from "./pages/ProjectCaseStudyPage";
 import ProjectsArchivePage from "./pages/ProjectsArchivePage";
+import DiagnostiqDemo from "./pages/DiagnostiqDemo";
 
 // Portfolio data
 import { PORTFOLIO_DATA, type PortfolioData } from './data';
@@ -335,6 +336,10 @@ function App() {
                       <ProjectsArchivePage onProjectClick={handleProjectClick} />
                     </PageWrapper>
                   } 
+                />
+                <Route
+                  path="/demo/diagnostiq"
+                  element={<DiagnostiqDemo />}
                 />
               </Routes>
             </AnimatePresence>

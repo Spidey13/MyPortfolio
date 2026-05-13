@@ -430,6 +430,65 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
             </span>
           </div>
         </motion.article>
+
+        {/* DIAGNOSTIQ - AI Support Agent (4x1 banner) */}
+        <motion.article
+          variants={itemVariants}
+          className="md:col-span-4 md:row-span-1 flex gap-6 items-center group cursor-pointer border border-[#E5E5E5] overflow-hidden relative"
+          style={{ background: "linear-gradient(135deg, #fdf6ec 0%, #fef9f2 60%, #f5f0e8 100%)" }}
+          onClick={() => handleCardClick(projects[7])}
+          onKeyDown={(e) => handleKeyDown(e, projects[7])}
+          tabIndex={0}
+          role="button"
+          aria-label={`View project: ${projects[7].title}`}
+          whileHover={{ y: -4, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        >
+          {/* Left accent bar — warm amber */}
+          <div className="w-1 self-stretch bg-gradient-to-b from-amber-500 to-orange-400 group-hover:w-1.5 transition-[width] duration-300"></div>
+
+          {/* Content section */}
+          <div className="flex-1 py-6 pr-6">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              <span className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">
+                HVAC AI Agent
+              </span>
+            </div>
+            <h3 className="font-serif text-xl font-bold mb-2 text-balance group-hover:text-amber-700 transition-colors">
+              Diagnostiq
+            </h3>
+            <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+              {projects[7].modalPreview.problemTeaser}
+            </p>
+          </div>
+
+          {/* Metrics section */}
+          <div className="flex gap-8 pr-6 border-l border-amber-200/60 pl-6">
+            <div className="flex flex-col items-center">
+              <span className="font-mono text-3xl font-bold text-gray-900">4</span>
+              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                Tool<br/>Schema
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-mono text-3xl font-bold text-gray-900">96</span>
+              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                Accessibility<br/>Score
+              </span>
+            </div>
+          </div>
+
+          {/* Demo badge */}
+          <div className="pr-4 flex flex-col items-center gap-2">
+            <span className="font-mono text-[9px] bg-amber-100 text-amber-700 border border-amber-200 px-2 py-1 uppercase tracking-wider">
+              Live Demo
+            </span>
+            <span className="material-symbols-outlined text-gray-300 group-hover:text-amber-500 transition-colors">
+              arrow_forward
+            </span>
+          </div>
+        </motion.article>
       </motion.div>
     </section>
   );
