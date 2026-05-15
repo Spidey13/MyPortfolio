@@ -363,4 +363,53 @@ export const PROJECTS: Project[] = [
       { label: "Specialist Agents", value: "5" },
     ],
   },
+  {
+    id: "p8",
+    title: "Diagnostiq - AI Technical Support Agent",
+    github_url: "https://github.com/Spidey13/diagnostiq",
+    deployed_url: "/demo/diagnostiq",
+    video: "/diagnostiq-demo.mp4",
+    star: {
+      situation:
+        "HVAC field technicians diagnosing rooftop unit faults rely on dense PDF service manuals that require slow page-by-page lookup. Existing support tools lack multimodal input for photo-based fault identification, interactive diagnostic workflows that branch based on technician responses, and real-time streaming — forcing constant context-switching between manuals and equipment.",
+      task: "Build a production-ready AI support agent using Anthropic's native tool_use loop directly (no LangChain or orchestration frameworks), implement branching diagnostic job cards grounded in the actual service manual, generate interactive HTML artifacts for wiring diagrams and settings configurators, enable multimodal image input for visual fault recognition, and deploy with zero cold-start latency on GCP Cloud Run.",
+      action:
+        "I built Diagnostiq directly on Claude's tool_use mechanism with a 4-tool architecture: search_knowledge (ChromaDB vector retrieval), get_manual_image (manual page PNG with bbox highlights), render_artifact (Sonnet-generated self-contained HTML in sandboxed iframe), and generate_job_card (Sonnet-validated JSON branching diagnostic workflow). Implemented a dual-embedding RAG pipeline — Gemini 2.5 Flash vision for per-page structured extraction at ingest with Vertex text-embedding-004 (768-dim), then local sentence-transformers all-MiniLM-L6-v2 (384-dim) for serving — eliminating GCP credential requirements at runtime. FastAPI backend streams responses via SSE with the synchronous tool loop running in a thread pool. Haiku drives the agent loop; Sonnet generates validated HTML artifacts and structured JSON job cards. React 19 frontend features a two-panel chat and artifact viewer, pinnable artifacts that persist across follow-up messages, swipe-gesture job card UI with keyboard Y/N navigation, and full accessibility. Baked HuggingFace embedding model weights into the Docker image layer to eliminate cold-start ML download.",
+      result:
+        "Delivered a production-ready AI support agent with real-time SSE streaming, interactive branching diagnostic workflows backed by actual manual citations, multimodal image input, and zero-dependency serving requiring only ANTHROPIC_API_KEY. Scored 96/100 on Web Interface Guidelines accessibility audit. Eliminated cold-start ML download latency by baking 80 MB embedding model into the Docker image layer. Deployed on GCP Cloud Run with automatic scale-to-zero for cost efficiency.",
+      impact:
+        "Transformed HVAC fault diagnosis from manual PDF lookup to AI-guided branching workflows with live manual citations, demonstrated framework-free agentic architecture built directly on Claude's tool_use without LangChain or AutoGen, established a dual-embedding pattern for cost-effective RAG deployment separating ingestion-time accuracy from serving-time portability, and proved that production-grade accessibility and UX are achievable in agent-native applications.",
+      architecture:
+        "FastAPI backend with SSE streaming via sse-starlette. SupportAgent class running synchronous Anthropic tool_use loop in thread pool executor — Haiku for tool routing, Sonnet for HTML artifact generation and job card JSON. 4-tool schema: search_knowledge (ChromaDB cosine similarity with chunk-type boosting), get_manual_image (PNG pages with annotation bbox overlay), render_artifact (three-stage HTML fallback with validation), generate_job_card (validated branching JSON with source_citation enforcement). Dual-embedding pipeline: Gemini 2.5 Flash vision structured per-page extraction, Vertex text-embedding-004 at ingest (768-dim), all-MiniLM-L6-v2 at serve (384-dim). Exact-match SemanticCache for fault button queries. Thread-safe SessionStore for conversation history. React 19 + Vite frontend with useChat SSE consumer, useJobCard branching state machine, ArtifactPanel iframe sandbox, pinnable artifact persistence. Multi-stage Dockerfile with HF_HOME baked into image layer. GCP Cloud Run with 2 GiB RAM, Secret Manager for API key.",
+    },
+    technologies: [
+      "Python",
+      "FastAPI",
+      "Anthropic Claude",
+      "ChromaDB",
+      "Sentence Transformers",
+      "React",
+      "Vite",
+      "SSE",
+      "Google Gemini",
+      "Docker",
+      "GCP Cloud Run",
+      "Pydantic",
+    ],
+    featured: true,
+    modalPreview: {
+      hook: "Framework-free AI support agent with branching diagnostic job cards and interactive artifacts",
+      problemTeaser:
+        "Built directly on Claude's tool_use — no LangChain, no AutoGen. Fault descriptions become branching diagnostic workflows grounded in the actual service manual.",
+      heroMetric: {
+        label: "Accessibility Score",
+        value: "96/100",
+      },
+    },
+    metrics: [
+      { label: "Agent Tools", value: "4 Specialized" },
+      { label: "Accessibility", value: "96/100" },
+      { label: "Cold Start", value: "Zero DL" },
+    ],
+  },
 ];

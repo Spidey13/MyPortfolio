@@ -1,0 +1,83 @@
+# Career-Ops Profile Configuration
+# Copy this file to config/profile.yml and fill in your details.
+# This is the single source of truth for your personal data across all modes.
+
+candidate:
+  full_name: "Prathamesh Pravin More"
+  email: "prpmore@gmail.com"
+  phone: "930-333-4542"
+  location: "Dallas, TX"
+  linkedin: "https://www.linkedin.com/in/more-prathamesh/"
+  portfolio_url: "https://www.prathamesh-more.com/"
+  github: "https://github.com/Spidey13"
+  twitter: ""
+  # (Optional) Canva resume design ID for visual CV generation via /career-ops pdf.
+  # Find it in your Canva design URL: https://www.canva.com/design/DAxxxxxxx/...
+  # The ID starts with "D" and is 11 characters long.
+  # canva_resume_design_id: "DAxxxxxxxxx"
+
+target_roles:
+  # Your North Star roles — what you're optimizing for
+  primary:
+    - "AI Engineer"
+    - "Machine Learning Engineer"
+  # Archetypes help the evaluation system score fit
+  archetypes:
+    - name: "AI/ML Engineer"
+      level: "Entry-Junior"
+      fit: "primary"        # primary = dream role, secondary = good fit, adjacent = stretch
+    - name: "Full Stack Engineer (AI-focused)"
+      level: "Entry-Junior"
+      fit: "primary"
+    - name: "MLOps / ML Platform Engineer"
+      level: "Entry-Junior"
+      fit: "secondary"
+    - name: "Data Scientist"
+      level: "Entry-Junior"
+      fit: "secondary"
+    - name: "Software Engineer (Backend / Python)"
+      level: "Entry-Junior"
+      fit: "adjacent"
+
+narrative:
+  # Your professional headline (1 line)
+  headline: "AI Engineer who builds end-to-end — from RAG pipelines and agentic systems to the full-stack apps that ship them"
+  # Your exit story — what makes you unique
+  exit_story: "M.S. Data Science grad who's been shipping production AI since undergrad — from real-time NLP on SageMaker to an Agentic RAG platform that replaced 3 weeks of academic review with 4 hours. I build the model AND the product around it."
+  # Your top 3-5 superpowers
+  superpowers:
+    - "End-to-end AI systems: RAG pipelines, agentic workflows, MLOps"
+    - "Full-stack product delivery (FastAPI + React, idea to production)"
+    - "Production ML at scale (sub-100ms inference, 10K+ daily requests, 99.9% uptime)"
+    - "Research-to-production bridge (2 peer-reviewed publications, IEEE + The Design Journal)"
+  # Proof points — projects, articles, case studies with measurable impact
+  proof_points:
+    - name: "Agentic RAG Platform (Indiana University)"
+      url: "https://www.prathamesh-more.com/"
+      hero_metric: "95% reduction in literature review time (3 weeks → 4 hours), 98% retrieval accuracy, published in The Design Journal"
+    - name: "Codiey - Voice-First AI Coding Partner"
+      url: "https://github.com/Spidey13/Codiey"
+      hero_metric: "Real-time bidirectional voice AI with <200ms latency, PageRank-based codebase intelligence"
+    - name: "ReMind - Human-like Memory for AI"
+      url: "https://github.com/IshanApte/ReMind"
+      hero_metric: "Temporal decay + memory reinforcement RAG with interactive heatmap visualizations"
+    - name: "PropelPro (Dimensionless Technologies)"
+      url: "https://www.prathamesh-more.com/"
+      hero_metric: "Scaled document processing 200x (50 → 10,000+ docs/month), saved $15K+/year"
+  # Optional: dashboard/demo URL with credentials
+  # dashboard:
+  #   url: "https://www.prathamesh-more.com/demo"
+  #   password: "demo-2026"
+
+compensation:
+  target_range: "$80K-110K"      # Your target total comp
+  currency: "USD"
+  minimum: "$70K"                # Walk-away number
+  location_flexibility: "Open to relocation anywhere in the US; hybrid or remote both work"
+
+location:
+  country: "United States"
+  city: "Dallas"               # Current base, but open to relocation
+  timezone: "CST"
+  visa_status: "Requires sponsorship"
+  relocation: "Open to relocating anywhere in the US for the right opportunity"

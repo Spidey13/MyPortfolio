@@ -1,0 +1,610 @@
+# Portal Scanner Configuration — Prathamesh More
+# Optimized for: Entry-level AI/ML Engineer, SWE (Python), Data Scientist
+# Focus: Startups (Seed → Series B), YC companies, recently funded AI cos
+# Geography: US (open to relocation), remote-friendly
+
+title_filter:
+  positive:
+    # -- AI/ML (primary) --
+    - "AI Engineer"
+    - "ML Engineer"
+    - "Machine Learning"
+    - "AI"
+    - "ML"
+    - "LLM"
+    - "GenAI"
+    - "Generative AI"
+    - "NLP"
+    - "MLOps"
+    - "LLMOps"
+    - "Applied AI"
+    - "Applied Scientist"
+    - "Research Engineer"
+    - "Data Scientist"
+    - "Deep Learning"
+    # -- Agentic / RAG --
+    - "Agent"
+    - "Agentic"
+    - "RAG"
+    - "Voice AI"
+    - "Conversational AI"
+    # -- SWE roles --
+    - "Software Engineer"
+    - "Backend Engineer"
+    - "Full Stack"
+    - "Python Engineer"
+    - "Platform Engineer"
+    # -- Entry-level keywords --
+    - "New Grad"
+    - "University Grad"
+    - "Early Career"
+    - "Associate"
+    - "Junior"
+    - "Entry Level"
+    - "Founding Engineer"
+  negative:
+    - "Director"
+    - "VP"
+    - "Principal"
+    - "Distinguished"
+    - ".NET"
+    - "iOS"
+    - "Android"
+    - "PHP"
+    - "Ruby"
+    - "Embedded"
+    - "Firmware"
+    - "FPGA"
+    - "Blockchain"
+    - "Web3"
+    - "SAP "
+    - "Mainframe"
+    - "COBOL"
+    - "10+ years"
+    - "15+ years"
+    - "8+ years"
+  seniority_boost:
+    - "Junior"
+    - "Associate"
+    - "New Grad"
+    - "Entry"
+    - "Founding"
+
+# ==========================================================================
+# SEARCH QUERIES
+# ==========================================================================
+
+search_queries:
+
+  # -- New Grad / Early Career --
+  - name: Greenhouse — New Grad AI/ML/SWE
+    query: 'site:boards.greenhouse.io OR site:job-boards.greenhouse.io "New Grad" OR "Early Career" OR "University Grad" "AI" OR "ML" OR "Software Engineer"'
+    enabled: true
+  - name: Ashby — New Grad AI/ML/SWE
+    query: 'site:jobs.ashbyhq.com "New Grad" OR "Early Career" OR "University Grad" "AI" OR "ML" OR "Engineer"'
+    enabled: true
+  - name: Lever — New Grad AI/ML/SWE
+    query: 'site:jobs.lever.co "New Grad" OR "Early Career" "AI" OR "ML" OR "Software Engineer"'
+    enabled: true
+  - name: All boards — New Grad 2025
+    query: '"New Grad" OR "Recent Graduate" "AI" OR "Machine Learning" OR "Data Science" "Engineer" 2025'
+    enabled: true
+
+  # -- Founding Engineer (startup-first) --
+  - name: Ashby — Founding Engineer
+    query: 'site:jobs.ashbyhq.com "Founding Engineer" OR "Founding Software Engineer" AI OR ML OR LLM'
+    enabled: true
+  - name: Greenhouse — Founding Engineer
+    query: 'site:job-boards.greenhouse.io "Founding Engineer" AI OR ML OR LLM'
+    enabled: true
+  - name: YC — Founding Engineer
+    query: 'site:workatastartup.com "Founding Engineer" OR "Founding" "AI" OR "ML"'
+    enabled: true
+
+  # -- AI / ML Engineer --
+  - name: Ashby — AI/ML Engineer
+    query: 'site:jobs.ashbyhq.com "AI Engineer" OR "ML Engineer" OR "Applied AI" OR "Machine Learning Engineer"'
+    enabled: true
+  - name: Greenhouse — AI/ML Engineer
+    query: 'site:job-boards.greenhouse.io "AI Engineer" OR "ML Engineer" OR "Applied AI" OR "LLM Engineer"'
+    enabled: true
+  - name: Lever — AI/ML Engineer
+    query: 'site:jobs.lever.co "AI Engineer" OR "ML Engineer" OR "Applied AI" OR "Machine Learning"'
+    enabled: true
+  - name: Ashby — Agentic & RAG
+    query: 'site:jobs.ashbyhq.com "Agentic" OR "RAG" OR "AI Agent" OR "LLM" OR "GenAI Engineer"'
+    enabled: true
+  - name: Greenhouse — Agentic & RAG
+    query: 'site:job-boards.greenhouse.io "Agentic" OR "RAG" OR "AI Agent" OR "GenAI"'
+    enabled: true
+
+  # -- Software Engineer (Python / Backend / Full Stack) --
+  - name: Ashby — SWE Python/Backend
+    query: 'site:jobs.ashbyhq.com "Software Engineer" "Python" OR "Backend" OR "Full Stack"'
+    enabled: true
+  - name: Greenhouse — SWE Python/Backend
+    query: 'site:job-boards.greenhouse.io "Software Engineer" "Python" OR "Backend" OR "Full Stack"'
+    enabled: true
+  - name: Lever — SWE Python/Backend
+    query: 'site:jobs.lever.co "Software Engineer" "Python" OR "Backend" OR "Full Stack" OR "AI"'
+    enabled: true
+
+  # -- Data Scientist / MLOps --
+  - name: Ashby — Data Science & MLOps
+    query: 'site:jobs.ashbyhq.com "Data Scientist" OR "MLOps" OR "ML Platform" OR "LLMOps"'
+    enabled: true
+  - name: Greenhouse — Data Science & MLOps
+    query: 'site:job-boards.greenhouse.io "Data Scientist" OR "MLOps" OR "ML Platform"'
+    enabled: true
+
+  # -- Voice AI / NLP --
+  - name: Voice AI & NLP — All portals
+    query: 'site:job-boards.greenhouse.io OR site:jobs.ashbyhq.com "Voice AI" OR "Conversational AI" OR "NLP Engineer" OR "Speech"'
+    enabled: true
+
+  # -- Startup-focused aggregators --
+  - name: YC Work at a Startup — AI/ML
+    query: 'site:workatastartup.com "AI Engineer" OR "ML Engineer" OR "Applied AI" OR "Software Engineer" "Python"'
+    enabled: true
+  - name: Wellfound — AI/ML Startups
+    query: 'site:wellfound.com "AI Engineer" OR "ML Engineer" OR "Machine Learning" OR "Data Scientist"'
+    enabled: true
+  - name: Workable — AI/ML
+    query: 'site:apply.workable.com "AI Engineer" OR "ML Engineer" OR "Machine Learning"'
+    enabled: true
+  - name: HN Who's Hiring — AI/ML
+    query: 'site:news.ycombinator.com "AI Engineer" OR "ML Engineer" OR "Machine Learning" OR "New Grad" hiring'
+    enabled: true
+  - name: Himalayas — AI/ML
+    query: 'site:himalayas.app "AI Engineer" OR "ML Engineer" OR "Machine Learning Engineer"'
+    enabled: true
+  - name: ai-jobs.net — AI/ML US
+    query: 'site:ai-jobs.net "AI Engineer" OR "ML Engineer" OR "Applied AI" United States'
+    enabled: true
+  - name: TrueUp — AI/ML
+    query: 'site:trueup.io "AI Engineer" OR "ML Engineer" OR "Machine Learning" OR "New Grad"'
+    enabled: true
+  - name: RemoteOK — AI/ML
+    query: 'site:remoteok.com "AI Engineer" OR "ML Engineer" OR "Machine Learning" OR "Python"'
+    enabled: true
+  - name: BuiltIn — AI/ML
+    query: 'site:builtin.com "AI Engineer" OR "ML Engineer" OR "Machine Learning" startup'
+    enabled: true
+
+  # -- Texas local --
+  - name: Texas — AI/ML roles
+    query: '"AI Engineer" OR "ML Engineer" OR "Software Engineer" "Python" Dallas OR Austin OR Houston OR Texas'
+    enabled: true
+  - name: BuiltIn Austin — AI
+    query: 'site:builtinaustin.com OR site:builtin.com Austin "AI" OR "Machine Learning" OR "Software Engineer"'
+    enabled: true
+
+  # -- Big Tech new grad (keep a few, not the focus) --
+  - name: Google — New Grad AI/ML
+    query: 'site:careers.google.com "AI" OR "Machine Learning" "New Grad" OR "Early Career"'
+    enabled: true
+  - name: Meta — New Grad AI/ML
+    query: 'site:metacareers.com "AI" OR "Machine Learning" "New Grad" OR "University"'
+    enabled: true
+  - name: Amazon — New Grad AI/ML
+    query: 'site:amazon.jobs "Applied Scientist" OR "Machine Learning" "New Grad" OR "Entry"'
+    enabled: true
+
+# ==========================================================================
+# TRACKED COMPANIES
+# ==========================================================================
+
+tracked_companies:
+
+  # ==== RECENTLY FUNDED AI STARTUPS (Seed → Series B, 2024-2026) ====
+  # These companies just raised money and WILL be hiring aggressively.
+
+  - name: Mem0
+    careers_url: https://jobs.ashbyhq.com/mem0
+    notes: "Memory layer for AI agents. YC. Ashby. SF. Applied AI Engineer roles."
+    enabled: true
+
+  - name: Gumloop
+    careers_url: https://jobs.ashbyhq.com/gumloop
+    notes: "AI automation platform. YC W24. Ashby. SF/Vancouver. Actively hiring."
+    enabled: true
+
+  - name: FurtherAI
+    careers_url: https://jobs.ashbyhq.com/furtherai
+    notes: "AI for insurance. YC W24. Ashby. SF/NYC."
+    enabled: true
+
+  - name: Reprompt
+    careers_url: https://www.workatastartup.com/companies/reprompt
+    scan_method: websearch
+    scan_query: '"reprompt" careers OR jobs "engineer"'
+    notes: "AI agents for geospatial. YC. Hiring SWE + founding roles."
+    enabled: true
+
+  - name: Basis
+    careers_url: https://jobs.ashbyhq.com/basis
+    scan_method: websearch
+    scan_query: 'site:jobs.ashbyhq.com/basis OR "basis" "AI" "engineer" careers'
+    notes: "AI agent for accounting. $100M Series B (2026). Ashby."
+    enabled: true
+
+  - name: Serval AI
+    careers_url: https://jobs.ashbyhq.com/serval
+    scan_method: websearch
+    scan_query: 'site:jobs.ashbyhq.com/serval'
+    notes: "Agentic AI workflows. Recently funded. Ashby."
+    enabled: true
+
+  - name: Teleskope
+    careers_url: https://jobs.ashbyhq.com/teleskope
+    scan_method: websearch
+    scan_query: 'site:jobs.ashbyhq.com/teleskope'
+    notes: "Agentic data security. $25M Series A. Ashby."
+    enabled: true
+
+  - name: Actively AI
+    careers_url: https://jobs.ashbyhq.com/activelyai
+    scan_method: websearch
+    scan_query: '"Actively AI" careers OR jobs "engineer"'
+    notes: "AI sales agents. $45M Series B (2026). Hiring."
+    enabled: true
+
+  - name: Daylit
+    careers_url: https://jobs.ashbyhq.com/daylit
+    scan_method: websearch
+    scan_query: '"daylit" careers OR jobs "engineer" OR "AI"'
+    notes: "Agentic AI for finance/AR. $110M raise (2025)."
+    enabled: true
+
+  - name: Unsloth AI
+    careers_url: https://www.workatastartup.com/companies/unsloth-ai
+    scan_method: websearch
+    scan_query: '"unsloth" careers OR jobs "engineer"'
+    notes: "Optimized AI training. YC S24."
+    enabled: true
+
+  # ==== AI CODING & DEV TOOLS (hot sector, hiring fast) ====
+
+  - name: Cursor
+    careers_url: https://cursor.com/careers
+    scan_method: websearch
+    scan_query: 'site:cursor.com/careers OR "cursor" "AI" "engineer" ashbyhq OR greenhouse'
+    notes: "AI code editor. Extremely selective but fast-growing."
+    enabled: true
+
+  - name: Cognition (Devin)
+    careers_url: https://cognition.ai/careers
+    scan_method: websearch
+    scan_query: '"cognition" "devin" careers OR jobs "engineer"'
+    notes: "AI software engineer (Devin). Scaling to 200+."
+    enabled: true
+
+  - name: Codeium (Windsurf)
+    careers_url: https://codeium.com/careers
+    scan_method: websearch
+    scan_query: '"codeium" OR "windsurf" careers "engineer" site:builtin.com OR site:codeium.com'
+    notes: "AI code completion. Aggressive growth."
+    enabled: true
+
+  - name: Lovable
+    careers_url: https://jobs.ashbyhq.com/lovable
+    notes: "AI app builder (text-to-app). 80+ open roles. Ashby."
+    enabled: true
+
+  # ==== AI LABS & LLM PROVIDERS ====
+
+  - name: OpenAI
+    careers_url: https://openai.com/careers
+    scan_method: websearch
+    scan_query: 'site:openai.com/careers "Engineer" OR "New Grad"'
+    enabled: true
+
+  - name: Anthropic
+    careers_url: https://job-boards.greenhouse.io/anthropic
+    api: https://boards-api.greenhouse.io/v1/boards/anthropic/jobs
+    enabled: true
+
+  - name: Cohere
+    careers_url: https://jobs.ashbyhq.com/cohere
+    notes: "LLM provider. Toronto + remote."
+    enabled: true
+
+  - name: Mistral AI
+    careers_url: https://jobs.lever.co/mistral
+    notes: "European frontier LLM lab."
+    enabled: true
+
+  - name: Perplexity
+    careers_url: https://jobs.ashbyhq.com/perplexity
+    notes: "AI-native search. Fast-growing. Ashby."
+    enabled: true
+
+  - name: xAI
+    careers_url: https://boards.greenhouse.io/xai
+    scan_method: websearch
+    scan_query: 'site:x.ai/careers OR site:boards.greenhouse.io/xai "Engineer"'
+    notes: "Grok. Greenhouse."
+    enabled: true
+
+  # ==== AI-NATIVE PLATFORMS & TOOLS ====
+
+  - name: LangChain
+    careers_url: https://jobs.ashbyhq.com/langchain
+    notes: "LangChain/LangSmith/LangGraph. Core RAG tooling. Ashby."
+    enabled: true
+
+  - name: Pinecone
+    careers_url: https://jobs.ashbyhq.com/pinecone
+    notes: "Vector database leader. Ashby."
+    enabled: true
+
+  - name: Weights & Biases
+    careers_url: https://jobs.lever.co/wandb
+    notes: "MLOps platform. Lever."
+    enabled: true
+
+  - name: Arize AI
+    careers_url: https://job-boards.greenhouse.io/arizeai
+    api: https://boards-api.greenhouse.io/v1/boards/arizeai/jobs
+    notes: "LLMOps / AI observability. Greenhouse."
+    enabled: true
+
+  - name: Langfuse
+    careers_url: https://langfuse.com/careers
+    scan_method: websearch
+    scan_query: '"langfuse" careers "engineer"'
+    notes: "LLMOps / observability. Open source."
+    enabled: true
+
+  - name: Zep AI
+    careers_url: https://www.getzep.com/careers
+    scan_method: websearch
+    scan_query: '"Zep" "Engineer" site:workatastartup.com OR site:getzep.com'
+    notes: "Context engineering for AI agents. YC W24."
+    enabled: true
+
+  - name: Writer
+    careers_url: https://writer.com/careers
+    scan_method: websearch
+    scan_query: 'site:writer.com/careers "Engineer"'
+    notes: "Enterprise AI platform. SF/NYC/London."
+    enabled: true
+
+  - name: Hebbia
+    careers_url: https://hebbia.com/careers
+    scan_method: websearch
+    scan_query: 'site:hebbia.com/careers OR "hebbia" "engineer" site:builtin.com'
+    notes: "AI for knowledge work. Well-funded. NYC."
+    enabled: true
+
+  - name: Harvey
+    careers_url: https://harvey.ai/careers
+    scan_method: websearch
+    scan_query: 'site:harvey.ai/careers "Engineer"'
+    notes: "AI for legal. Scaling rapidly. SF/NYC."
+    enabled: true
+
+  # ==== AI INFRASTRUCTURE ====
+
+  - name: Modal
+    careers_url: https://modal.com/careers
+    scan_method: websearch
+    scan_query: 'site:modal.com/careers OR site:jobs.ashbyhq.com/modal'
+    notes: "Serverless AI infra. Ashby. Hot startup."
+    enabled: true
+
+  - name: Together AI
+    careers_url: https://together.ai/careers
+    scan_method: websearch
+    scan_query: 'site:together.ai/careers "Engineer"'
+    notes: "Open-source AI inference platform."
+    enabled: true
+
+  - name: Fireworks AI
+    careers_url: https://fireworks.ai/careers
+    scan_method: websearch
+    scan_query: 'site:fireworks.ai/careers OR "fireworks" "AI" "engineer" site:job-boards.greenhouse.io'
+    notes: "AI inference platform. Greenhouse."
+    enabled: true
+
+  - name: Groq
+    careers_url: https://groq.com/careers
+    scan_method: websearch
+    scan_query: 'site:groq.com/careers "Engineer"'
+    notes: "LPU inference chips. Hardware + software."
+    enabled: true
+
+  - name: Cerebras
+    careers_url: https://cerebras.ai/careers
+    scan_method: websearch
+    scan_query: 'site:cerebras.ai/careers "Engineer" OR "ML" OR "AI"'
+    notes: "AI compute hardware. ML + SWE roles."
+    enabled: true
+
+  - name: Replicate
+    careers_url: https://replicate.com/careers
+    scan_method: websearch
+    scan_query: 'site:replicate.com/careers OR "replicate" "engineer" site:jobs.ashbyhq.com'
+    notes: "Run ML models via API. YC."
+    enabled: true
+
+  - name: RunPod
+    careers_url: https://job-boards.greenhouse.io/runpod
+    api: https://boards-api.greenhouse.io/v1/boards/runpod/jobs
+    notes: "GPU cloud for AI. Greenhouse."
+    enabled: true
+
+  # ==== VOICE AI & CONVERSATIONAL AI ====
+
+  - name: ElevenLabs
+    careers_url: https://jobs.ashbyhq.com/elevenlabs
+    notes: "Voice AI / TTS leader. Ashby."
+    enabled: true
+
+  - name: Deepgram
+    careers_url: https://jobs.ashbyhq.com/deepgram
+    notes: "STT/TTS APIs. Ashby."
+    enabled: true
+
+  - name: Vapi
+    careers_url: https://jobs.ashbyhq.com/vapi
+    notes: "Voice AI infra. Ashby."
+    enabled: true
+
+  - name: Bland AI
+    careers_url: https://jobs.ashbyhq.com/bland
+    notes: "Voice phone agents. $65M Series B. Ashby."
+    enabled: true
+
+  - name: Hume AI
+    careers_url: https://job-boards.greenhouse.io/humeai
+    api: https://boards-api.greenhouse.io/v1/boards/humeai/jobs
+    notes: "Empathic voice AI. NYC. Greenhouse."
+    enabled: true
+
+  - name: PolyAI
+    careers_url: https://job-boards.eu.greenhouse.io/polyai
+    api: https://boards-api.greenhouse.io/v1/boards/polyai/jobs
+    notes: "Voice AI for contact centers. Greenhouse."
+    enabled: true
+
+  # ==== HIGH-GROWTH AI STARTUPS ====
+
+  - name: Sierra
+    careers_url: https://jobs.ashbyhq.com/sierra
+    notes: "Bret Taylor. AI customer agents. Ashby."
+    enabled: true
+
+  - name: Decagon
+    careers_url: https://jobs.ashbyhq.com/decagon
+    notes: "AI customer support agents. Ashby."
+    enabled: true
+
+  - name: Lindy
+    careers_url: https://jobs.ashbyhq.com/lindy
+    notes: "AI agent management. Ashby."
+    enabled: true
+
+  - name: Clay Labs
+    careers_url: https://jobs.ashbyhq.com/claylabs
+    notes: "AI GTM / workflow automation. Ashby."
+    enabled: true
+
+  - name: Ada
+    careers_url: https://job-boards.greenhouse.io/ada
+    scan_method: websearch
+    scan_query: '"ada.cx" "AI" "Engineer" site:job-boards.greenhouse.io'
+    notes: "AI customer service. Toronto + remote. Greenhouse."
+    enabled: true
+
+  - name: Glean
+    careers_url: https://job-boards.greenhouse.io/gleanwork
+    api: https://boards-api.greenhouse.io/v1/boards/gleanwork/jobs
+    notes: "Enterprise AI search. Well-funded. Greenhouse."
+    enabled: true
+
+  - name: Runway
+    careers_url: https://job-boards.greenhouse.io/runwayml
+    api: https://boards-api.greenhouse.io/v1/boards/runwayml/jobs
+    notes: "Generative AI video. Greenhouse."
+    enabled: true
+
+  - name: Stability AI
+    careers_url: https://job-boards.greenhouse.io/stabilityai
+    api: https://boards-api.greenhouse.io/v1/boards/stabilityai/jobs
+    notes: "Generative AI research. London/SF. Greenhouse."
+    enabled: true
+
+  - name: Hugging Face
+    careers_url: https://apply.workable.com/huggingface/
+    scan_method: websearch
+    scan_query: 'site:apply.workable.com/huggingface'
+    notes: "ML hub & open-source. Paris/NYC/Remote. Workable."
+    enabled: true
+
+  # ==== STRONG TECH (AI teams, good for entry-level) ====
+
+  - name: Vercel
+    careers_url: https://job-boards.greenhouse.io/vercel
+    api: https://boards-api.greenhouse.io/v1/boards/vercel/jobs
+    notes: "AI SDK, v0.dev, Next.js. Greenhouse."
+    enabled: true
+
+  - name: Scale AI
+    careers_url: https://job-boards.greenhouse.io/scaleai
+    scan_method: websearch
+    scan_query: 'site:job-boards.greenhouse.io/scaleai "Engineer" OR "ML" OR "Data"'
+    notes: "AI data platform. Large new grad cohorts. Greenhouse."
+    enabled: true
+
+  - name: Palantir
+    careers_url: https://jobs.lever.co/palantir
+    notes: "AIP platform. Strong new grad pipeline. Lever."
+    enabled: true
+
+  - name: Databricks
+    careers_url: https://job-boards.greenhouse.io/databricks
+    scan_method: websearch
+    scan_query: 'site:job-boards.greenhouse.io/databricks "Software Engineer" OR "ML Engineer"'
+    notes: "Data + AI platform. Mosaic ML. Greenhouse."
+    enabled: true
+
+  - name: Anduril
+    careers_url: https://job-boards.greenhouse.io/andurilindustries
+    api: https://boards-api.greenhouse.io/v1/boards/andurilindustries/jobs
+    notes: "Defense tech. SWE + ML roles. Greenhouse."
+    enabled: true
+
+  - name: Retool
+    careers_url: https://retool.com/careers
+    scan_method: websearch
+    scan_query: 'site:retool.com/careers "Engineer"'
+    notes: "Internal tools + AI features."
+    enabled: true
+
+  - name: Supabase
+    careers_url: https://jobs.ashbyhq.com/supabase
+    notes: "Open-source Firebase alt. Remote-first. Ashby."
+    enabled: true
+
+  # ==== AUTOMATION & WORKFLOW ====
+
+  - name: Zapier
+    careers_url: https://jobs.ashbyhq.com/zapier
+    notes: "Remote-first. Automation leader. Ashby."
+    enabled: true
+
+  - name: n8n
+    careers_url: https://jobs.ashbyhq.com/n8n
+    notes: "Workflow automation. Open source. Ashby."
+    enabled: true
+
+  # ==== BIG TECH (new grad only — keep minimal) ====
+
+  - name: Google
+    careers_url: https://careers.google.com
+    scan_method: websearch
+    scan_query: 'site:careers.google.com "New Grad" OR "Early Career" "AI" OR "Machine Learning"'
+    notes: "L3/L4 new grad."
+    enabled: true
+
+  - name: Meta
+    careers_url: https://metacareers.com
+    scan_method: websearch
+    scan_query: 'site:metacareers.com "New Grad" OR "University" "AI" OR "Machine Learning"'
+    notes: "E3/E4 new grad."
+    enabled: true
+
+  - name: Amazon
+    careers_url: https://amazon.jobs
+    scan_method: websearch
+    scan_query: 'site:amazon.jobs "New Grad" OR "Entry" "Applied Scientist" OR "SDE"'
+    notes: "SDE I, Applied Scientist."
+    enabled: true
+
+  - name: NVIDIA
+    careers_url: https://nvidia.wd5.myworkdayjobs.com
+    scan_method: websearch
+    scan_query: 'site:nvidia.wd5.myworkdayjobs.com "Deep Learning" OR "AI" "Engineer"'
+    notes: "GPU AI leader."
+    enabled: true
