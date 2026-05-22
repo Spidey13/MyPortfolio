@@ -1,15 +1,15 @@
 # CV -- Prathamesh Pravin More
 
-**Location:** Bloomington, IN (Open to relocation)
+**Location:** Dallas, TX (Open to relocation)
 **Phone:** 930-333-4542
 **Email:** prpmore@gmail.com
-**LinkedIn:** linkedin.com/in/more-prathamesh
-**GitHub:** github.com/Spidey13
-**Portfolio:** prathamesh-more.com
+**LinkedIn:** https://www.linkedin.com/in/more-prathamesh/
+**GitHub:** https://github.com/Spidey13
+**Portfolio:** https://www.prathamesh-more.com/
 
 ## Professional Summary
 
-AI Engineer and M.S. Data Science graduate with 3+ years building production AI/ML systems and full-stack applications. Architected an enterprise Agentic RAG platform at Indiana University that automated academic literature review across 550+ publications, cutting manual review cycles by 95% (3 weeks → 4 hours) with 98% retrieval accuracy — results published in The Design Journal. Built real-time NLP pipelines, MLOps infrastructure, and high-throughput APIs across fintech, HR tech, and academic research domains.
+AI Engineer and M.S. Data Science graduate with 3+ years building AI/ML systems and full-stack applications. Built an Agentic RAG platform at Indiana University that cut manual literature review by 95% (3 weeks → 4 hours) with 98% retrieval accuracy. Developed the computational text-mining pipeline for a peer-reviewed diversity study published in The Design Journal. Experience across fintech, HR tech, and academic research building real-time NLP pipelines, MLOps infrastructure, and high-throughput APIs.
 
 ## Work Experience
 
@@ -17,25 +17,25 @@ AI Engineer and M.S. Data Science graduate with 3+ years building production AI/
 **Applied AI Engineer**
 May 2024 -- Present
 
-- Architected an enterprise-grade Agentic RAG platform using Python and Pinecone vector databases with semantic routing, automating academic workflows across 550+ publications and reducing manual review cycles by 95% (3 weeks → 4 hours)
-- Engineered asynchronous backend microservices and RESTful APIs via FastAPI and Docker, aggregating spaCy-filtered corpora and NMF topic models to serve processed datasets across multiple university departments
-- Deployed interactive full-stack dashboards using Plotly/Dash for system observability, integrating MLflow tracking for 100% computational reproducibility — system's 98% retrieval accuracy independently validated and published in The Design Journal
+- Built an Agentic RAG platform using Python and Pinecone vector databases with semantic routing, automating literature retrieval and reducing manual review cycles by 95% (3 weeks → 4 hours) with 98% retrieval accuracy
+- Developed the computational text-mining pipeline for a diversity study across 550+ publications — spaCy NLP preprocessing, NMF topic modeling, and Plotly/Dash visualizations with MLflow-tracked reproducibility, published in The Design Journal
+- Engineered asynchronous backend microservices and RESTful APIs with FastAPI and Docker to serve processed datasets across multiple university departments
 
 ### Dimensionless Technologies -- Mumbai, India
 **Machine Learning Engineer**
 Feb 2023 -- Jul 2023
 
-- Engineered real-time NLP classification models for stock market news on AWS SageMaker, establishing CI/CD-integrated MLOps pipelines to serve high-throughput API predictions with sub-100ms latency
-- Developed PropelPro, an intelligent PDF automation tool using event-driven serverless architecture with Azure Functions and custom OCR models, scaling document processing from 50 to 10,000+ documents monthly for enterprise clients
-- Optimized cloud infrastructure by re-architecting compute resource allocation using containerized AWS spot instances, reducing operational costs by 20% ($15K+ annually)
+- Fine-tuned a BERT model for multiclass stock news classification and built the AWS SageMaker inference backend with CI/CD pipelines, achieving sub-100ms latency through optimized model serialization and endpoint configuration
+- Designed and built PropelPro's document extraction pipeline on serverless Azure Functions with Tesseract OCR and BERT-based NLP, scaling processing from 50 to 10,000+ documents monthly after identifying that a chatbot approach wouldn't solve the core extraction need
+- Optimized cloud infrastructure across AWS and Azure by right-sizing compute and implementing spot instance strategies, reducing operational costs by 20% ($15K+ annually)
 
 ### Benchmark Computer Solutions -- Mumbai, India
 **Full Stack Software Engineer**
 Jun 2022 -- Dec 2022
 
-- Modernized monolithic legacy systems into distributed microservices architecture using FastAPI, Docker, and Redis caching, scaling to 10,000+ daily REST API requests with 99.9% uptime
-- Optimized complex database retrieval by implementing composite indexes and query planning in PostgreSQL, reducing P99 latency by 40% (500ms → 300ms)
-- Integrated Hugging Face Transformer models into production workflows, engineering an active-learning human-in-the-loop validation system that improved NER F1-score from 78% to 91% and cut manual data labeling costs by 40%
+- Rebuilt the backend architecture using FastAPI, Docker, and Redis caching with asyncio patterns, scaling to 10,000+ daily API requests at 99.9% uptime and reducing P99 latency by 40% (500ms → 300ms)
+- Fine-tuned a Hugging Face Transformer for NER and built an active learning pipeline with uncertainty sampling, improving candidate extraction F1-score from 78% to 91% while cutting annotation costs by 40%
+- Optimized PostgreSQL with composite indexing and query planning, contributing to latency reduction and improving end-to-end screening pipeline reliability
 
 ## Projects
 

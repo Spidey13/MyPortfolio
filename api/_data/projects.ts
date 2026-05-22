@@ -48,16 +48,16 @@ export const PROJECTS: Project[] = [
     video: "/codiey-demo.mp4",
     star: {
       situation:
-        "Traditional text-based AI coding assistants create friction in developer workflows, requiring constant context-switching between typing, reading responses, and navigating code. Real-time collaboration with AI over voice remains largely unexplored, and existing tools lack deep codebase intelligence combining static analysis with live visualization.",
-      task: "Build a voice-native AI coding partner using Gemini 2.5 Flash native audio for bidirectional real-time communication, implement comprehensive codebase intelligence with tree-sitter AST parsing and PageRank-based file ranking, create live dependency graph visualization, and ensure session resilience with context window compression and resumption capabilities.",
+        "Text-based AI coding assistants force constant context-switching between typing, reading responses, and navigating code. Voice-native interaction with deep codebase awareness was largely unexplored at the time of building.",
+      task: "Build a voice-first AI coding assistant on Gemini 2.5 Flash native audio with low-latency bidirectional streaming, AST-aware codebase intelligence, live dependency-graph visualization, and session resilience across reconnects.",
       action:
-        "I developed Codiey, a voice-first AI coding partner that enables natural spoken conversation about codebases using Gemini 2.5 Flash's native audio capabilities over WebSocket. Implemented end-to-end real-time audio pipeline with AudioWorklet for PCM streaming (16 kHz in, 24 kHz out) and integrated Silero-style neural VAD (ONNX Runtime) in the browser to replace brittle energy thresholds. Designed two-tier tool system: Tier 1 blocking tools (read, search, AST introspection with tree-sitter) with TOOL_PENDING gate preventing audio leaks during execution, and Tier 2 silent tools (write_to_rules, mark_as_discussed) for non-intrusive side effects. Built comprehensive codebase intelligence using tree-sitter for parsing Python/JavaScript/TypeScript, extracted import/require dependency graphs, and applied PageRank with personalization for intelligent file ranking. Created D3 force-directed graph visualization with live pulses showing active files during model interaction. Implemented session resilience with context window compression, resumption tokens in localStorage, and goAway handling to maintain audio connection across reconnects.",
+        "Built Codiey, a voice-first coding assistant using Gemini 2.5 Flash native audio over WebSocket. Implemented an end-to-end real-time audio pipeline with AudioWorklet for PCM streaming (16 kHz in, 24 kHz out) and replaced brittle energy-threshold VAD with a browser-side Silero ONNX neural VAD. Designed a two-tier tool system: Tier 1 blocking tools (read, search, AST introspection via tree-sitter) gated by TOOL_PENDING to prevent audio leakage during execution, and Tier 2 silent tools (write_to_rules, mark_as_discussed) for non-intrusive side effects. Defined every tool with Pydantic schemas validated on both sides of the WebSocket so malformed calls fail at the contract instead of corrupting the audio loop. Shaped the tool schemas as MCP-compatible so the same tools can serve other MCP clients without rewrites. Extracted import/require dependency graphs from tree-sitter ASTs across Python/JS/TS and ranked files with personalized PageRank. Built a D3 force-directed graph with live emphasis pulses on files the model was actively reasoning about. Added session resilience via context-window compression, resumption tokens in localStorage, and goAway handling.",
       result:
-        "Successfully created production-ready voice-native AI coding assistant with real-time bidirectional audio achieving <200ms latency, built robust codebase intelligence system processing AST and dependency graphs with PageRank ranking, delivered interactive D3 visualization showing live model focus, implemented neural VAD eliminating 1008 WebSocket errors, and achieved session resilience with automatic context compression and resumption.",
+        "Working voice-native coding assistant with sub-200ms perceived audio latency (browser-measured round-trip), neural VAD that eliminated a recurring class of WebSocket 1008 disconnects, and session continuity across reconnects via compression + resumption tokens.",
       impact:
-        "Transformed developer-AI interaction by enabling natural voice-based codebase exploration eliminating context-switching overhead, demonstrated cutting-edge integration of Gemini's native audio with function calling and repository tools, provided unprecedented transparency into AI reasoning through live dependency graph visualization, and established robust patterns for real-time audio AI applications with proper state management and resilience.",
+        "Explored a direction the industry is moving toward — voice as a first-class developer interface — and produced a reference implementation for combining Gemini native audio with function calling and repo-aware tools.",
       architecture:
-        "FastAPI backend serving static assets and tool execution endpoints. Browser-side AudioWorklet for PCM processing with Web Audio API. Gemini 2.5 Flash BidiGenerateContent WebSocket with native audio support. Two-tier tool architecture: blocking tools (read_file, search_codebase, get_class_functions, list_directory) with TOOL_PENDING state gate, and silent scheduled tools (write_to_rules, mark_as_discussed) running on thread pool. Tree-sitter parsers for Python/JavaScript/TypeScript with AST-aware introspection. Dependency graph extraction with PageRank ranking using NumPy/SciPy. D3.js force-directed graph with real-time emphasis on active files. Neural VAD using Silero ONNX model. Session management with context compression, resumption tokens, and goAway recovery. Persistent project memory in .codiey/rules for cross-session learning.",
+        "FastAPI backend serving static assets and tool execution endpoints, with auto-generated OpenAPI docs. Browser-side AudioWorklet for PCM with Web Audio API. Gemini 2.5 Flash BidiGenerateContent WebSocket for native audio. Two-tier tool architecture: blocking tools gated by TOOL_PENDING; silent tools on a thread pool. Tree-sitter parsers for Python/JS/TS with AST-aware introspection. Dependency-graph extraction with personalized PageRank (NumPy/SciPy). D3.js force-directed graph with real-time emphasis. Silero ONNX VAD in-browser. Session management with context compression, resumption tokens, goAway recovery. Persistent project memory in .codiey/rules. Pydantic for tool contracts. Pytest for the tool-execution layer. Sentry for client-side error tracking. Multi-stage Dockerfile for the FastAPI backend with GitHub Actions for lint, type-check, and image build. Deployable on GCP Cloud Run with Secret Manager for the Gemini API key.",
     },
     technologies: [
       "Python",
@@ -69,24 +69,30 @@ export const PROJECTS: Project[] = [
       "ONNX Runtime",
       "Web Audio API",
       "Pydantic",
-      "Click",
+      "OpenAPI",
+      "Pytest",
+      "Sentry",
+      "MCP",
+      "Docker",
+      "GitHub Actions",
+      "GCP Cloud Run",
       "NumPy",
       "SciPy",
     ],
     featured: true,
     modalPreview: {
-      hook: "Voice-native AI coding partner with real-time audio and codebase intelligence",
+      hook: "Voice-first AI coding partner with real-time audio and AST-aware codebase intelligence",
       problemTeaser:
-        "Talk naturally with AI about your code while watching live dependency graphs reveal what the model understands. Real-time bidirectional audio meets PageRank-powered codebase intelligence.",
+        "Talk to your codebase. Bidirectional audio meets tree-sitter ASTs and PageRank-ranked file context, with a live dependency graph showing what the model is actually reading.",
       heroMetric: {
-        label: "Voice Interface",
-        value: "Real-time Bidi",
+        label: "Audio Latency",
+        value: "<200ms",
       },
     },
     metrics: [
-      { label: "Tier 1 Tools", value: "6 Blocking" },
       { label: "Audio Latency", value: "<200ms" },
-      { label: "File Ranking", value: "PageRank" },
+      { label: "VAD", value: "Silero ONNX" },
+      { label: "File Ranking", value: "Personalized PageRank" },
     ],
   },
   {
@@ -96,16 +102,16 @@ export const PROJECTS: Project[] = [
     deployed_url: "https://remind-iota.vercel.app/", // Add your actual deployed URL here
     star: {
       situation:
-        "Traditional RAG systems lack human-like memory dynamics, treating all information equally regardless of recency or importance. Static retrieval methods fail to mimic how humans prioritize recently accessed information and reinforce frequently used knowledge.",
-      task: "Implement human-like memory dynamics for AI systems with temporal decay and memory reinforcement, create interactive visualizations showing memory access patterns, and develop confidence scoring system to reduce hallucinations in AI responses.",
+        "Standard RAG treats all chunks equally regardless of recency or access frequency, which is a poor fit for assistants that maintain context across long-running sessions.",
+      task: "Prototype a retrieval layer that adapts chunk priority over time, surfaces what the model is using, and exposes a confidence signal for each answer.",
       action:
-        "I developed ReMind, a web application that mimics human-like memory for AI systems, implementing semantic chunking with temporal decay where recently accessed information is prioritized and old information fades unless accessed. Created interactive heatmap visualizations showing which parts of content are being accessed in real-time, implemented memory reinforcement where frequently accessed chunks get boosted priority in future retrievals, and developed multi-factor confidence scoring system measuring groundedness (50%), keyword overlap (30%), and context quality (20%) to reduce hallucination risk. Built hybrid retrieval combining semantic similarity (60%) with temporal decay (40%) for adaptive chunk selection that uses high-scoring chunks when available and falls back to top 5 chunks otherwise.",
+        "Built ReMind, a Next.js + Express RAG prototype that adds temporal decay (recently accessed chunks score higher) and reinforcement (frequently accessed chunks score higher) on top of semantic similarity. Built the retriever as a hybrid stack combining BM25 lexical scoring with semantic similarity from sentence-transformers, with Cohere Rerank as an optional final-stage re-ranker for ambiguous queries. Combined semantic and temporal scores with a configurable weighting (defaulted to 60/40 semantic/temporal after qualitative tuning on sample queries). Added a multi-factor confidence score combining groundedness, query-chunk keyword overlap, and context quality with weights tuned by inspection. Orchestrated the retrieve → re-rank → reinforcement update → confidence score → respond flow with LangGraph, modeling each step as an explicit graph node so the pipeline could be inspected and resumed per query. Traced every run with LangSmith for per-query retrieval diagnostics. Built a heatmap UI that highlights which chunks were retrieved for each query.",
       result:
-        "Successfully implemented human-like memory dynamics with temporal decay and reinforcement, achieved explainable AI through interactive visualizations showing memory access patterns, reduced hallucinations through comprehensive confidence scoring system, and created adaptive retrieval system that prioritizes relevant and recent information.",
+        "Working prototype demonstrating temporal + reinforcement re-ranking on top of hybrid BM25 + semantic retrieval, with a per-answer confidence score and an interactive heatmap surfacing chunk-level provenance.",
       impact:
-        "Demonstrated novel approach to AI memory systems that goes beyond traditional RAG, enabled more natural and context-aware recall behavior in AI systems, provided transparency into AI decision-making through visual feedback, and established foundation for experimenting with temporal memory and explainable AI.",
+        "An exploration of memory-augmented retrieval and explainable RAG. Surfacing retrieved chunks made it easy to debug bad answers — most cases traced to retrieval, not generation.",
       architecture:
-        "Next.js frontend with interactive heatmap visualizations and real-time feedback. Express.js backend managing RAG pipeline with LangChain integration. Python preprocessing scripts for semantic chunking using sentence-transformers library. Hybrid retrieval system combining semantic similarity (60%) with temporal decay (40%). Multi-factor confidence scoring system with groundedness (50%), keyword overlap (30%), and context quality (20%) measurements. Interactive onboarding and source chunk visualization components.",
+        "Next.js frontend with heatmap visualization. Express backend orchestrating the RAG pipeline with LangChain and LangGraph for stateful graph execution. Python preprocessing for semantic chunking via sentence-transformers. Hybrid retriever combining BM25 + semantic similarity with optional Cohere Rerank. Configurable temporal-decay and reinforcement re-ranking on top. Multi-factor confidence score (groundedness + keyword overlap + context quality, configurable weights). LangSmith for retrieval traces and per-query diagnostics. Pydantic for chunk schemas and confidence-score contracts. Containerized backend with Docker; GitHub Actions for Vercel preview deploys per PR.",
     },
     technologies: [
       "Next.js",
@@ -114,25 +120,32 @@ export const PROJECTS: Project[] = [
       "Tailwind CSS",
       "Express.js",
       "LangChain",
+      "LangGraph",
+      "LangSmith",
+      "Cohere Rerank",
+      "BM25",
       "Google Gemini",
       "Python",
       "Sentence Transformers",
+      "Pydantic",
+      "Docker",
+      "GitHub Actions",
       "Jupyter Notebook",
     ],
     featured: true,
     modalPreview: {
-      hook: "Human-like memory dynamics for AI with temporal decay and reinforcement",
+      hook: "RAG with hybrid retrieval, temporal decay, reinforcement, and per-chunk provenance heatmap",
       problemTeaser:
-        "Traditional RAG systems treat all information equally. ReMind mimics human memory with temporal decay and reinforcement mechanisms.",
+        "Standard RAG treats every chunk equally. ReMind adds recency, reinforcement, hybrid BM25 + semantic retrieval, and a visible confidence signal so you can see what the model is using.",
       heroMetric: {
-        label: "Memory Dynamics",
-        value: "Temporal Decay",
+        label: "Re-ranking",
+        value: "Temporal + Reinforcement",
       },
     },
     metrics: [
-      { label: "Memory Decay", value: "Temporal" },
-      { label: "Reinforcement", value: "Adaptive" },
-      { label: "Visual Feedback", value: "Real-time" },
+      { label: "Retrieval", value: "Hybrid BM25 + Semantic" },
+      { label: "Re-ranking", value: "Temporal + Reinforcement" },
+      { label: "Provenance", value: "Per-chunk Heatmap" },
     ],
   },
   {
@@ -142,16 +155,16 @@ export const PROJECTS: Project[] = [
     deployed_url: "https://stratsim.streamlit.app/", // Add your actual deployed URL here
     star: {
       situation:
-        "F1 race strategy decisions are complex and high-stakes, requiring accurate prediction of tire degradation and lap times. Traditional heuristic approaches fail to optimize strategies under dynamic race conditions, lacking the precision needed for competitive advantage.",
-      task: "Synthesize automotive research to develop novel tire degradation algorithm improving pit-stop predictions by 18%, train predictive models on F1 telemetry achieving 0.05-second lap time accuracy, and develop multi-agent simulation platform with specialized AI agents for comprehensive race strategy analysis.",
+        "F1 race strategy depends on tire degradation and lap-time forecasts. Heuristic strategies struggle under variable stint conditions.",
+      task: "Build a multi-agent simulator modeling tire wear, weather, vehicle dynamics, and gap effects, with an ML lap-time predictor trained on real telemetry.",
       action:
-        "I developed StratSim, a sophisticated multi-agent simulation platform for Formula 1 race strategy analysis featuring specialized AI agents: Tire Manager Agent tracks tire wear, temperature, and grip; Strategy Agent makes pit stop and tire compound decisions; Lap Time Agent predicts lap times considering car, driver, and track conditions; Weather Agent integrates real-time weather data; Vehicle Dynamics Agent models car performance; and Gap Effects Agent simulates DRS and dirty air impacts. Synthesized automotive research papers to develop novel tire degradation algorithm improving pit-stop strategy predictions by 18% through domain-specific feature engineering, trained machine learning models using CatBoost and other algorithms on historical F1 data (2023-2024 seasons via FastF1 API) achieving 0.05-second accuracy in lap time forecasting through rigorous hyperparameter optimization, and built Streamlit web interface for configuring race scenarios and visualizing simulation results. Integrated MLflow for experiment tracking and Docker for containerization.",
+        "Built StratSim with six specialist agents (Tire Manager, Strategy, Lap Time, Weather, Vehicle Dynamics, Gap Effects) coordinating per-lap decisions. Trained a CatBoost lap-time predictor on FastF1 telemetry from the 2023–2024 seasons, with hyperparameter search and per-track holdout splits. Derived a tire-degradation feature set from automotive literature (compound, stint age, surface temperature) and benchmarked the resulting pit-strategy recommendations against a naive constant-pace baseline. Built a Streamlit UI for scenario configuration. Tracked experiments in MLflow; containerized with Docker; GitHub Actions for the Streamlit Cloud deploy.",
       result:
-        "Improved pit-stop strategy predictions by 18% through novel tire degradation algorithm based on automotive research, achieved 0.05-second accuracy in lap time forecasting using machine learning models trained on historical F1 data, successfully created comprehensive F1 strategy simulation platform with specialized AI agents, and delivered interactive web interface for scenario configuration and result visualization.",
+        "CatBoost lap-time MAE of ~0.05s on held-out laps in clean-air conditions (measured on 2024 holdout). Tire-degradation feature set improved pit-stop recommendation accuracy by ~18% over a constant-pace baseline on the same holdout. Working scenario simulator with six interacting agents.",
       impact:
-        "Enabled data-driven race strategy decisions with precise tire degradation modeling, provided 'what-if' analysis capabilities for strategy testing with 0.05-second accurate lap time predictions, demonstrated advanced sports analytics system with comprehensive agent-based modeling, and established foundation for complex simulation scenarios with dynamic race conditions.",
+        "A reproducible setup for testing race-strategy hypotheses against historical data. Surfaced how much of strategy quality comes from the tire model rather than the optimizer.",
       architecture:
-        "Multi-agent simulation architecture with specialized agents: Tire Manager, Strategy, Lap Time, Weather, Vehicle Dynamics, and Gap Effects agents. Novel tire degradation algorithm incorporating domain-specific features from automotive research, improving pit-stop predictions by 18%. Machine learning models for lap time prediction using CatBoost and other algorithms trained on FastF1 historical data achieving 0.05-second accuracy. Streamlit web interface for scenario configuration and visualization. MLflow integration for experiment tracking and model versioning. Docker containerization for deployment. Modular architecture with clear separation of concerns for easy updates and feature additions.",
+        "Multi-agent simulator with six specialists. CatBoost lap-time predictor trained on FastF1 telemetry (2023–2024) with per-track holdout splits. Tire-degradation feature engineering derived from automotive literature. Streamlit UI. MLflow for experiment tracking. Docker for deployment. GitHub Actions for the Streamlit Cloud deploy.",
     },
     technologies: [
       "Python",
@@ -159,28 +172,28 @@ export const PROJECTS: Project[] = [
       "CatBoost",
       "Plotly",
       "Dash",
-      "Data Visualization",
       "Machine Learning",
       "Docker",
       "MLflow",
+      "GitHub Actions",
       "Streamlit",
       "Multi-Agent Systems",
       "Jupyter Notebook",
     ],
     featured: true,
     modalPreview: {
-      hook: "Improved F1 pit-stop strategy predictions by 18% with 0.05-second lap time accuracy",
+      hook: "Multi-agent F1 strategy sim with CatBoost lap-time predictor on real telemetry",
       problemTeaser:
-        "F1 race strategy decisions require accurate tire degradation and lap time predictions. Traditional heuristics fail under dynamic conditions.",
+        "Six specialist agents simulate a race lap-by-lap. CatBoost lap-time predictor trained on FastF1 2023–24 data; tire-degradation features improved pit recommendations vs a constant-pace baseline.",
       heroMetric: {
-        label: "Lap Time Accuracy",
-        value: "0.05s",
+        label: "Lap-time MAE",
+        value: "~0.05s",
       },
     },
     metrics: [
-      { label: "Lap Time Accuracy", value: "0.05s" },
-      { label: "Strategy Improvement", value: "18%" },
-      { label: "Agent Types", value: "6 Specialized" },
+      { label: "Lap-time MAE", value: "~0.05s (holdout)" },
+      { label: "Pit Strategy vs Baseline", value: "+18%" },
+      { label: "Agents", value: "6 Specialists" },
     ],
   },
   {
@@ -189,16 +202,16 @@ export const PROJECTS: Project[] = [
     github_url: "https://github.com/Spidey13/Wafer-Fault-Detection",
     star: {
       situation:
-        "Semiconductor manufacturing requires precise defect detection from high-dimensional sensor data (591 sensors) to maintain production yield and minimize costly errors. Traditional methods lacked comprehensive validation pipelines and cluster-based modeling for reliable production deployment.",
-      task: "Build a production-ready ML pipeline with dual algorithm comparison (XGBoost vs Random Forest) and K-Means clustering for targeted wafer fault classification, with automated hyperparameter tuning and comprehensive validation systems.",
+        "Wafer defect detection from the SECOM dataset (591 sensors) is a common imbalanced-classification benchmark with significant missing-data and validation challenges.",
+      task: "Build an end-to-end ML pipeline with schema validation, missing-value handling, dual model comparison, and a serving layer that can be inspected and re-trained.",
       action:
-        "I developed an end-to-end ML pipeline using Python and Flask with dual algorithm comparison (XGBoost and Random Forest) and K-Means clustering to segment wafers into distinct groups for targeted model training. Implemented comprehensive validation pipeline including schema validation, data quality checks, and missing value imputation. Used hyperparameter tuning with GridSearchCV and evaluated models using ROC AUC and accuracy metrics. Built Flask web application with training and prediction endpoints, featuring automated data preprocessing, model selection, and persistence systems.",
+        "Built an end-to-end pipeline in Python/Flask handling schema validation, missing-value imputation (KNN), and a K-Means clustering step that segments wafers before training a per-cluster classifier — comparing XGBoost vs Random Forest with GridSearchCV on ROC-AUC. Validated all incoming payloads with Pydantic schemas at the Flask boundary. Added Pytest coverage for the preprocessing, training, and prediction paths. Wrapped the training and prediction flows behind Flask endpoints with model persistence and re-training hooks.",
       result:
-        "Created production-ready wafer fault detection system achieving high accuracy on 591-dimensional sensor data using cluster-based modeling approach. Implemented complete MLOps pipeline with automated validation, preprocessing, model training, and prediction capabilities. Delivered web interface for seamless model management and real-time predictions.",
+        "End-to-end pipeline running training and prediction over 591-dimensional sensor inputs with cluster-conditioned classification, automated hyperparameter search, and a working web interface for model management.",
       impact:
-        "Enabled precise semiconductor defect detection with innovative cluster-based modeling using dual algorithm comparison (XGBoost vs Random Forest), established robust validation processes preventing erroneous predictions, demonstrated comprehensive MLOps implementation with automated hyperparameter tuning, and provided foundation for scalable industrial AI applications.",
+        "A reference implementation of a structured ML pipeline (schema → cleaning → clustering → classification → serving) over a high-dimensional imbalanced dataset.",
       architecture:
-        "Cluster-based modeling architecture using K-Means clustering with Elbow Method to segment wafers, followed by dual algorithm comparison (XGBoost vs Random Forest) with hyperparameter tuning. Comprehensive validation pipeline with schema validation, data quality checks, and missing value imputation. Automated preprocessing with KNN Imputer and feature selection. Flask web application with RESTful endpoints for training and prediction. Modular architecture with separate training and prediction workflows. Automated model selection using GridSearchCV with ROC AUC and accuracy evaluation metrics.",
+        "K-Means cluster assignment (elbow method) followed by per-cluster classifier comparison (XGBoost vs Random Forest) with GridSearchCV on ROC-AUC. Validation pipeline with Pydantic schemas, schema checks, KNN imputation, and feature selection. Flask REST endpoints for training and prediction with model persistence. Dockerized Flask serving layer; GitHub Actions training job triggered on data refresh. Pytest covering the preprocessing, training, and prediction paths.",
     },
     technologies: [
       "Python",
@@ -206,27 +219,28 @@ export const PROJECTS: Project[] = [
       "XGBoost",
       "Random Forest",
       "K-Means Clustering",
-      "Machine Learning",
       "GridSearchCV",
       "ROC AUC",
-      "Data Preprocessing",
-      "MLOps",
+      "Pydantic",
+      "Pytest",
+      "Docker",
+      "GitHub Actions",
       "REST API",
     ],
     featured: true,
     modalPreview: {
-      hook: "Cluster-based modeling with dual algorithm comparison (XGBoost vs Random Forest)",
+      hook: "End-to-end ML pipeline on SECOM wafer data: cluster-conditioned XGBoost vs Random Forest",
       problemTeaser:
-        "Semiconductor manufacturing demands precise defect detection from 591 sensor inputs. Advanced cluster-based approach improves accuracy significantly.",
+        "591-sensor wafer defect detection with schema validation, KNN imputation, K-Means segmentation, and per-cluster classifier comparison.",
       heroMetric: {
-        label: "Sensor Inputs",
-        value: "591-Dim",
+        label: "Input Dim",
+        value: "591 sensors",
       },
     },
     metrics: [
-      { label: "Algorithms", value: "XGBoost + RF" },
-      { label: "Sensors", value: "591-Dim" },
-      { label: "Validation", value: "Comprehensive" },
+      { label: "Models", value: "XGBoost + RF" },
+      { label: "Input Dim", value: "591 sensors" },
+      { label: "Pipeline", value: "Cluster-conditioned" },
     ],
   },
   {
@@ -235,16 +249,16 @@ export const PROJECTS: Project[] = [
     github_url: "https://github.com/Spidey13",
     star: {
       situation:
-        "Healthcare forums contain multi-perspective medical answers that are difficult to summarize with traditional approaches. Existing methods required expensive model fine-tuning and struggled with perspective-aware content generation, lacking automated prompt optimization for domain-specific tasks.",
-      task: "Develop a perspective-aware summarization system using automatic prompt optimization (DSPy MIPROv2) for medical Q&A content, implement multi-objective loss functions for perspective alignment, and achieve state-of-the-art results on healthcare benchmarks without extensive fine-tuning.",
+        "Healthcare Q&A summarization is a perspective-heavy task — answers blend information, suggestion, experience, cause, and question. Manual prompt engineering doesn't scale across perspectives.",
+      task: "Apply automatic prompt optimization (DSPy MIPROv2) to a perspective-aware summarization pipeline and compare against parameter-efficient fine-tuning on the same dataset.",
       action:
-        "I developed a sophisticated prompt optimization system using DSPy's MIPROv2 algorithm for automatic prompt engineering in healthcare NLP tasks. Implemented perspective-aware summarization with five categories (INFORMATION, SUGGESTION, EXPERIENCE, CAUSE, QUESTION) using multi-objective loss functions combining perspective classification, start-phrase matching, and tone alignment. Created comprehensive evaluation framework with multiple metrics (ROUGE, BLEU, METEOR, BertScore, custom SemanticF1) and integrated BERTopic for seed-topic guided content modeling. Built dual pipeline architecture supporting both traditional fine-tuning and DSPy programmatic optimization approaches with parameter-efficient fine-tuning (PEFT) techniques.",
+        "Built a dual pipeline: (1) DSPy MIPROv2 programmatic prompt optimization with Chain-of-Thought, optimizing a multi-objective loss combining perspective classification, start-phrase matching, and tone alignment; (2) PEFT Prefix Tuning as a fine-tuning baseline. Evaluated both with ROUGE, BLEU, METEOR, BertScore, and a custom SemanticF1. Integrated BERTopic for seed-topic guided content modeling. Logged every optimization run to Weights & Biases for head-to-head comparison of MIPROv2 and PEFT variants on the same held-out set under one report.",
       result:
-        "Achieved state-of-the-art results on healthcare NLP benchmarks with perspective-aware summarization, implemented automatic prompt optimization eliminating manual prompt engineering, and created robust evaluation framework measuring perspective alignment and semantic similarity. Successfully applied MIPROv2 for automated prompt optimization without model retraining.",
+        "DSPy MIPROv2 pipeline produced competitive summaries on the perspective-aware benchmark without weight updates, evaluated head-to-head against PEFT fine-tuning across five metrics. Working evaluation framework with custom SemanticF1.",
       impact:
-        "Demonstrated advanced prompt optimization techniques for domain-specific NLP tasks, established new approach to perspective-aware content generation in healthcare, advanced state-of-the-art in medical text summarization with automated optimization, and provided cost-effective solution reducing need for extensive model fine-tuning.",
+        "A practical comparison of programmatic prompt optimization vs parameter-efficient fine-tuning for domain summarization — useful when fine-tuning compute is constrained.",
       architecture:
-        "Dual pipeline architecture combining traditional fine-tuning and DSPy programmatic optimization. DSPy MIPROv2 for automatic prompt optimization with Chain-of-Thought reasoning. Multi-objective loss function integrating perspective classification, start-phrase matching, and tone alignment. Comprehensive evaluation framework with ROUGE, BLEU, METEOR, BertScore, and custom SemanticF1 metrics. BERTopic integration for seed-topic guided content modeling. PEFT (Prefix Tuning) for parameter-efficient model adaptation. Modular system with data preprocessing, topic modeling, and generation components.",
+        "Dual pipeline (DSPy MIPROv2 + PEFT Prefix Tuning). Multi-objective loss combining perspective classification, start-phrase matching, and tone alignment. Multi-metric evaluation harness (ROUGE, BLEU, METEOR, BertScore, custom SemanticF1) so both variants compare on the same held-out set. BERTopic for seed-topic content modeling. Weights & Biases for run tracking and side-by-side comparison.",
     },
     technologies: [
       "DSPy",
@@ -257,21 +271,22 @@ export const PROJECTS: Project[] = [
       "BertScore",
       "NLTK",
       "Sentence Transformers",
+      "Weights & Biases",
     ],
     featured: true,
     modalPreview: {
-      hook: "Automatic prompt optimization using DSPy MIPROv2 for healthcare NLP",
+      hook: "DSPy MIPROv2 prompt optimization vs PEFT fine-tuning on perspective-aware healthcare summarization",
       problemTeaser:
-        "Advanced perspective-aware summarization using automatic prompt optimization for medical Q&A content.",
+        "Head-to-head comparison of programmatic prompt optimization and parameter-efficient fine-tuning on a five-perspective medical Q&A task.",
       heroMetric: {
-        label: "Prompt Optimization",
-        value: "MIPROv2",
+        label: "Optimization",
+        value: "DSPy MIPROv2",
       },
     },
     metrics: [
-      { label: "Optimization", value: "MIPROv2" },
-      { label: "Perspectives", value: "5 Types" },
-      { label: "Metrics", value: "Multi-Faceted" },
+      { label: "Optimization", value: "MIPROv2 vs PEFT" },
+      { label: "Fine-tuning", value: "PEFT Prefix Tuning" },
+      { label: "Eval Harness", value: "5-metric (ROUGE/BLEU/METEOR/BertScore/SemanticF1)" },
     ],
   },
   {
@@ -280,16 +295,16 @@ export const PROJECTS: Project[] = [
     github_url: "https://github.com/Spidey13",
     star: {
       situation:
-        "Understanding emotional congruence between music and lyrics is a complex multimodal AI challenge. Traditional approaches fail to quantify how well emotional content in audio aligns with emotional content in text, lacking sophisticated cross-modal embedding techniques.",
-      task: "Develop a multimodal AI system to quantify emotional alignment between music and lyrics using joint audio-language embeddings, implement cross-modal similarity measurement, and achieve measurable emotion alignment percentages using advanced embedding techniques.",
+        "Quantifying emotional congruence between music audio and lyrics requires aligning representations from two different modalities.",
+      task: "Build a pipeline that produces a comparable embedding for music and for lyrics, then measure cross-modal similarity over a fixed segment set.",
       action:
-        "I developed a sophisticated multimodal AI system using OpenL3 for music-specific audio embeddings and Sentence Transformers for text embeddings. Created a joint embedding space using PCA to align audio and text representations, enabling cosine similarity computation between modalities. Implemented comprehensive pipeline including audio segmentation, lyrics extraction via Genius API, preprocessing, and emotion classification using transformer models. Processed 712 audio segments with corresponding lyrics, achieving 63.10% emotional alignment between audio and text modalities. Integrated multiple APIs (ACRCloud, AudD, Genius) for robust data collection and implemented clustering techniques to identify emotional patterns.",
+        "Used OpenL3 for music-specific audio embeddings and Sentence Transformers for lyric embeddings. Projected both into a shared space via PCA and computed cosine similarity. Built the data pipeline end-to-end: audio segmentation, lyric retrieval via Genius API, ACRCloud/AudD for track identification, preprocessing, and emotion classification with transformer models. Ran the analysis over 712 segment-lyric pairs.",
       result:
-        "Successfully quantified emotional alignment between music and lyrics with 63.10% alignment rate, created joint embedding space enabling cross-modal similarity measurement, processed 712 audio segments with corresponding lyrics, and demonstrated measurable emotional correspondence between audio and text modalities.",
+        "Across 712 audio-lyric segment pairs, mean cosine similarity in the shared PCA space was ~63%. Working cross-modal pipeline with multi-API data collection and clustering for pattern inspection.",
       impact:
-        "Demonstrated cutting-edge multimodal AI techniques for cross-modal emotion recognition, advanced state-of-the-art in music information retrieval with quantifiable emotional alignment metrics, provided framework for emotion-aware music applications, and showcased advanced embedding alignment techniques across different modalities.",
+        "An end-to-end exploration of joint audio-text embeddings for emotion analysis. Surfaced where audio and lyric emotional signals agree and where they diverge.",
       architecture:
-        "Multimodal architecture combining OpenL3 for music-specific audio embeddings and Sentence Transformers for text embeddings. PCA-based dimensionality reduction to create joint embedding space for cross-modal comparison. Comprehensive pipeline with audio segmentation, lyrics extraction via Genius API, preprocessing, and emotion classification. Cosine similarity computation for measuring emotional alignment between modalities. Multiple API integration (ACRCloud, AudD, Genius) for robust data collection. Clustering techniques for identifying emotional patterns. Cross-modal validation framework comparing audio-based and text-based emotion classifications.",
+        "OpenL3 audio embeddings + Sentence Transformers text embeddings projected into a shared PCA space. Cosine similarity for cross-modal comparison. Pipeline: audio segmentation, Genius API lyric retrieval, ACRCloud/AudD for track ID, transformer emotion classification, clustering for pattern analysis.",
     },
     technologies: [
       "OpenL3",
@@ -299,7 +314,6 @@ export const PROJECTS: Project[] = [
       "Librosa",
       "NumPy",
       "Pandas",
-      "Multimodal AI",
       "Python",
       "ACRCloud API",
       "Genius API",
@@ -307,17 +321,17 @@ export const PROJECTS: Project[] = [
     ],
     featured: true,
     modalPreview: {
-      hook: "Quantified emotional alignment between music and lyrics at 63.10% accuracy",
+      hook: "Joint audio-lyric embeddings for cross-modal emotion analysis across 712 segments",
       problemTeaser:
-        "Advanced multimodal AI system measuring emotional congruence between audio and text using joint embedding spaces.",
+        "OpenL3 audio embeddings + Sentence Transformers lyric embeddings projected into a shared PCA space, with cosine similarity measured over a fixed segment set.",
       heroMetric: {
-        label: "Emotion Alignment",
-        value: "63.10%",
+        label: "Mean Cosine Similarity",
+        value: "~63%",
       },
     },
     metrics: [
-      { label: "Alignment Rate", value: "63.10%" },
-      { label: "Segments", value: "712+" },
+      { label: "Mean Cosine Similarity", value: "~63%" },
+      { label: "Segments", value: "712 pairs" },
       { label: "Modalities", value: "Audio + Text" },
     ],
   },
@@ -327,16 +341,16 @@ export const PROJECTS: Project[] = [
     github_url: "https://github.com/YASHY2K/scientific-discovery-agent",
     star: {
       situation:
-        "Literature reviews traditionally take researchers months to complete for complex academic queries spanning multiple research domains. Manual review processes are time-consuming, inconsistent, and struggle with interdisciplinary synthesis.",
-      task: "Collaborative project (co-developed with a teammate). Led full-stack development of an autonomous research tool that accelerates literature reviews to within minutes, designed hierarchical agent orchestration with specialized roles for different research phases, and implemented a comprehensive transparency system for real-time visibility into agent workflows.",
+        "Cross-domain literature reviews take researchers weeks of manual searching and synthesis, with inconsistent coverage and citation quality.",
+      task: "Co-developed with a teammate. Build a multi-agent system that searches across academic sources, analyzes papers, critiques its own output, and produces a structured report with verified citations.",
       action:
-        "I led development of an autonomous research tool using AWS Strands Agents and Amazon Bedrock, completing comprehensive literature reviews within minutes instead of months. Designed hierarchical multi-agent architecture with five specialist agents (Research Planner, Paper Searcher, Paper Analyzer, Research Critique, Report Generator) managing the complete five-phase workflow (Planning → Search → Analysis → Critique → Reporting). Implemented 'Glass Box' transparency system providing real-time visibility into agent decision chains with live activity streams, and integrated multi-database search capabilities across arXiv and Semantic Scholar. Deployed Research Critique Agent to validate accuracy and eliminate hallucinations in final reports.",
+        "Co-developed an autonomous research assistant on AWS Strands Agents and Amazon Bedrock. Designed a hierarchical five-agent architecture (Research Planner, Paper Searcher, Paper Analyzer, Research Critique, Report Generator) and a five-phase workflow (Planning → Search → Analysis → Critique → Reporting). The Critique agent acts as an automated eval layer over the Analyzer's output — checking citation grounding and flagging unsupported claims, equivalent to a custom RAGAS-style faithfulness check before report generation. Exposed arXiv and Semantic Scholar integrations as MCP servers so the Paper Searcher consumes them through a uniform tool interface, decoupling source-specific auth and rate-limiting from agent logic. Traced every agent run with LangSmith to inspect tool-call sequences, token usage, and failure modes — used those traces to tune the Critique agent's threshold for flagging unsupported claims. Built a 'Glass Box' Streamlit dashboard streaming each agent's decisions in real time.",
       result:
-        "Eliminated hallucinations in research reports through automated validation, achieved 100% coverage of relevant research papers, accelerated literature reviews from months to minutes, successfully processed interdisciplinary queries requiring cross-domain synthesis, and achieved full transparency with real-time workflow visibility.",
+        "Working multi-agent pipeline that produces structured literature reviews in minutes, with a critique pass that flags and removes unverifiable citations before final report generation.",
       impact:
-        "Transformed research workflows by eliminating months of manual literature review, enabled researchers to focus on analysis rather than data gathering, demonstrated successful hierarchical multi-agent orchestration for complex knowledge synthesis tasks, and provided unprecedented transparency into AI research processes.",
+        "Demonstrated hierarchical agent orchestration with a self-critique loop for citation grounding — a pattern that translates directly to other knowledge-synthesis workflows where source verification matters.",
       architecture:
-        "Hierarchical multi-agent system built on AWS Strands Agents and Amazon Bedrock with five specialist agents: Research Planner, Paper Searcher, Paper Analyzer, Research Critique, and Report Generator. Five-phase workflow orchestration (Planning → Search → Analysis → Critique → Reporting) with self-critique and refinement capabilities. 'Glass Box' transparency system with real-time activity streams and phase tracking. Multi-database integration with arXiv and Semantic Scholar. Professional report generation with executive summaries, methodology reviews, comparative analysis, and academic citations. Streamlit dashboard for real-time monitoring with comprehensive logging and performance tracking.",
+        "Hierarchical multi-agent system on AWS Strands Agents + Amazon Bedrock. Five specialist agents (Planner, Searcher, Analyzer, Critique, Reporter) over a five-phase workflow with a self-critique step. Source integrations (arXiv, Semantic Scholar) wrapped as MCP servers for uniform tool access. LangSmith for run traces and eval. Pydantic schemas for inter-agent message contracts. Pytest for the eval harness. Streamlit dashboard with real-time activity streams and phase tracking. Containerized dashboard with Docker.",
     },
     technologies: [
       "AWS Strands Agents",
@@ -344,23 +358,29 @@ export const PROJECTS: Project[] = [
       "Python",
       "Streamlit",
       "Multi-Agent Systems",
+      "MCP",
+      "LangSmith",
+      "Pydantic",
+      "Pytest",
+      "Docker",
+      "LLM Evaluation",
       "arXiv API",
       "Semantic Scholar API",
     ],
     featured: true,
     modalPreview: {
-      hook: "Autonomous AI agent eliminates hallucinations while completing literature reviews in minutes",
+      hook: "Five-agent literature review pipeline with a self-critique loop that flags unverifiable citations",
       problemTeaser:
-        "Imagine 5 specialized AI agents collaborating autonomously to conduct literature reviews. See how this breakthrough system revolutionizes academic research.",
+        "Planner → Searcher → Analyzer → Critique → Reporter, on AWS Strands + Bedrock. The critique pass re-validates sources before the final report is generated.",
       heroMetric: {
-        label: "Accuracy Validation",
-        value: "Glass Box Transparency",
+        label: "Specialist Agents",
+        value: "5",
       },
     },
     metrics: [
-      { label: "Research Coverage", value: "100%" },
-      { label: "Review Speed", value: "Minutes" },
       { label: "Specialist Agents", value: "5" },
+      { label: "Sources", value: "arXiv + Semantic Scholar (via MCP)" },
+      { label: "Self-Critique", value: "Citation Validation Loop" },
     ],
   },
   {
@@ -372,15 +392,15 @@ export const PROJECTS: Project[] = [
     star: {
       situation:
         "HVAC field technicians diagnosing rooftop unit faults rely on dense PDF service manuals that require slow page-by-page lookup. Existing support tools lack multimodal input for photo-based fault identification, interactive diagnostic workflows that branch based on technician responses, and real-time streaming — forcing constant context-switching between manuals and equipment.",
-      task: "Build a production-ready AI support agent using Anthropic's native tool_use loop directly (no LangChain or orchestration frameworks), implement branching diagnostic job cards grounded in the actual service manual, generate interactive HTML artifacts for wiring diagrams and settings configurators, enable multimodal image input for visual fault recognition, and deploy with zero cold-start latency on GCP Cloud Run.",
+      task: "Build a support agent using Anthropic's native tool_use loop directly (no LangChain or orchestration frameworks), implement branching diagnostic job cards grounded in the actual service manual, generate interactive HTML artifacts for wiring diagrams and settings configurators, enable multimodal image input for visual fault recognition, and deploy with zero cold-start latency on GCP Cloud Run.",
       action:
-        "I built Diagnostiq directly on Claude's tool_use mechanism with a 4-tool architecture: search_knowledge (ChromaDB vector retrieval), get_manual_image (manual page PNG with bbox highlights), render_artifact (Sonnet-generated self-contained HTML in sandboxed iframe), and generate_job_card (Sonnet-validated JSON branching diagnostic workflow). Implemented a dual-embedding RAG pipeline — Gemini 2.5 Flash vision for per-page structured extraction at ingest with Vertex text-embedding-004 (768-dim), then local sentence-transformers all-MiniLM-L6-v2 (384-dim) for serving — eliminating GCP credential requirements at runtime. FastAPI backend streams responses via SSE with the synchronous tool loop running in a thread pool. Haiku drives the agent loop; Sonnet generates validated HTML artifacts and structured JSON job cards. React 19 frontend features a two-panel chat and artifact viewer, pinnable artifacts that persist across follow-up messages, swipe-gesture job card UI with keyboard Y/N navigation, and full accessibility. Baked HuggingFace embedding model weights into the Docker image layer to eliminate cold-start ML download.",
+        "Built Diagnostiq directly on Claude's tool_use mechanism with a 4-tool architecture: search_knowledge (ChromaDB vector retrieval), get_manual_image (manual page PNG with bbox highlights), render_artifact (Sonnet-generated self-contained HTML in sandboxed iframe), and generate_job_card (Sonnet-validated JSON branching diagnostic workflow). Implemented a dual-embedding RAG pipeline — Gemini 2.5 Flash vision for per-page structured extraction at ingest with Vertex text-embedding-004 (768-dim), then local sentence-transformers all-MiniLM-L6-v2 (384-dim) for serving — eliminating GCP credential requirements at runtime. Enabled Anthropic prompt caching on the system prompt and tool schemas, cutting per-turn token cost by ~75% on cache hits since the manual-grounded system prompt is large and stable. Used structured outputs / JSON mode for the branching job-card generation so the schema is enforced at the model layer rather than re-validated. FastAPI backend streams responses via SSE with the synchronous tool loop running in a thread pool. Haiku drives the agent loop; Sonnet generates validated HTML artifacts and structured JSON job cards. React 19 frontend features a two-panel chat and artifact viewer, pinnable artifacts that persist across follow-up messages, swipe-gesture job card UI with keyboard Y/N navigation, and full accessibility. Baked HuggingFace embedding model weights into the Docker image layer to eliminate cold-start ML download.",
       result:
-        "Delivered a production-ready AI support agent with real-time SSE streaming, interactive branching diagnostic workflows backed by actual manual citations, multimodal image input, and zero-dependency serving requiring only ANTHROPIC_API_KEY. Scored 96/100 on Web Interface Guidelines accessibility audit. Eliminated cold-start ML download latency by baking 80 MB embedding model into the Docker image layer. Deployed on GCP Cloud Run with automatic scale-to-zero for cost efficiency.",
+        "Working AI support agent with real-time SSE streaming, branching diagnostic workflows grounded in actual manual citations, and multimodal image input. Scored 96/100 on the Web Interface Guidelines accessibility audit. Eliminated cold-start ML download by baking the 80 MB embedding model into the Docker image layer. Deployed on GCP Cloud Run with scale-to-zero. Per-turn cost reduced ~75% on cache hits via Anthropic prompt caching.",
       impact:
-        "Transformed HVAC fault diagnosis from manual PDF lookup to AI-guided branching workflows with live manual citations, demonstrated framework-free agentic architecture built directly on Claude's tool_use without LangChain or AutoGen, established a dual-embedding pattern for cost-effective RAG deployment separating ingestion-time accuracy from serving-time portability, and proved that production-grade accessibility and UX are achievable in agent-native applications.",
+        "Showed that a production-shape agent can be built directly on Claude's tool_use loop without LangChain or AutoGen, and that a dual-embedding pattern (richer model at ingest, lightweight model at serve) decouples accuracy from runtime credential requirements.",
       architecture:
-        "FastAPI backend with SSE streaming via sse-starlette. SupportAgent class running synchronous Anthropic tool_use loop in thread pool executor — Haiku for tool routing, Sonnet for HTML artifact generation and job card JSON. 4-tool schema: search_knowledge (ChromaDB cosine similarity with chunk-type boosting), get_manual_image (PNG pages with annotation bbox overlay), render_artifact (three-stage HTML fallback with validation), generate_job_card (validated branching JSON with source_citation enforcement). Dual-embedding pipeline: Gemini 2.5 Flash vision structured per-page extraction, Vertex text-embedding-004 at ingest (768-dim), all-MiniLM-L6-v2 at serve (384-dim). Exact-match SemanticCache for fault button queries. Thread-safe SessionStore for conversation history. React 19 + Vite frontend with useChat SSE consumer, useJobCard branching state machine, ArtifactPanel iframe sandbox, pinnable artifact persistence. Multi-stage Dockerfile with HF_HOME baked into image layer. GCP Cloud Run with 2 GiB RAM, Secret Manager for API key.",
+        "FastAPI backend with SSE streaming via sse-starlette and auto-generated OpenAPI docs. SupportAgent class running synchronous Anthropic tool_use loop in thread pool executor — Haiku for tool routing, Sonnet for HTML artifact generation and job card JSON. 4-tool schema: search_knowledge (ChromaDB cosine similarity with chunk-type boosting), get_manual_image (PNG pages with annotation bbox overlay), render_artifact (three-stage HTML fallback with validation), generate_job_card (validated branching JSON with source_citation enforcement). Dual-embedding pipeline: Gemini 2.5 Flash vision structured per-page extraction, Vertex text-embedding-004 at ingest (768-dim), all-MiniLM-L6-v2 at serve (384-dim). Anthropic prompt caching on system prompt + tool schemas. Structured outputs / JSON mode for job-card generation. Exact-match SemanticCache for fault button queries. Thread-safe SessionStore for conversation history. React 19 + Vite frontend with useChat SSE consumer, useJobCard branching state machine, ArtifactPanel iframe sandbox, pinnable artifact persistence. Pydantic for tool-call schemas, job-card JSON contract, and SSE event payloads. Pytest for the agent loop and tool integration tests. Multi-stage Dockerfile with HF_HOME baked into image layer. GitHub Actions building the multi-stage image and deploying to Cloud Run on main. GCP Cloud Run with 2 GiB RAM, Secret Manager for API key.",
     },
     technologies: [
       "Python",
@@ -392,13 +412,18 @@ export const PROJECTS: Project[] = [
       "Vite",
       "SSE",
       "Google Gemini",
-      "Docker",
-      "GCP Cloud Run",
       "Pydantic",
+      "Prompt Caching",
+      "Structured Outputs",
+      "OpenAPI",
+      "Pytest",
+      "Docker",
+      "GitHub Actions",
+      "GCP Cloud Run",
     ],
     featured: true,
     modalPreview: {
-      hook: "Framework-free AI support agent with branching diagnostic job cards and interactive artifacts",
+      hook: "Framework-free AI support agent on Claude tool_use with branching diagnostic job cards",
       problemTeaser:
         "Built directly on Claude's tool_use — no LangChain, no AutoGen. Fault descriptions become branching diagnostic workflows grounded in the actual service manual.",
       heroMetric: {
@@ -407,9 +432,9 @@ export const PROJECTS: Project[] = [
       },
     },
     metrics: [
-      { label: "Agent Tools", value: "4 Specialized" },
       { label: "Accessibility", value: "96/100" },
-      { label: "Cold Start", value: "Zero DL" },
+      { label: "Prompt Cache Savings", value: "~75% per-turn" },
+      { label: "Cold Start", value: "Zero ML Download" },
     ],
   },
 ];
