@@ -66,20 +66,20 @@ export const EXPERIENCE: Experience[] = [
     id: 1,
     role: "Applied AI Engineer",
     company: "Indiana University",
-    duration: "May 2024 to Present",
+    duration: "May 2024 to Jun 2026",
     location: "Bloomington, IN",
     star: {
       situation:
-        "Indiana University's digital humanities research team faced a critical bottleneck: analyzing 550+ academic publications for diversity trends required 3+ weeks of manual review per batch. The manual process was error-prone, delaying publication timelines, and lacked the reproducibility guarantees required for rigorous peer review.",
-      task: "Build an AI-powered research analysis platform to automate literature review workflows, verify source reliability, extract diversity themes, and provide interactive visualizations—all while meeting strict academic reproducibility standards.",
+        "Indiana University's research team faced two interconnected challenges: the manual literature review process took 3+ weeks per batch and lacked a reusable retrieval tool, while a parallel diversity study across 550+ academic publications needed a reproducible computational pipeline for peer-reviewed publication.",
+      task: "Build a reusable Agentic RAG platform to automate literature retrieval with high accuracy, and separately develop the text-mining pipeline to analyze diversity trends across 550+ publications for a peer-reviewed study.",
       action:
-        "Architected an enterprise-grade Agentic RAG platform using Python and Pinecone vector databases with semantic routing, automating academic literature workflows across 550+ peer-reviewed publications and reducing manual review cycles by 95% (3 weeks → 4 hours). Engineered asynchronous backend microservices and RESTful APIs with FastAPI and Docker, aggregating spaCy-filtered corpora and NMF topic models to serve processed datasets reliably across multiple university departments. Deployed full-stack Plotly/Dash dashboards for system observability, integrating MLflow tracking for 100% computational reproducibility — the system's 98% retrieval accuracy was independently validated through peer review and published in The Design Journal.",
+        "Built an Agentic RAG platform using Python and Pinecone vector databases, automating literature retrieval across 550+ academic publications. Built the retriever as a hybrid stack (BM25 lexical + Pinecone semantic + metadata filters on publication year and venue) since pure-semantic retrieval over academic abstracts was missing exact-name and acronym matches. Traced runs with LangSmith and used the traces to drive iterative improvements to the routing rules. Validated retrieval quality against a faculty-curated relevance set used as a regression suite. Separately, developed the computational text-mining pipeline for the diversity study — engineering spaCy-based NLP preprocessing, NMF topic modeling, and statistical analysis across 550+ peer-reviewed publications. Engineered asynchronous backend microservices and RESTful APIs with FastAPI and Docker to serve processed datasets across university departments. Deployed Plotly/Dash dashboards for interactive trend visualization and integrated MLflow experiment tracking to ensure full computational reproducibility for the published study.",
       result:
-        "Reduced literature review time by 95% (3 weeks → 4 hours), processed 550+ academic publications with 98% retrieval accuracy, powered source-first diversity trend analysis, and delivered reproducible research outcomes published in a peer-reviewed journal.",
+        "Agentic RAG platform processing 550+ publications with hybrid BM25 + semantic retrieval, validated against a faculty-curated relevance set. The diversity analysis pipeline findings were independently validated through peer review and published in The Design Journal.",
       impact:
-        "Transformed the university's research infrastructure, enabling the team to meet critical publication deadlines and produce peer-reviewed findings in The Design Journal. The Agentic RAG platform demonstrated that LLM-based automation can meet rigorous academic reproducibility standards at scale.",
+        "The RAG platform became a reusable research tool for the department. The diversity study was published in The Design Journal, demonstrating that LLM-augmented workflows can meet peer-review reproducibility standards.",
       architecture:
-        "Agentic RAG platform built on Python with Pinecone vector databases for semantic search and routing. FastAPI async microservices aggregating spaCy-filtered, NMF-modeled corpora across university departments. Docker containerization for reproducible deployments. Plotly/Dash frontend for real-time semantic dashboards and trend visualization. MLflow experiment tracking for full computational reproducibility. Multi-stage LLM pipeline for automated literature synthesis.",
+        "RAG platform: Python with Pinecone vector databases for semantic search and routing, FastAPI async microservices, Docker containerization. Diversity study pipeline: spaCy NLP preprocessing, NMF topic modeling, statistical analysis across 550+ publications. Shared infrastructure: Plotly/Dash dashboards for visualization, MLflow for experiment tracking and reproducibility. Hybrid BM25 + Pinecone retrieval with metadata filtering. LangSmith for run traces. Pydantic models for the document, chunk, and citation contracts. Pytest with a faculty-curated evaluation set as the regression suite. OpenAPI auto-published from FastAPI for cross-team integration.",
     },
     technologies: [
       "Python",
@@ -93,9 +93,14 @@ export const EXPERIENCE: Experience[] = [
       "LLMs",
       "Plotly / Dash",
       "Statistical Modeling",
+      "LangSmith",
+      "BM25",
+      "Pydantic",
+      "Pytest",
+      "OpenAPI",
     ],
     competencies: [
-      "Research & Innovation: Academic Research, Novel Pipeline Architecture, Reproducible Research Methods",
+      "Research & Engineering: Academic Research, RAG Pipeline Architecture, Reproducible Research Methods",
       "Technical Execution: End-to-End ML System Design, Interactive Data Visualization",
       "Problem Solving: Complex Data Analysis, Algorithm Optimization",
     ],
@@ -106,22 +111,22 @@ export const EXPERIENCE: Experience[] = [
     ],
     metrics: {
       usersScaled: "550+ Publications",
-      systemUptime: "100% Reproducibility",
-      costReduction: "95% Time Saved",
-      performanceImprovement: "98% Retrieval Accuracy",
+      systemUptime: "Peer-Reviewed (The Design Journal)",
+      costReduction: "Hybrid BM25 + Semantic Retrieval",
+      performanceImprovement: "Faculty-Curated Eval Set",
     },
     tag: {
-      text: "Current",
+      text: "Most Recent",
       icon: "workspace_premium",
       color: "bg-purple-600",
     },
     teamStructure: {
       role: "Applied AI Engineer",
-      size: "3 Researchers",
+      size: "Research Team",
       description:
-        "Led technical AI pipeline development, collaborating with a team of 3 digital humanities researchers on diversity and inclusion analysis.",
+        "Led technical AI pipeline development, collaborating with digital humanities researchers on diversity and inclusion analysis.",
       collaboration:
-        "Direct collaboration with faculty members to define methodology and ensure academic rigor. Regular syncs with research ethics board.",
+        "Direct collaboration with faculty to define methodology and ensure academic rigor.",
     },
     companyInfo: {
       fundingStage: "Academic Research",
@@ -145,11 +150,11 @@ export const EXPERIENCE: Experience[] = [
     star: {
       situation:
         "Dimensionless Technologies needed to scale their ML capabilities on two fronts: operationalizing a high-frequency stock prediction model for real-time inference, and scaling their enterprise document processing workflows which were bottlenecked at 50 documents/month due to manual effort.",
-      task: "Deploy a production-ready MLOps pipeline on AWS for the stock prediction model with sub-100ms latency, and concurrently engineer a high-throughput ETL pipeline on Azure to process 10,000+ documents monthly while reducing overall cloud infrastructure costs.",
+      task: "Deploy a production-ready MLOps pipeline on AWS for the stock prediction model with sub-100ms latency, and concurrently engineer a high-throughput ETL pipeline on Azure capable of processing 10,000+ documents monthly.",
       action:
-        "I operationalized the high-frequency stock prediction model by architecting an end-to-end MLOps pipeline on AWS SageMaker, optimizing serialization for sub-100ms real-time inference. Simultaneously, I engineered PropelPro — a serverless Azure Functions ETL pipeline integrating Tesseract OCR and BERT-based NLP models to automate 90% of manual data entry for enterprise tender documents, scaling capacity from 50 to 10,000+ documents monthly. To manage scale, I right-sized compute resources and implemented spot instance strategies, cutting cloud infrastructure costs by 20% ($15K+ annually).",
+        "I operationalized the high-frequency stock prediction model by architecting an end-to-end MLOps pipeline on AWS SageMaker, optimizing serialization for sub-100ms real-time inference. Simultaneously, I engineered PropelPro — a serverless Azure Functions ETL pipeline integrating Tesseract OCR and BERT-based NLP models to automate 90% of manual data entry for enterprise tender documents, handling 10,000+ documents monthly. To manage scale, I right-sized compute resources and implemented spot instance strategies to keep inference costs proportional to load.",
       result:
-        "Achieved sub-100ms inference latency on the production stock model, scaled document processing capacity from 50 to 10,000+ documents monthly (200x increase), and reduced overall infrastructure costs by 20% ($15K+ annually).",
+        "Achieved sub-100ms inference latency on the production stock model and delivered a document processing pipeline handling 10,000+ documents monthly.",
       impact:
         "Enabled Dimensionless to scale operations without proportional hiring, directly contributing to 3 new enterprise client acquisitions. Demonstrated that complex AI workflows (both time-series financial models and NLP pipelines) could be deployed cost-effectively.",
       architecture:
@@ -176,9 +181,9 @@ export const EXPERIENCE: Experience[] = [
     ],
     metrics: {
       usersScaled: "10,000+ Docs/Month",
-      systemUptime: "99.9% API Uptime",
-      costReduction: "20% Cloud Cost Savings",
-      performanceImprovement: "<100ms Inference Latency",
+      systemUptime: "Sub-100ms Inference",
+      costReduction: "Serverless Auto-Scaling",
+      performanceImprovement: "90% Data Entry Automated",
     },
     tag: {
       text: "High Growth",
@@ -207,21 +212,22 @@ export const EXPERIENCE: Experience[] = [
     location: "Mumbai, India",
     star: {
       situation:
-        "Benchmark's enterprise recruitment platform was struggling with scale and accuracy. Their resume parsing API was handling thousands of concurrent requests but suffered from frequent timeouts (500ms+ latency). Furthermore, the core candidate extraction model was underperforming at a 78% F1-score, leading to poor candidate matching and threatening key enterprise contracts.",
-      task: "Architect a high-throughput, containerized REST API capable of serving 10,000+ daily requests with 99.9% uptime, reduce response latency by 40%, and boost the NER (Named Entity Recognition) model accuracy to ensure reliable automated candidate screening.",
+        "Benchmark's enterprise recruitment platform was struggling with reliability and extraction quality. The resume parsing API suffered from frequent timeouts at 500ms+ P99 latency under load, and the core candidate extraction model was underperforming at 78% F1-score, leading to poor candidate matching.",
+      task: "Rebuild the API backend for high throughput and reliability, reduce response latency, and improve the NER model accuracy for automated candidate screening.",
       action:
-        "I rebuilt the backend architecture using FastAPI and Docker to handle high concurrency, implementing asyncio patterns and Redis caching to reduce P99 latency by 40% (500ms → 300ms). To fix the extraction accuracy, I fine-tuned a state-of-the-art Hugging Face Transformer model for NER and implemented an active learning pipeline using uncertainty sampling to continuously improve the model while reducing manual labeling efforts by 40%.",
+        "I rebuilt the backend architecture using FastAPI and Docker to handle high concurrency, implementing asyncio patterns and Redis caching to cut P99 from 500ms to 300ms. Added targeted PostgreSQL indexes on search-heavy queries for consistent latency under concurrent load. Fine-tuned a Hugging Face Transformer model for NER and built an active-learning loop with uncertainty sampling, lifting F1 from 78% to 91% on held-out test data.",
       result:
-        "Successfully deployed the production API handling 10,000+ daily requests with 99.9% uptime. Improved the candidate matching F1-score from 78% to 91%, and reduced annotation costs by 40%.",
+        "Improved candidate extraction F1-score from 78% to 91% on held-out test data. Deployed the production API with P99 latency cut from 500ms to 300ms via Redis caching and async FastAPI.",
       impact:
-        "Stabilized the core enterprise product, eliminating downtime complaints and securing over $500K in at-risk enterprise contracts. The improved extraction accuracy reduced time-to-placement by 33%, significantly boosting client satisfaction.",
+        "Stabilized the recruitment platform's core API, eliminating timeout-related complaints and improving candidate match quality — enabling the product team to reliably serve enterprise clients at scale.",
       architecture:
-        "Built a scalable microservices architecture using FastAPI for high-performance async request handling. Docker containerization ensured reproducible deployments. The NLP pipeline combined fine-tuned Transformer models (Hugging Face) with an active learning loop using uncertainty sampling to maximize labeling efficiency. Used PostgreSQL with optimized indexing strategies.",
+        "Microservices architecture using FastAPI for async request handling with Redis caching layer. Docker containerization for reproducible deployments. NLP pipeline with fine-tuned Transformer models (Hugging Face) and active learning loop using uncertainty sampling. PostgreSQL with optimized composite indexing.",
     },
     technologies: [
       "Python",
       "FastAPI",
       "Docker",
+      "Redis",
       "Transformers (Hugging Face)",
       "Active Learning",
       "PostgreSQL",
@@ -238,10 +244,10 @@ export const EXPERIENCE: Experience[] = [
       "Delivery: Working under pressure to secure client contracts",
     ],
     metrics: {
-      usersScaled: "10,000+ Daily Requests",
-      systemUptime: "99.9% System Uptime",
-      costReduction: "40% Annotation Cost",
-      performanceImprovement: "+13% F1-Score",
+      usersScaled: "F1: 0.78 → 0.91",
+      systemUptime: "P99: 500ms → 300ms",
+      costReduction: "Active Learning Loop",
+      performanceImprovement: "Uncertainty Sampling",
     },
     tag: {
       text: "Early Career",

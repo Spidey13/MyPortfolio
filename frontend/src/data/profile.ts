@@ -29,13 +29,13 @@ export interface Education {
 export const PROFILE: Profile = {
   name: "Prathamesh Pravin More",
   title: "AI Engineer · Full Stack · RAG & Agentic Systems",
-  summary: "M.S. Data Science graduate specializing in productionizing end-to-end Generative AI and Agentic AI solutions. Proven experience architecting advanced RAG pipelines and deploying full-stack ML applications using Python, LangChain, and MLOps best practices.",
+  summary: "AI Engineer specializing in production agentic systems — custom agent loops with Pydantic-enforced tool schemas, advanced RAG pipelines, and the evaluation harnesses that prove they work. M.S. in Data Science from Indiana University, with peer-reviewed research published in The Design Journal and IEEE. Ships full-stack: Python/FastAPI and TypeScript/React, containerized and deployed on AWS, Azure, and GCP.",
   location: "Currently seeking full-time opportunities",
   email: "prpmore@gmail.com",
   highlights: [
     "Architected and operationalized end-to-end MLOps pipelines using Docker, MLflow, and DVC that slashed model retraining time by 10x.",
     "Engineered agentic AI workflows and advanced Retrieval-Augmented Generation (RAG) pipelines using LangChain and vector databases (Pinecone).",
-    "Delivered high-impact results, including a 70% improvement in information retrieval speed and a 98% F1-score in a production-level anomaly detection system.",
+    "Delivered high-impact results, including a 70% improvement in information retrieval speed and a 94% F1-score in a production-level anomaly detection system.",
     "Published research on novel algorithms and text-mining frameworks in outlets including IEEE and The Design Journal."
   ],
   links: [

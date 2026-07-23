@@ -242,7 +242,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
                     </div>
 
                     <p className="font-sans text-sm text-ink/70 leading-relaxed mb-4">
-                      Replaced 3 weeks of manual research with a 4-hour AI pipeline — processing 550+ publications with 98% accuracy. Results rigorous enough to get published.
+                      Replaced weeks of manual literature review with an Agentic RAG platform — hybrid BM25 + semantic retrieval across 550+ publications, rigorous enough to back a peer-reviewed publication.
                     </p>
 
                     <div className="flex items-center gap-2 text-ink/50 group-hover:text-editorial-red transition-colors text-xs font-mono uppercase tracking-wider">
@@ -292,7 +292,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
                     </div>
 
                     <p className="font-sans text-sm text-ink/70 leading-relaxed mb-4">
-                      Shipped PropelPro — scaled enterprise document processing 200× in 3 months. Also ran real-time stock prediction on AWS at sub-100ms, while cutting cloud costs by $15K/yr.
+                      Shipped PropelPro — enterprise document processing at 10,000+ docs/month on serverless Azure. Also ran real-time stock prediction on AWS SageMaker at sub-100ms.
                     </p>
 
                     <div className="flex items-center gap-2 text-ink/50 group-hover:text-editorial-red transition-colors text-xs font-mono uppercase tracking-wider">
@@ -342,7 +342,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
                     </div>
 
                     <p className="font-sans text-sm text-ink/70 leading-relaxed mb-4">
-                      Rebuilt a hiring platform's core API from scratch — 40% faster, 99.9% uptime, and a candidate matching model that jumped from 78% to 91% F1. Secured $500K in at-risk contracts.
+                      Rebuilt a hiring platform's core API — P99 latency cut from 500ms to 300ms, and a candidate matching model that jumped from 78% to 91% F1 via an active-learning loop.
                     </p>
 
                     <div className="flex items-center gap-2 text-ink/50 group-hover:text-editorial-red transition-colors text-xs font-mono uppercase tracking-wider">

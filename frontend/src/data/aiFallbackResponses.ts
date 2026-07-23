@@ -85,24 +85,24 @@ I'm passionate about building production-ready AI applications that solve real-w
   },
 
   projects: {
-    response: `Here are my featured projects that showcase my AI/ML expertise:
+    response: `Here are my featured projects that showcase my AI engineering expertise:
 
-🏎️ **F1 Race Strategy Simulator**
-• Built a Digital Twin using CatBoost/XGBoost on telemetry data
-• Complete MLOps pipeline with MLflow, Docker, FastAPI
-• Multi-agent simulation for optimal race strategies
+🎙️ **Codiey - Voice-First AI Coding Partner**
+• Real-time bidirectional voice over Gemini native audio at <200ms latency
+• Tree-sitter AST intelligence + personalized PageRank file ranking with a live D3 dependency graph
+• Two-tier tool system with Pydantic-enforced schemas keeping the audio loop safe during execution
 
-🔬 **Wafer Fault Detection System**
-• 94% F1-score anomaly detection on 200+ sensor features
-• Real-time monitoring with data drift detection
-• 10x faster model retraining through MLOps automation
+🔧 **Diagnostiq - AI Technical Support Agent**
+• Custom agentic loop on the Anthropic API with a 4-tool architecture and SSE streaming
+• Branching diagnostic job cards grounded in the actual HVAC service manual, with multimodal image input
+• Dual-embedding RAG pipeline, prompt caching, deployed on GCP Cloud Run
 
-🎵 **Audio-Lyric Emotional Alignment**
-• Agentic AI workflow using LangChain and RAG
-• Multimodal analysis with Sentence Transformers & OpenL3
-• 92% classification accuracy for emotion-aware music systems
+✅ **Queue Whisperer - Human-Approved GitHub Agent in Slack**
+• Grounded Q&A over a live GitHub issue queue, with citations to the issues it actually read
+• Zero model-initiated writes — every action requires a human Approve click in Slack
+• Citation-trace grounding eval regression-checks every prompt or model change
 
-Each project demonstrates end-to-end MLOps, from data engineering to production deployment.
+Also: an Autonomous Research Agent (5-agent literature review on AWS Bedrock with MCP servers), ReMind (memory-augmented RAG), an F1 race strategy simulator, and more — see the Work section for full case studies.
 
 *🔄 AI assistant is starting up to discuss specific technical details and answer deeper questions...*`,
     confidence: 'high' as const,
@@ -112,20 +112,20 @@ Each project demonstrates end-to-end MLOps, from data engineering to production 
   experience: {
     response: `My professional experience spans AI/ML engineering and full-stack development:
 
-🔬 **Applied AI Engineer - Indiana University** (May 2024 - Present)
-• Architected an Agentic RAG platform on Python + Pinecone, cutting literature review time by 95% (3 weeks → 4 hours) across 550+ publications
+🔬 **Applied AI Engineer - Indiana University** (May 2024 - Jun 2026)
+• Built an Agentic RAG platform on Python + Pinecone with hybrid BM25 + semantic retrieval across 550+ academic publications, validated against a faculty-curated relevance set
 • Engineered FastAPI/Docker async microservices + spaCy/NMF pipelines serving multiple university departments
-• Integrated MLflow for 100% reproducibility; 98% retrieval accuracy validated in peer-reviewed Design Journal publication
+• Developed the text-mining pipeline behind a peer-reviewed diversity study published in The Design Journal, with MLflow tracking for full computational reproducibility
 
-🤖 **Machine Learning Engineer - Dimensionless Technologies** (May 2023 - Jul 2023)
+🤖 **Machine Learning Engineer - Dimensionless Technologies** (Feb 2023 - Jul 2023)
 • Deployed AWS SageMaker MLOps pipeline for real-time stock prediction with sub-100ms inference latency
-• Built PropelPro — Azure Functions + Tesseract OCR pipeline scaling document processing from 50 to 10,000+/month
-• Reduced cloud infrastructure costs by 20% ($15K+ annually) via spot instance optimization
+• Built PropelPro — Azure Functions + Tesseract OCR + BERT pipeline handling 10,000+ enterprise documents/month
+• Right-sized compute with spot-instance strategies and CI/CD for automated retraining and deployment
 
 💻 **Full Stack Engineer - Benchmark Computer Solutions** (Jun 2022 - Dec 2022)
-• Rebuilt production API with FastAPI + Docker + Redis, reducing P99 latency by 40% (500ms → 300ms) at 10,000+ daily requests
+• Rebuilt production API with FastAPI + Docker + Redis, cutting P99 latency from 500ms to 300ms
 • Fine-tuned Hugging Face Transformer NER model, improving candidate matching F1-score from 78% to 91%
-• Implemented active learning loop cutting manual labeling costs by 40%
+• Built an active-learning loop with uncertainty sampling to continuously improve the model
 
 *⚡ AI co-pilot is warming up to provide deeper insights about my experience and how it relates to your needs...*`,
     confidence: 'high' as const,
@@ -136,19 +136,19 @@ Each project demonstrates end-to-end MLOps, from data engineering to production 
     response: `My technical skill set spans the full AI/ML and software development stack:
 
 🧠 **AI/ML & NLP:**
-Python, LangChain, RAG, Transformers, LLMs, PyTorch, TensorFlow, Scikit-learn, SpaCy, NLTK, XGBoost, CatBoost
+Python, RAG Pipelines, LLMs, Agentic Systems, Prompt Engineering, Hugging Face Transformers, PyTorch, Scikit-learn, XGBoost, CatBoost, spaCy, LangChain, Anthropic Claude, Google Gemini
 
 ☁️ **Cloud & MLOps:**
-AWS (S3, SageMaker, ECS), Azure, MLflow, DVC, Kubeflow, Docker, Kubernetes, CI/CD, FastAPI
+AWS (SageMaker, Lambda, Bedrock), Azure Functions, GCP Cloud Run, Docker, Kubernetes, CI/CD (GitHub Actions), MLflow, FastAPI
 
 🗄️ **Data & Databases:**
-SQL, MongoDB, PostgreSQL, MySQL, Firebase, Pinecone (Vector DB), Spark, Hadoop, Airflow
+SQL, PostgreSQL, MongoDB, Redis, Pinecone, ChromaDB, Pandas, Spark
 
 💻 **Development:**
-React, TypeScript, Node.js, Python, R, Java, C++, Scala
+TypeScript, JavaScript, React, Next.js, Node.js, Express, WebSockets, SSE, D3.js, Java, C++, R
 
 📊 **Visualization:**
-Plotly, Dash, Streamlit, Matplotlib, Seaborn, Power BI, Tableau
+Plotly, Dash, Streamlit, Matplotlib, Seaborn
 
 I'm particularly strong in building production-ready AI systems that bridge research and real-world applications.
 
@@ -160,7 +160,7 @@ I'm particularly strong in building production-ready AI systems that bridge rese
   contact: {
     response: `Let's connect! Here are the best ways to reach me:
 
-📧 **Email:** pramore@iu.edu
+📧 **Email:** prpmore@gmail.com
 
 🔗 **LinkedIn:** https://linkedin.com/in/more-prathamesh
 📱 **GitHub:** https://github.com/Spidey13
@@ -179,14 +179,14 @@ I'm always excited to discuss AI/ML opportunities, technical challenges, or pote
   publications: {
     response: `My research contributions in AI and data science:
 
-📄 **"Modular text-mining framework for DEI themes"**
+📄 **"An exploratory text-mining approach to analyzing DEI-related issues in eight leading architecture & design firms' publications"**
 • Published in The Design Journal (Taylor & Francis) - 2025
-• Novel framework for automated analysis of design publications
-• Achieved 93% Topic Coherence with LDA, NMF, and K-Means
+• Computational text-mining pipeline (spaCy, NMF topic modeling) across 550+ publications
+• Findings independently validated through peer review
 
-📄 **"Novel extractive summarization algorithm"**
-• Published in IEEE CONIT 2023
-• Advanced NLP techniques for automated text summarization
+📄 **"An algorithmic approach for text summarization"**
+• Published at IEEE ICONAT 2023
+• Extractive summarization algorithm for automated text analysis
 • Demonstrated improved efficiency in information extraction
 
 🎯 **Research Focus:**

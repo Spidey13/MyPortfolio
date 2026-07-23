@@ -25,7 +25,7 @@ export const ACTIVITIES: Activity[] = [
     category: "Deploy",
     title: "Diagnostiq - AI support agent",
     description:
-      "Launched an HVAC support agent built directly on Claude tool_use: branching diagnostic job cards grounded in the service manual, streaming over SSE on Cloud Run.",
+      "Launched an HVAC support agent built on a custom agentic loop over the Anthropic API: branching diagnostic job cards grounded in the service manual, streaming over SSE on Cloud Run.",
     type: "milestone",
   },
   {
