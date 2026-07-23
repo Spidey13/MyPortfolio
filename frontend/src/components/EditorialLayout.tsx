@@ -466,10 +466,10 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
 
           {/* Active Focus */}
           <ActiveFocusCard
-            title="Codiey - Voice AI"
-            description="Building a voice-first AI coding partner with real-time audio and codebase intelligence."
-            phase="Active Development"
-            progress={80}
+            title="Queue Whisperer - Slack × GitHub Agent"
+            description="A Slack agent over live GitHub issues — cited answers plus triage actions a human approves before anything is written. Hosted and installable."
+            phase="V1 Shipped — Hardening"
+            progress={90}
           />
         </aside>
       </main>

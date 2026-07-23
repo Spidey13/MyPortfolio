@@ -13,6 +13,30 @@ export interface Activity {
 
 export const ACTIVITIES: Activity[] = [
   {
+    time: "Jul 2026",
+    category: "Deploy",
+    title: "Queue Whisperer live on Slack",
+    description:
+      "Shipped a hosted multi-workspace Slack agent over live GitHub issues: grounded answers with citations, and label/reply actions gated behind human approval.",
+    type: "milestone",
+  },
+  {
+    time: "May 2026",
+    category: "Deploy",
+    title: "Diagnostiq - AI support agent",
+    description:
+      "Launched an HVAC support agent built directly on Claude tool_use: branching diagnostic job cards grounded in the service manual, streaming over SSE on Cloud Run.",
+    type: "milestone",
+  },
+  {
+    time: "Mar 2026",
+    category: "GitHub",
+    title: "Codiey - voice-first coding partner",
+    description:
+      "Built a voice-native AI pair programmer on Gemini native audio, with tree-sitter codebase intelligence and a live dependency-graph visualization.",
+    type: "milestone",
+  },
+  {
     time: "Dec 2025",
     category: "Research",
     title: "RAG and Forgetting Curve",

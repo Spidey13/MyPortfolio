@@ -52,6 +52,9 @@ narrative:
     - "Research-to-production bridge (2 peer-reviewed publications, IEEE + The Design Journal)"
   # Proof points — projects, articles, case studies with measurable impact
   proof_points:
+    - name: "Queue Whisperer - Human-Approved GitHub Agent in Slack"
+      url: "https://github.com/Spidey13/queue-whisperer"
+      hero_metric: "Hosted multi-workspace Slack agent over live GitHub issues — zero model-initiated writes (propose/approve/commit split), citation-trace grounding eval"
     - name: "Agentic RAG Platform (Indiana University)"
       url: "https://www.prathamesh-more.com/"
       hero_metric: "95% reduction in literature review time (3 weeks → 4 hours), 98% retrieval accuracy, published in The Design Journal"

@@ -70,6 +70,67 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
         initial="hidden"
         animate="visible"
       >
+        {/* QUEUE WHISPERER - Slack x GitHub Agent (4x1 banner, latest ship) */}
+        <motion.article
+          variants={itemVariants}
+          className="md:col-span-4 md:row-span-1 flex gap-6 items-center group cursor-pointer border border-[#E5E5E5] overflow-hidden relative"
+          style={{ background: "linear-gradient(135deg, #f7f4fb 0%, #fbfaf7 55%, #f1edf7 100%)" }}
+          onClick={() => handleCardClick(projects[8])}
+          onKeyDown={(e) => handleKeyDown(e, projects[8])}
+          tabIndex={0}
+          role="button"
+          aria-label={`View project: ${projects[8].title}`}
+          whileHover={{ y: -4, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        >
+          {/* Left accent bar — Slack aubergine */}
+          <div className="w-1 self-stretch bg-gradient-to-b from-[#4A154B] to-violet-500 group-hover:w-1.5 transition-[width] duration-300"></div>
+
+          {/* Content section */}
+          <div className="flex-1 py-6 pr-6">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="font-mono text-[10px] bg-black text-white px-2 py-1 uppercase tracking-wider">
+                New
+              </span>
+              <span className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">
+                Slack × GitHub Agent
+              </span>
+            </div>
+            <h3 className="font-serif text-xl font-bold mb-2 text-balance group-hover:text-[#4A154B] transition-colors">
+              Queue Whisperer
+            </h3>
+            <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+              {projects[8].modalPreview.problemTeaser}
+            </p>
+          </div>
+
+          {/* Metrics section */}
+          <div className="flex gap-8 pr-6 border-l border-violet-200/60 pl-6">
+            <div className="flex flex-col items-center">
+              <span className="font-mono text-3xl font-bold text-gray-900">0</span>
+              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                Model-Initiated<br/>Writes
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-mono text-3xl font-bold text-gray-900">100%</span>
+              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                Human-Approved<br/>Actions
+              </span>
+            </div>
+          </div>
+
+          {/* Hosted app badge */}
+          <div className="pr-4 flex flex-col items-center gap-2">
+            <span className="font-mono text-[9px] bg-violet-100 text-[#4A154B] border border-violet-200 px-2 py-1 uppercase tracking-wider">
+              Hosted App
+            </span>
+            <span className="material-symbols-outlined text-gray-300 group-hover:text-[#4A154B] transition-colors">
+              arrow_forward
+            </span>
+          </div>
+        </motion.article>
+
         {/* TOP STORY - Codiey Voice AI (2x2) - CUSTOM RESTORED HOVER */}
         <motion.div 
             className="md:col-span-2 md:row-span-2 relative group overflow-hidden cursor-pointer bg-white border border-[#E5E5E5]"

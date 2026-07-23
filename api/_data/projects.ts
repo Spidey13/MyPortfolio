@@ -437,4 +437,53 @@ export const PROJECTS: Project[] = [
       { label: "Cold Start", value: "Zero ML Download" },
     ],
   },
+  {
+    id: "p9",
+    title: "Queue Whisperer - Human-Approved GitHub Agent in Slack",
+    github_url: "https://github.com/Spidey13/queue-whisperer",
+    deployed_url:
+      "https://queue-whisperer-production.up.railway.app/slack/install",
+    star: {
+      situation:
+        "The real state of a product often sits in a noisy GitHub issue queue: what is newly urgent, what is recurring, and what has quietly stalled. Reading that state and making routine triage changes is manual work, and an AI agent only helps if it is grounded in the live queue and cannot make a public write on its own.",
+      task: "Build a Slack agent grounded in a live GitHub issue queue that answers questions with citations to the issues it actually read, and stages triage actions (labels, replies) that commit only after a human clicks Approve in Slack — with the write-safety boundary enforced structurally, not by prompt instructions.",
+      action:
+        "Built Queue Whisperer, a TypeScript service wrapping a bounded tool-calling agent (Vercel AI SDK) in a Slack Bolt app over the GitHub REST API. The model's toolset contains only read tools plus two propose tools that stage to an ActionStore; the GitHub write tools live in a separate module imported solely by the Slack approval-button handler, so a prompt injection in issue text can at worst stage a proposal a human still reviews. Implemented propose → approve → commit with compare-and-set state transitions (double-approve safe), label commits that fetch-and-merge existing labels, and credential re-resolution at approve time so a stale token fails cleanly. Bounded every turn with a five-tool-step budget and 90-second abort, plus a final no-tools grounded-or-decline pass so the bot honestly says when it can't answer instead of fabricating. Built a hosted multi-workspace mode: Slack OAuth installation, a GitHub App minting 60-minute installation tokens per workspace (never stored), HMAC-signed state binding each GitHub installation to its Slack team, an AES-256-GCM-encrypted PAT fallback, and Postgres holding only bot state so GitHub stays the sole source of truth. Escaped untrusted issue text before Slack rendering so <!channel>-style pings can't fire. Made the LLM layer provider-agnostic (Google AI Studio / Vertex / Anthropic via one env var), and wrote an agent:smoke grounding eval that runs the real agent loop against the live repo and fails any answer citing an issue that never appeared in that run's tool trace.",
+      result:
+        "Hosted, installable multi-workspace Slack app on Railway where zero GitHub writes are model-initiated — every write passes through a human Approve click and plain TypeScript. Answers cite the issues they read and decline honestly on thin data; a citation-trace eval regression-checks grounding on every prompt or model change. Trust boundaries and the five key design decisions documented as ADRs.",
+      impact:
+        "Demonstrates human-in-the-loop approval as a structural boundary — the model never receives a write tool — rather than a prompt rule: prompt-injection containment by architecture, grounded-or-decline over confident fabrication, and deliberate v1 scoping with seams (ActionStore, credential resolution, event log) that make production hardening additive rather than a rewrite.",
+      architecture:
+        "Single-process TypeScript service: Slack Bolt (Socket Mode) wrapping one bounded tool-calling agent turn (Vercel AI SDK) over the GitHub REST API. buildContext resolves a Slack team to { owner, repo, credential, mode, labels }; label vocabulary and date cutoffs are injected into the system prompt as schema-in-context while issue bodies, comments, and activity arrive only through live tool calls. Model-reachable tools: list/search/read issues and comments plus proposeLabel/proposeReply staging to an ActionStore with compare-and-set transitions; GitHub write tools imported only by the approval handler. Tools never throw — failures return { error } in-band as data the model reacts to. Multi-workspace auth: Slack OAuth plus a GitHub App via @octokit/auth-app minting short-lived installation tokens (cached, refreshed before expiry, never stored), HMAC-signed OAuth state, AES-256-GCM-encrypted PAT fallback, Postgres for installations and per-team repo config only. Zod-validated configuration at startup. Read-only mode for public repos derived per turn from live installation coverage. Smoke-test suite: rest:smoke (live GitHub tool layer), model:smoke (tool-calling round trip), agent:smoke (citation-trace grounding eval). Deployed on Railway.",
+    },
+    technologies: [
+      "TypeScript",
+      "Node.js",
+      "Slack Bolt",
+      "Vercel AI SDK",
+      "GitHub REST API",
+      "GitHub Apps",
+      "OAuth",
+      "Zod",
+      "PostgreSQL",
+      "Google Gemini",
+      "Anthropic Claude",
+      "Railway",
+    ],
+    featured: true,
+    modalPreview: {
+      hook: "A Slack agent over a live GitHub queue where zero writes are model-initiated — every action needs a human Approve",
+      problemTeaser:
+        "Answers queue questions from live GitHub data with citations, and stages triage actions a human approves in Slack. The model never receives a write tool — safety is structural, not a prompt rule.",
+      heroMetric: {
+        label: "Model-Initiated Writes",
+        value: "Zero",
+      },
+    },
+    metrics: [
+      { label: "Model Write Access", value: "Zero by Design" },
+      { label: "Tool-Step Budget", value: "5 / turn" },
+      { label: "Grounding Eval", value: "Citation Trace" },
+    ],
+  },
 ];
