@@ -3,7 +3,7 @@
  * Port of Python agents to TypeScript
  */
 
-import { callGemini } from './gemini';
+import { callGemini, type GeminiUsage } from './gemini';
 import {
   getPortfolioData,
   getProfile,
@@ -27,6 +27,16 @@ export interface AgentResponse {
   analysis?: string;
   cached?: boolean;
   error?: string;
+  /**
+   * True when the user was served a canned fallback because the LLM call failed.
+   * Previously this was indistinguishable from a real answer: the endpoint returned
+   * HTTP 200 with an apology string and no error event anywhere, so a chat broken by
+   * a missing GEMINI_API_KEY could go unnoticed indefinitely.
+   */
+  degraded?: boolean;
+  error_kind?: string;
+  /** LLM observability metadata, forwarded to PostHog by chat.ts. */
+  llm?: GeminiUsage;
 }
 
 /**
@@ -58,14 +68,30 @@ abstract class PortfolioAgent {
       const result = await callGemini(this.systemPrompt, query, builtContext, maxTokens);
 
       if (result.error) {
-        return this.getFallbackResponse(query);
+        // Still a fallback answer, but now it says so, so the client can report it
+        // and chat.ts can flag the generation as an error in PostHog.
+        return {
+          ...this.getFallbackResponse(query),
+          degraded: true,
+          error: result.error,
+          error_kind: result.errorKind,
+          llm: result.usage,
+        };
       }
 
       const processingTime = Date.now() - startTime;
-      return this.parseResponse(result.text, query, processingTime);
+      return {
+        ...this.parseResponse(result.text, query, processingTime),
+        llm: result.usage,
+      };
     } catch (error: any) {
       console.error(`[${this.name}] Error:`, error);
-      return this.getFallbackResponse(query);
+      return {
+        ...this.getFallbackResponse(query),
+        degraded: true,
+        error: error?.message || 'Agent exception',
+        error_kind: 'agent_exception',
+      };
     }
   }
 

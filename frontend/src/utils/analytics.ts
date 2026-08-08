@@ -64,17 +64,11 @@ export const trackPageView = (pagePath: string, pageTitle?: string) => {
 };
 
 // Portfolio-specific tracking functions with enhanced metadata
-export const trackJobAnalysis = (matchScore?: number, processingTime?: number) => {
-  trackEvent('job_analysis_started', {
-    match_score: matchScore,
-    processing_time: processingTime,
-    timestamp: new Date().toISOString()
-  });
-};
 
+// NOTE: deliberately does NOT fire a $pageview. It used to emit one per section
+// (page_path: "/contact", "/work", ...), which polluted real route pageviews with
+// synthetic rows and inflated every traffic figure. Real pageviews come from App.tsx.
 export const trackSectionView = (sectionName: string) => {
-  // Track as both page view and custom event for better analytics
-  trackPageView(`/${sectionName}`, `${sectionName} - Prathamesh More Portfolio`);
   trackEvent('section_viewed', {
     section: sectionName,
     timestamp: new Date().toISOString()
@@ -96,20 +90,22 @@ export const trackFallbackResponse = (query: string) => {
   });
 };
 
-export const trackContactAction = (method: 'email' | 'linkedin' | 'github' | 'phone') => {
-  trackEvent('contact_initiated', {
-    method,
-    timestamp: new Date().toISOString()
-  });
-  // Granular PostHog event for contact link clicks
+// Single event per click. This previously fired 'contact_initiated' AND
+// 'contact_link_clicked' for one click, double-counting every contact figure in history.
+export const trackContactAction = (
+  method: 'email' | 'linkedin' | 'github' | 'phone',
+  source: string = 'contact_card'
+) => {
   trackEvent('contact_link_clicked', {
     link_type: method,
-    source: 'contact_card',
+    source,
     timestamp: new Date().toISOString()
   });
 };
 
-export const trackProjectInteraction = (projectName: string, action: 'view' | 'download' | 'demo' | 'github') => {
+export type ProjectAction = 'view' | 'demo' | 'github' | 'case_study';
+
+export const trackProjectInteraction = (projectName: string, action: ProjectAction) => {
   trackEvent('project_interaction', {
     project: projectName,
     action,
@@ -117,12 +113,20 @@ export const trackProjectInteraction = (projectName: string, action: 'view' | 'd
   });
 };
 
-// New tracking functions for more detailed events
-export const trackChatMessage = (messageLength: number, agentUsed?: string, isCached?: boolean) => {
-  trackEvent('chat_message_sent', {
-    message_length: messageLength,
-    agent_used: agentUsed,
-    is_cached: isCached,
+// The contact card's "ask the AI assistant" nudge. Previously untracked, so the
+// contact -> chat handoff was invisible.
+export const trackAIChatNudge = () => {
+  trackEvent('ai_chat_nudge_clicked', {
+    source: 'contact_card',
+    timestamp: new Date().toISOString()
+  });
+};
+
+// Fired when the AI backend answered with a canned fallback because the LLM call
+// failed. Without this a broken chat looks identical to a working one.
+export const trackChatDegraded = (reason?: string) => {
+  trackEvent('chat_degraded', {
+    reason: reason ?? 'unknown',
     timestamp: new Date().toISOString()
   });
 };
@@ -151,26 +155,5 @@ export const trackError = (errorType: string, errorMessage: string, context?: st
     });
   } catch (e) {
     console.error('Error tracking error:', e);
-  }
-};
-
-// Send custom event to backend for database logging
-export const sendAnalyticsToBackend = async (eventType: string, eventData: Record<string, any>) => {
-  try {
-    const backendUrl = import.meta.env.VITE_API_BASE_URL || '/api';
-    await fetch(`${backendUrl}/api/v1/analytics/event`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        session_id: sessionId,
-        event_type: eventType,
-        event_data: eventData,
-      }),
-    });
-  } catch (error) {
-    // Silently fail - don't disrupt user experience
-    console.error('Backend analytics error:', error);
   }
 };

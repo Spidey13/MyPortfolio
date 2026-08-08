@@ -246,7 +246,7 @@ export const PROJECTS: Project[] = [
   {
     id: "p5",
     title: "Prompt Optimization for Healthcare NLP",
-    github_url: "https://github.com/Spidey13",
+    github_url: "https://github.com/Spidey13/Perspective-aware-summarization",
     star: {
       situation:
         "Healthcare Q&A summarization is a perspective-heavy task — answers blend information, suggestion, experience, cause, and question. Manual prompt engineering doesn't scale across perspectives.",
@@ -292,7 +292,7 @@ export const PROJECTS: Project[] = [
   {
     id: "p7",
     title: "Audio-Lyric Emotional Alignment",
-    github_url: "https://github.com/Spidey13",
+    github_url: "https://github.com/Ranvirsv/Emotion_Analysis_Music-Lyrics",
     star: {
       situation:
         "Quantifying emotional congruence between music audio and lyrics requires aligning representations from two different modalities.",
@@ -484,6 +484,55 @@ export const PROJECTS: Project[] = [
       { label: "Model Write Access", value: "Zero by Design" },
       { label: "Tool-Step Budget", value: "5 / turn" },
       { label: "Grounding Eval", value: "Citation Trace" },
+    ],
+  },
+  {
+    id: "p10",
+    title: "cachefault - Prefix-Cache Miss Attribution",
+    github_url: "https://github.com/Spidey13/cachefault",
+    star: {
+      situation:
+        "LLM prompt caching matches an exact prefix: one byte off is a total miss, silently, at roughly 10x the bill. Providers report that a miss happened — Anthropic's April 2026 diagnostics beta names the top-level component that diverged (model / system / tools / messages) — but nothing names the field that moved, nothing covers a provider other than the first-party Claude API, and nothing attributes a miss on a self-hosted engine at all. The culprit is usually a tool in the middle: in headroom #1042, a proxy's own canonical re-serialization reordered tool-schema keys and recomputed ~1.15M tokens across 17 of 18 turns.",
+      task: "Build a tool that names the exact request field that broke a prefix cache — a field path, not a component name — across hosted providers and on self-hosted vLLM, that reports a miss as provider-side when the bytes were identical instead of inventing a client-side cause, and that validates every verdict against real systems with the disagreements published rather than dropped.",
+      action:
+        "Built cachefault as a single static Go binary owning the capture proxy, diff, classifier, CLI, block simulator, and both validation harnesses. Made the proxy forward request bodies as raw bytes and never decode them — a proxy that round-trips JSON through a decoder reorders keys and becomes the exact cache-buster it exists to diagnose. Wrote internal/ojson, an order-preserving JSON parser, because encoding/json into a map destroys key order and rewrites number literals, and both are signals here: key reordering, float re-encoding, and whitespace-only edits break a cache while looking identical in a debugger. Built the classifier so evidence outranks inference — provider usage counters settle the verdict before any heuristic runs, and only then does the diff name a cause, reporting the earliest divergence in the provider's own prefix order (tools → system → messages on Anthropic) since everything after the first changed byte is invalidated anyway. Shipped nine verdicts across Anthropic and OpenAI adapters; the four client-fixable ones exit 1 so analyze works as a CI gate, with --json for machine output and an X-Cachefault-Session header to group sessions. For self-hosted engines, built the inverse map nothing else publishes — token index → 16-token block → character range → request field — and a simulator that replays a session through vLLM's V1 block-hash chain with no GPU. Quarantined render+tokenize in a Python sidecar (transformers + Jinja2, NDJSON over stdio) because vLLM renders chat templates with Python, so only Python is definitionally exact against the server being validated; the Go options were evaluated and rejected (gonja is Jinja-ish rather than exact, minja and the HF tokenizer bindings are cgo and would cost the static binary). Validated both tiers against real systems: a live hosted matrix against the Anthropic API using its diagnostics beta as the oracle, and a differential vLLM run under WSL2 scored against the engine's own prefix-cache counters.",
+      result:
+        "Across 10 live Anthropic scenarios ($0.04 of real traffic), 9 of 9 scored rows agree with Anthropic's cache-diagnostics oracle on whether the client caused the miss, with a field path on every divergence the oracle could only label by component. Three rows disagreed with the scenario table's own prediction, and in all three the prediction was wrong about Anthropic rather than the tool — key reordering inside input_schema, a model alias vs its dated snapshot, and tool_choice all turn out not to be part of Anthropic's cache key. Those are published as findings instead of being rewritten into agreement. The block simulator agrees with a real vLLM server within one block (16 tokens) on 100% of requests — 47 of 47 samples across five workloads, every one matching exactly, mean error 0.0 tokens. Ships as one binary with no runtime, plus a 17-pair fixture corpus under go test.",
+      impact:
+        "Demonstrates deterministic attribution with no model in the loop, and the discipline that makes it trustworthy: the tool reports PROVIDER_SIDE when two requests were byte-identical and the cache still missed, because inventing a client-side cause there would be a lie. Scope is stated as plainly as the results — Anthropic and OpenAI adapters only, post-hoc analysis rather than live monitoring, and the OpenAI adapter marked unvalidated against the live API because no key was available for the matrix run. Where the provider's own beta reaches, it is credited and used as the oracle; cachefault claims only the three places it goes deeper — the field path inside the component, cross-provider coverage, and self-hosted token/block attribution.",
+      architecture:
+        "Single static Go binary (Cobra CLI: analyze, diff, proxy, attribute, simulate). Byte-faithful capture proxy writing append-only JSONL, closed after every request so a session can be analyzed while recording continues. Order-preserving JSON parser (internal/ojson) feeding a structural diff that detects value changes, key reordering, float re-encoding, and whitespace-only edits. Provider adapters (internal/providers) defining prefix order, cache-key fields, and minimum cacheable length per model; classifier (internal/classify) with counter-driven verdict precedence over diff heuristics. Self-hosted path: Python analyzer sidecar (transformers + Jinja2 + tokenizers, NDJSON over stdio) for exact chat-template render and tokenization, an inverse map from token index through block to character range to request field, and a vLLM V1 block-hash-chain simulator running without a GPU. Two validation harnesses kept out of go test because they spend money or need a GPU: cmd/validate-hosted (live Anthropic matrix, hard-capped spend, diagnostics beta as oracle) and cmd/validate-vllm (differential run against a real server, scored on vllm:prefix_cache_hits_total). Cross-compiled releases for darwin-arm64, darwin-amd64, linux-amd64, and windows-amd64.",
+    },
+    technologies: [
+      "Go",
+      "Cobra",
+      "Python",
+      "Hugging Face Transformers",
+      "Tokenizers",
+      "Jinja2",
+      "vLLM",
+      "Anthropic Claude",
+      "OpenAI API",
+      "Prompt Caching",
+      "KV Cache",
+      "HTTP Proxy",
+      "NDJSON",
+      "WSL2",
+    ],
+    featured: true,
+    modalPreview: {
+      hook: "Names the exact request field that broke your prefix cache — on any provider, and on your own vLLM box",
+      problemTeaser:
+        "Providers can tell you that a cache miss happened. cachefault records traffic byte for byte, diffs each request against the one before it, and names the field — tools[0].input_schema, not tools_changed — down to the token block on self-hosted engines.",
+      heroMetric: {
+        label: "Simulator vs Real vLLM",
+        value: "47/47 exact",
+      },
+    },
+    metrics: [
+      { label: "Oracle Agreement", value: "9/9 Scored Rows" },
+      { label: "Simulator vs Real vLLM", value: "47/47 Exact" },
+      { label: "Attribution", value: "Field Path, Not Component" },
     ],
   },
 ];

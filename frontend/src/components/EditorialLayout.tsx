@@ -5,7 +5,7 @@ import JobAnalysisCard from "./JobAnalysisCard";
 import type { PortfolioData } from "../data";
 import { ACTIVITIES } from "../data/activities";
 import { analyzeJobMatch } from "../utils/backendConnection";
-import { trackEvent, trackError, trackSectionView } from "../utils/analytics";
+import { trackEvent, trackError, trackSectionView, trackAIChatNudge } from "../utils/analytics";
 
 // New Journal Components
 import JournalNavbar from "./JournalNavbar";
@@ -45,36 +45,49 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
   const [isJobAnalyzing, setIsJobAnalyzing] = React.useState(false);
 
   // Section refs for IntersectionObserver
+  const heroSectionRef = React.useRef<HTMLDivElement>(null);
   const workSectionRef = React.useRef<HTMLDivElement>(null);
   const experienceSectionRef = React.useRef<HTMLDivElement>(null);
   const researchSectionRef = React.useRef<HTMLDivElement>(null);
   const contactSectionRef = React.useRef<HTMLDivElement>(null);
 
+  // Survives remounts. <Routes> is keyed on location.pathname, so every return from
+  // /project/:id remounts this component; a Set scoped to the effect re-fired 'contact'
+  // (the only section above the fold) on each one, and StrictMode doubled it again in dev.
+  const trackedSections = React.useRef<Set<string>>(new Set());
+
   // Track section views with IntersectionObserver
   React.useEffect(() => {
+    // A mid-viewport band, NOT a visibility ratio. The old `threshold: 0.3` required 30% of
+    // a section to be on screen at once, which #work (the whole bento grid, several thousand
+    // px tall) can never satisfy -- so it effectively never fired, while the short #contact
+    // card in the sidebar fired for every visitor without any scrolling. That asymmetry, not
+    // visitor behaviour, produced the "contact 105 vs work 7" split.
     const observerOptions = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.3, // Fire when 30% of section is visible
+      rootMargin: '-45% 0px -45% 0px',
+      threshold: 0,
     };
-
-    const trackedSections = new Set<string>();
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && !trackedSections.has(entry.target.id)) {
+        if (entry.isIntersecting && !trackedSections.current.has(entry.target.id)) {
+          trackedSections.current.add(entry.target.id);
           trackSectionView(entry.target.id);
-          trackedSections.add(entry.target.id);
         }
       });
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    if (workSectionRef.current) observer.observe(workSectionRef.current);
-    if (experienceSectionRef.current) observer.observe(experienceSectionRef.current);
-    if (researchSectionRef.current) observer.observe(researchSectionRef.current);
-    if (contactSectionRef.current) observer.observe(contactSectionRef.current);
+    const targets = [
+      heroSectionRef.current,
+      workSectionRef.current,
+      experienceSectionRef.current,
+      researchSectionRef.current,
+      contactSectionRef.current,
+    ];
+    targets.forEach((el) => el && observer.observe(el));
 
     return () => observer.disconnect();
   }, []);
@@ -126,7 +139,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
   };
 
   // Prepare data for components
-  const featuredProject = portfolioData.projects?.[0]; // F1 Race Strategy Simulator
+  const featuredProject = portfolioData.projects?.[0]; // Codiey (first entry in PROJECTS)
 
 
 
@@ -157,6 +170,7 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
 
   // Scroll to AI chat card
   const handleAIChatClick = () => {
+    trackAIChatNudge();
     const chatCard = document.getElementById('ai-chat-card');
     if (chatCard) {
       chatCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -178,15 +192,18 @@ export const EditorialLayout: React.FC<EditorialLayoutProps> = ({
       <main className="w-full max-w-[1440px] px-4 md:px-8 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Main Content Column (3 cols) */}
         <div className="lg:col-span-3 flex flex-col gap-12">
-          {/* Featured Article */}
-          <FeaturedArticle
-            title={featuredProject?.title || "Featured Project"}
-            quote={(featuredProject as any)?.star?.impact}
-            description={(featuredProject as any)?.star?.situation || ""}
-            image={(featuredProject as any)?.image}
-            video={(featuredProject as any)?.video}
-            onClick={() => featuredProject && onProjectClick(featuredProject)}
-          />
+          {/* Featured Article — also the tracked #hero baseline, so scroll-through to
+              #work can be measured against a real top-of-page denominator. */}
+          <div id="hero" ref={heroSectionRef}>
+            <FeaturedArticle
+              title={featuredProject?.title || "Featured Project"}
+              quote={(featuredProject as any)?.star?.impact}
+              description={(featuredProject as any)?.star?.situation || ""}
+              image={(featuredProject as any)?.image}
+              video={(featuredProject as any)?.video}
+              onClick={() => featuredProject && onProjectClick(featuredProject)}
+            />
+          </div>
 
           {/* Project Archive - Bento Grid */}
           <section id="work" ref={workSectionRef}>

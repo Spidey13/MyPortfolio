@@ -13,6 +13,14 @@ export interface Activity {
 
 export const ACTIVITIES: Activity[] = [
   {
+    time: "Aug 2026",
+    category: "GitHub",
+    title: "cachefault - prefix-cache miss attribution",
+    description:
+      "Shipped a single-binary Go tool that names the request field which broke an LLM prefix cache, validated 9/9 against Anthropic's diagnostics oracle and 47/47 exact against a real vLLM server.",
+    type: "milestone",
+  },
+  {
     time: "Jul 2026",
     category: "Deploy",
     title: "Queue Whisperer live on Slack",

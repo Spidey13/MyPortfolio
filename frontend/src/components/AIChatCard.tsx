@@ -40,6 +40,13 @@ const TypewriterText = ({ text }: { text: string }) => {
   );
 };
 
+/** Phrased as the questions a hiring manager actually has, not as feature demos. */
+const STARTER_PROMPTS = [
+  'Why should I interview Prathamesh?',
+  'What is the hardest thing you have shipped?',
+  'Walk me through Codiey.',
+] as const;
+
 export const AIChatCard: React.FC<AIChatCardProps> = ({
   onSendMessage,
   aiMessage,
@@ -50,14 +57,17 @@ export const AIChatCard: React.FC<AIChatCardProps> = ({
   const [showResult, setShowResult] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  const submitQuery = (query: string) => {
+    if (!query.trim() || isAnalyzing) return;
+    setHasError(false);
+    onSendMessage(query);
+    setInputValue('');
+    setShowResult(true);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim() && !isAnalyzing) {
-      setHasError(false);
-      onSendMessage(inputValue);
-      setInputValue('');
-      setShowResult(true);
-    }
+    submitQuery(inputValue);
   };
 
   const handleCollapse = () => {
@@ -123,6 +133,22 @@ export const AIChatCard: React.FC<AIChatCardProps> = ({
             <p className="font-serif text-2xl font-bold leading-tight text-white mb-8">
               “Ask me about my architecture, decisions, or trade-offs.”
             </p>
+            {/* One-tap starters. The card had no suggestions at all, only a blank input,
+                and had not been used once since 2026-03-13 -- asking a stranger to invent
+                a question about someone they just met is a high bar. */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {STARTER_PROMPTS.map((prompt) => (
+                <button
+                  key={prompt}
+                  type="button"
+                  onClick={() => submitQuery(prompt)}
+                  disabled={isAnalyzing}
+                  className="text-left font-sans text-[11px] leading-snug text-white/70 bg-white/5 hover:bg-white/15 hover:text-white border border-white/10 hover:border-white/30 rounded-sm px-3 py-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
             <form onSubmit={handleSubmit}>
               <div className="bg-white/10 backdrop-blur-md rounded-sm border border-white/20 flex items-center hover:border-white/40 transition-colors">
                 <input
@@ -130,7 +156,7 @@ export const AIChatCard: React.FC<AIChatCardProps> = ({
                   name="ai-query"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="e.g. Why use Next.js?"
+                  placeholder="Or ask your own question…"
                   disabled={isAnalyzing}
                   autoComplete="off"
                   className="bg-transparent text-white placeholder-white/40 text-sm font-sans w-full py-3 px-4 focus:outline-none disabled:opacity-50"
@@ -156,7 +182,12 @@ export const AIChatCard: React.FC<AIChatCardProps> = ({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ type: "spring", damping: 24, stiffness: 260 }}
+            transition={{
+              y: { type: "spring", damping: 24, stiffness: 260 },
+              // Tween, not spring — see the note in BentoArchive: a spring on
+              // opacity emits scientific-notation values that Firefox drops.
+              opacity: { duration: 0.3, ease: "easeOut" }
+            }}
             className="p-5"
             onClick={(e) => e.stopPropagation()}
           >
@@ -185,7 +216,10 @@ export const AIChatCard: React.FC<AIChatCardProps> = ({
                 <TypewriterText text={aiMessage} />
                 <div className="mt-4 pt-3 border-t border-ink/5 flex items-center justify-between">
                   <span className="font-mono text-[9px] text-ink/30 uppercase">
-                    Generated via Gemini 1.5 Flash
+                    {/* Deliberately not a version number. This said "Gemini 1.5 Flash"
+                        while the API called 2.0, which was then retired entirely; the
+                        model is now env-configurable, so any pinned label will drift. */}
+                    Generated via Google Gemini
                   </span>
                   <button
                      onClick={handleAskAnother}

@@ -8,7 +8,7 @@ import CollabCTA from "../components/CollabCTA";
 import { ACTIVITIES } from "../data/activities";
 import { PORTFOLIO_DATA } from "../data";
 import type { Project } from "../data/projects";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 interface ProjectsArchivePageProps {
   onProjectClick?: (project: Project) => void;
@@ -19,7 +19,7 @@ export const ProjectsArchivePage: React.FC<ProjectsArchivePageProps> = ({
 }) => {
   const portfolioData = PORTFOLIO_DATA;
 
-  const sidebarContainer = {
+  const sidebarContainer: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -30,12 +30,17 @@ export const ProjectsArchivePage: React.FC<ProjectsArchivePageProps> = ({
     }
   };
 
-  const sidebarItem = {
+  // Annotated so `type: "spring"` narrows instead of widening to `string`, which
+  // is what made these variants fail to typecheck.
+  const sidebarItem: Variants = {
     hidden: { opacity: 0, x: 20 },
     visible: { 
         opacity: 1, 
         x: 0,
-        transition: { type: "spring", stiffness: 100, damping: 15 }
+        transition: {
+          x: { type: "spring", stiffness: 100, damping: 15 },
+          opacity: { duration: 0.3, ease: "easeOut" }
+        }
     }
   };
 

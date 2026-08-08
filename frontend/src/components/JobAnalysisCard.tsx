@@ -93,7 +93,10 @@ export const JobAnalysisCard: React.FC<JobAnalysisCardProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            transition={{
+              y: { type: "spring", damping: 20, stiffness: 300 },
+              opacity: { duration: 0.3, ease: "easeOut" }
+            }}
             className="mt-3 pt-3 border-t border-primary/5"
           >
             {/* Rapid Scan Summary for Recruiters */}

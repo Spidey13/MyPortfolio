@@ -56,7 +56,10 @@ const StrategicFitAnalysisSection: React.FC<StrategicFitAnalysisSectionProps> = 
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          transition={{ type: "spring", damping: 30, stiffness: 200 }}
+          transition={{
+            height: { type: "spring", damping: 30, stiffness: 200 },
+            opacity: { duration: 0.3, ease: "easeOut" }
+          }}
           className="overflow-hidden"
         >
           <DashboardJobAnalysis

@@ -1,13 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { trackProjectInteraction } from "../utils/analytics";
+import { trackProjectInteraction, trackContactAction } from "../utils/analytics";
+import { PROFILE } from "../data/profile";
+
+const CONTACT_EMAIL = PROFILE.email;
 
 interface ProjectDetailModalProps {
   project: any;
   isOpen: boolean;
   onClose: () => void;
 }
+
+/**
+ * True only for URLs that point at an actual repository, i.e. github.com/<owner>/<repo>.
+ * Some projects still carry a bare profile URL (github.com/Spidey13) as their
+ * github_url; rendering a "Source Code" button for those sends a hiring manager to a
+ * profile page instead of the code, which reads as a dead link.
+ */
+const isRepoUrl = (url?: string): boolean => {
+  if (!url) return false;
+  try {
+    const { hostname, pathname } = new URL(url);
+    if (!hostname.endsWith('github.com')) return true; // non-GitHub hosts: trust as given
+    return pathname.split('/').filter(Boolean).length >= 2;
+  } catch {
+    return false;
+  }
+};
 
 const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   project,
@@ -50,7 +70,10 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              transition={{
+                default: { type: "spring", damping: 25, stiffness: 300 },
+                opacity: { duration: 0.25, ease: "easeOut" }
+              }}
               className="relative w-full max-w-6xl bg-[#F9F9F7] shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px] md:min-h-[700px]"
               onClick={(e) => e.stopPropagation()}
             >
@@ -108,9 +131,9 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                   <span className="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform">close</span>
                 </button>
 
-                <div className="flex-grow flex flex-col justify-center">
+                <div className="flex-grow flex flex-col justify-center py-4">
                    {/* Tech Stack */}
-                   <div className="flex flex-wrap gap-2 mb-10">
+                   <div className="flex flex-wrap gap-2 mb-6">
                       {project.technologies.slice(0, 4).map((tech: string, i: number) => (
                          <span key={i} className="px-3 py-1 rounded-full bg-ink/5 text-ink/60 text-[10px] font-mono uppercase tracking-wide border border-ink/5">
                             {tech}
@@ -124,26 +147,50 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                    </div>
 
                    {/* Narrative */}
-                   <div className="mb-14">
+                   <div className="mb-8">
                       <h3 className="font-mono text-xs text-editorial-red uppercase tracking-widest mb-4 flex items-center gap-2">
                         <span className="w-8 h-[1px] bg-editorial-red/40"></span>
                         Project Brief
                       </h3>
-                      <p className="font-serif text-2xl md:text-3xl text-ink/90 leading-tight block">
+                      <p className="font-serif text-xl md:text-2xl text-ink/90 leading-snug block mb-5">
                          {project.modalPreview.problemTeaser}
                       </p>
+
+                      {/* The outcome. This is the persuasive part and it used to live only
+                          on the case study page, which almost nobody reached. */}
+                      {(project.star?.result || project.star?.impact) && (
+                        <p className="text-sm text-ink/70 leading-relaxed line-clamp-4">
+                           {project.star?.result || project.star?.impact}
+                        </p>
+                      )}
                    </div>
 
-                   {/* Hero Metric */}
-                   <div className="mb-8">
+                   {/* Hero Metric + supporting metrics */}
+                   <div className="mb-6 flex flex-wrap items-end gap-x-10 gap-y-6">
                       <div className="inline-flex flex-col border-l-2 border-editorial-red pl-6 py-1">
-                        <div className="font-serif text-6xl md:text-7xl text-ink leading-[0.8]">
+                        <div className="font-serif text-5xl md:text-6xl text-ink leading-[0.8]">
                             {project.modalPreview.heroMetric.value}
                         </div>
                         <div className="font-mono text-xs text-ink/50 uppercase tracking-widest mt-2">
                             {project.modalPreview.heroMetric.label}
                         </div>
                       </div>
+
+                      {/* Was already in the data and rendered nowhere. */}
+                      {Array.isArray(project.metrics) && project.metrics.length > 0 && (
+                        <div className="flex flex-wrap gap-x-8 gap-y-3">
+                          {project.metrics
+                            .filter((m: { label: string }) => m.label !== project.modalPreview.heroMetric.label)
+                            .map((metric: { label: string; value: string }, i: number) => (
+                              <div key={i} className="flex flex-col">
+                                <span className="font-mono text-sm text-ink/80">{metric.value}</span>
+                                <span className="font-mono text-[9px] text-ink/40 uppercase tracking-wider mt-1">
+                                  {metric.label}
+                                </span>
+                              </div>
+                            ))}
+                        </div>
+                      )}
                    </div>
                 </div>
 
@@ -173,30 +220,59 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                          </a>
                       )}
 
-                      <a
-                         href={project.github_url}
-                         target="_blank"
-                         rel="noopener noreferrer"
-                         onClick={() => trackProjectInteraction(project.title, 'github')}
-                         className="flex-1 group flex items-center justify-center gap-3 px-4 py-3 border border-ink/10 hover:border-ink/30 bg-white hover:bg-ink/5 transition-all duration-300 min-h-[50px]"
-                      >
-                         <span className="material-symbols-outlined text-[18px] text-ink/40 group-hover:text-ink transition-colors">
-                            code
-                         </span>
-                         <span className="font-mono text-[11px] uppercase tracking-widest text-ink/70 group-hover:text-ink transition-colors">
-                            Source Code
-                         </span>
-                         <span className="material-symbols-outlined text-[16px] text-ink/30 group-hover:text-ink/70 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all">
+                      {/* Falls back to the demo video when there is no hosted demo. Codiey
+                          is the most-clicked project on the site and has no deployed_url, so
+                          it previously offered no demo action at all despite shipping one. */}
+                      {!project.deployed_url && project.video && (
+                         <a
+                            href={project.video}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => trackProjectInteraction(project.title, 'demo')}
+                            className="flex-1 group flex items-center justify-center gap-3 px-4 py-3 border border-ink/10 hover:border-editorial-red/50 bg-white hover:bg-editorial-red/5 transition-all duration-300 min-h-[50px]"
+                         >
+                            <span className="material-symbols-outlined text-[18px] text-ink/40 group-hover:text-editorial-red transition-colors">
+                               play_circle
+                            </span>
+                            <span className="font-mono text-[11px] uppercase tracking-widest text-ink/70 group-hover:text-editorial-red transition-colors">
+                               Watch Demo
+                            </span>
+                            <span className="material-symbols-outlined text-[16px] text-ink/30 group-hover:text-editorial-red/70 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all">
                                arrow_outward
-                         </span>
-                      </a>
+                            </span>
+                         </a>
+                      )}
+
+                      {isRepoUrl(project.github_url) && (
+                         <a
+                            href={project.github_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => trackProjectInteraction(project.title, 'github')}
+                            className="flex-1 group flex items-center justify-center gap-3 px-4 py-3 border border-ink/10 hover:border-ink/30 bg-white hover:bg-ink/5 transition-all duration-300 min-h-[50px]"
+                         >
+                            <span className="material-symbols-outlined text-[18px] text-ink/40 group-hover:text-ink transition-colors">
+                               code
+                            </span>
+                            <span className="font-mono text-[11px] uppercase tracking-widest text-ink/70 group-hover:text-ink transition-colors">
+                               Source Code
+                            </span>
+                            <span className="material-symbols-outlined text-[16px] text-ink/30 group-hover:text-ink/70 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all">
+                                  arrow_outward
+                            </span>
+                         </a>
+                      )}
                    </div>
 
                    {/* Primary CTA */}
                    <Link
                       to={`/project/${project.id}`}
                       className="group relative w-full bg-ink hover:bg-editorial-red text-white py-5 px-6 md:px-8 flex items-center justify-between overflow-hidden transition-colors duration-500 shadow-xl"
-                      onClick={onClose}
+                      onClick={() => {
+                        // The single most important click in the funnel, previously untracked.
+                        trackProjectInteraction(project.title, 'case_study');
+                        onClose();
+                      }}
                    >
                       <div className="flex flex-col relative z-10">
                          <span className="font-mono text-[9px] uppercase tracking-widest opacity-60 mb-1.5 flex items-center gap-2">
@@ -217,6 +293,21 @@ const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                       {/* Background Texture Effect */}
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent transition-opacity duration-500" />
                    </Link>
+
+                   {/* Contact at the point of peak intent. The only ask used to live in the
+                       sidebar, which visitors pass before they have a reason to care. */}
+                   <a
+                      href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+                        `Re: ${project.title}`
+                      )}`}
+                      onClick={() => trackContactAction('email', 'project_modal')}
+                      className="group flex items-center justify-center gap-2 py-2 text-ink/50 hover:text-editorial-red transition-colors"
+                   >
+                      <span className="material-symbols-outlined text-[15px]">mail</span>
+                      <span className="font-mono text-[10px] uppercase tracking-widest">
+                         Questions about this project? Email me
+                      </span>
+                   </a>
                 </div>
 
               </div>

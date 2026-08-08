@@ -45,15 +45,22 @@ export const CollabCTA: React.FC<CollabCTAProps> = ({
 
         {/* Contact Links */}
         <div className="flex flex-col gap-2 mb-4">
-          {/* Email — Primary CTA */}
+          {/* Email — Primary CTA. The label is now an action ("Email me") with the
+              address as a quiet sub-label; it used to be the raw address as the button
+              text, which truncated and read as a field rather than something to click. */}
           {email && (
             <a
-              href={`mailto:${email}`}
+              href={`mailto:${email}?subject=${encodeURIComponent('Role opportunity')}`}
               onClick={() => handleLinkClick('email')}
-              className="flex items-center gap-3 w-full bg-paper text-ink font-mono font-bold text-xs uppercase py-3 px-4 hover:bg-editorial-red hover:text-white transition-[color,background-color] duration-300 ease-out shadow-lg group"
+              className="flex items-center gap-3 w-full bg-paper text-ink py-3 px-4 hover:bg-editorial-red hover:text-white transition-[color,background-color] duration-300 ease-out shadow-lg group"
             >
-              <Mail size={14} className="shrink-0" />
-              <span className="truncate">{email}</span>
+              <Mail size={16} className="shrink-0" />
+              <span className="flex flex-col min-w-0 text-left">
+                <span className="font-mono font-bold text-xs uppercase tracking-wide">
+                  Email me
+                </span>
+                <span className="font-mono text-[10px] opacity-60 truncate">{email}</span>
+              </span>
               <span className="material-symbols-outlined text-sm ml-auto opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
             </a>
           )}

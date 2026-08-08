@@ -33,15 +33,20 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
     }
   };
 
+  // Opacity is deliberately a tween, not a spring. A spring settles through
+  // sub-precision values, so framer-motion writes inline styles like
+  // `opacity: 2.3e-7`; Firefox's CSS parser rejects scientific notation for
+  // <number> and drops the declaration, leaving the element on the previous
+  // frame's opacity. Nine staggered cards produced well over a thousand
+  // "Error in parsing value for 'opacity'" errors and visibly janky fade-ins.
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15
+        y: { type: "spring", stiffness: 100, damping: 15 },
+        opacity: { duration: 0.3, ease: "easeOut" }
       }
     }
   };
@@ -88,10 +93,10 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
 
           {/* Content section */}
           <div className="flex-1 py-6 pr-6">
+            {/* "New" moved to cachefault (Aug 2026), which now supersedes this
+                as the latest ship. Two "New" badges cancel each other out. */}
             <div className="flex items-center gap-2 mb-3">
-              <span className="font-mono text-[10px] bg-black text-white px-2 py-1 uppercase tracking-wider">
-                New
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4A154B]"></span>
               <span className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">
                 Slack × GitHub Agent
               </span>
@@ -104,20 +109,19 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
             </p>
           </div>
 
-          {/* Metrics section */}
+          {/* Metrics section — from the data, not literals. The old hard-coded
+              "0 / 100%" could drift from projects.ts without anyone noticing. */}
           <div className="flex gap-8 pr-6 border-l border-violet-200/60 pl-6">
-            <div className="flex flex-col items-center">
-              <span className="font-mono text-3xl font-bold text-gray-900">0</span>
-              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
-                Model-Initiated<br/>Writes
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="font-mono text-3xl font-bold text-gray-900">100%</span>
-              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
-                Human-Approved<br/>Actions
-              </span>
-            </div>
+            {projects[8].metrics.slice(0, 2).map((metric, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <span className="font-mono text-xl font-bold text-gray-900 text-center">
+                  {metric.value}
+                </span>
+                <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                  {metric.label}
+                </span>
+              </div>
+            ))}
           </div>
 
           {/* Hosted app badge */}
@@ -316,18 +320,20 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
                 {/* Default State */}
                 <div className="absolute inset-0 transition-opacity duration-300 ease-in-out opacity-100 group-hover:opacity-0 delay-75 group-hover:delay-0">
                     <div className="text-3xl font-serif font-bold text-gray-900">
-                      0.05s
+                      {projects[2].modalPreview.heroMetric.value}
                     </div>
                 </div>
-                {/* Hover State */}
+                {/* Hover State — driven from the data. This used to hard-code
+                    "PyTorch · MLflow · Simulation" while the project's technologies list
+                    contains CatBoost and no PyTorch at all. */}
                 <div className="absolute inset-0 transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 delay-0 group-hover:delay-75">
                     <span className="text-[11px] font-mono font-bold text-gray-800 leading-tight block">
-                      PyTorch · MLflow · Simulation
+                      {projects[2].technologies.slice(0, 3).join(' · ')}
                     </span>
                 </div>
             </div>
              <div className="text-[10px] text-gray-400 uppercase tracking-tight mt-1">
-               Lap Time Accuracy
+               {projects[2].modalPreview.heroMetric.label}
             </div>
           </div>
         </motion.article>
@@ -524,20 +530,18 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
             </p>
           </div>
 
-          {/* Metrics section */}
+          {/* Metrics section — from the data, not literals. */}
           <div className="flex gap-8 pr-6 border-l border-amber-200/60 pl-6">
-            <div className="flex flex-col items-center">
-              <span className="font-mono text-3xl font-bold text-gray-900">4</span>
-              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
-                Tool<br/>Schema
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="font-mono text-3xl font-bold text-gray-900">96</span>
-              <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
-                Accessibility<br/>Score
-              </span>
-            </div>
+            {projects[7].metrics.slice(0, 2).map((metric, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <span className="font-mono text-xl font-bold text-gray-900 text-center">
+                  {metric.value}
+                </span>
+                <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                  {metric.label}
+                </span>
+              </div>
+            ))}
           </div>
 
           {/* Demo badge */}
@@ -550,6 +554,69 @@ export const BentoArchive: React.FC<BentoArchiveProps> = ({
             </span>
           </div>
         </motion.article>
+
+        {/* CACHEFAULT - Prefix-Cache Miss Attribution (4x1 banner).
+            The grid hard-codes nine positional slots, so projects[9] existed in
+            projects.ts but rendered nowhere and was reachable only at /project/p10. */}
+        {projects[9] && (
+          <motion.article
+            variants={itemVariants}
+            className="md:col-span-4 md:row-span-1 flex gap-6 items-center group cursor-pointer border border-[#E5E5E5] overflow-hidden relative"
+            style={{ background: "linear-gradient(135deg, #eef4f8 0%, #f8fafb 60%, #e8eff5 100%)" }}
+            onClick={() => handleCardClick(projects[9])}
+            onKeyDown={(e) => handleKeyDown(e, projects[9])}
+            tabIndex={0}
+            role="button"
+            aria-label={`View project: ${projects[9].title}`}
+            whileHover={{ y: -4, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
+            {/* Left accent bar — Go cyan */}
+            <div className="w-1 self-stretch bg-gradient-to-b from-[#00ADD8] to-sky-400 group-hover:w-1.5 transition-[width] duration-300"></div>
+
+            {/* Content section */}
+            <div className="flex-1 py-6 pr-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="font-mono text-[10px] bg-black text-white px-2 py-1 uppercase tracking-wider">
+                  New
+                </span>
+                <span className="font-mono text-[10px] text-gray-500 uppercase tracking-wider">
+                  Go · LLM Infrastructure
+                </span>
+              </div>
+              <h3 className="font-serif text-xl font-bold mb-2 text-balance group-hover:text-[#00728c] transition-colors">
+                cachefault
+              </h3>
+              <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                {projects[9].modalPreview.problemTeaser}
+              </p>
+            </div>
+
+            {/* Metrics section */}
+            <div className="flex gap-8 pr-6 border-l border-sky-200/60 pl-6">
+              {projects[9].metrics.slice(0, 2).map((metric, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <span className="font-mono text-xl font-bold text-gray-900 text-center">
+                    {metric.value}
+                  </span>
+                  <span className="font-mono text-[9px] text-gray-400 uppercase tracking-wider text-center mt-1">
+                    {metric.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Binary badge */}
+            <div className="pr-4 flex flex-col items-center gap-2">
+              <span className="font-mono text-[9px] bg-sky-100 text-[#00728c] border border-sky-200 px-2 py-1 uppercase tracking-wider">
+                Single Binary
+              </span>
+              <span className="material-symbols-outlined text-gray-300 group-hover:text-[#00ADD8] transition-colors">
+                arrow_forward
+              </span>
+            </div>
+          </motion.article>
+        )}
       </motion.div>
     </section>
   );

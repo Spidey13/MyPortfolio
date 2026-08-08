@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { trackPageView, trackEvent, trackError, generateQueryHash, trackProjectInteraction, trackFallbackResponse } from "./utils/analytics";
+import { trackPageView, trackEvent, trackError, generateQueryHash, trackProjectInteraction, trackFallbackResponse, trackChatDegraded } from "./utils/analytics";
 import { AnimatePresence } from "framer-motion";
 
 import ScrollProgress from "./components/ScrollProgress";
@@ -81,7 +81,15 @@ function App() {
         response_length: result.response?.length || 0,
         message_length: message.length,
         is_cached: false,
+        degraded: Boolean(result.degraded),
       });
+
+      // A degraded answer is an HTTP 200 carrying a canned apology because the LLM
+      // call failed. Without its own event it is indistinguishable from a real
+      // answer, which is how a broken chat can go unnoticed for months.
+      if (result.degraded) {
+        trackChatDegraded(result.error_kind || result.error);
+      }
     } catch (error) {
       console.error("Chat error:", error);
       trackError('chat_error', (error as Error).message, 'App.handleSendMessage');

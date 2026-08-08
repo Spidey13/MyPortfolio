@@ -1,5 +1,6 @@
 // Backend connection utilities
 import { log, withPerformance } from './logger';
+import { getSessionId } from './analytics';
 
 // Vercel serverless functions are at /api
 export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '/api';
@@ -8,8 +9,10 @@ export const testBackendConnection = async (): Promise<boolean> => {
   return withPerformance('testBackendConnection', async () => {
     try {
       const start = performance.now();
-      // Use relative path for Vercel deployment
-      const response = await fetch(`${BACKEND_URL}/api/health`, {
+      // BACKEND_URL is already '/api', so appending '/api/health' produced
+      // '/api/api/health', which 404s. That made backend_status_change fire
+      // 'offline' on every load regardless of the backend's actual health.
+      const response = await fetch(`${BACKEND_URL}/health`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +52,10 @@ ${jobDescription}`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: analysisPrompt
+        message: analysisPrompt,
+        // Lets the server attribute its $ai_generation events to the same PostHog
+        // person as the client-side events.
+        distinct_id: getSessionId()
         // REMOVED: context: { portfolioData } - backend loads data dynamically
       })
     });
@@ -115,7 +121,8 @@ export const chatWithAI = async (message: string) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message
+        message,
+        distinct_id: getSessionId()
         // REMOVED: context: { portfolioData } - backend loads data dynamically
       })
     });

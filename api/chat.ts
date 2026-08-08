@@ -7,7 +7,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { routeQuery } from './_lib/router';
 import { AgentFactory } from './_lib/agents';
-import { trackAIQuery, trackAgentUsage } from './_lib/analytics';
+import {
+  trackAIGeneration,
+  trackAgentUsage,
+  shutdownAnalytics,
+  newTraceId,
+} from './_lib/analytics';
+import { GEMINI_MODEL, GEMINI_PROVIDER } from './_lib/gemini';
 import { checkRateLimit } from './_lib/rateLimit';
 
 const agentFactory = new AgentFactory();
@@ -54,11 +60,12 @@ export default async function handler(
   }
 
   const startTime = Date.now();
+  const traceId = newTraceId();
   let sessionId: string | undefined;
 
   try {
     // Parse request body
-    const { message, context } = req.body;
+    const { message, context, distinct_id: distinctIdFromBody } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({
@@ -84,8 +91,12 @@ export default async function handler(
       });
     }
 
-    // Extract session ID if provided
+    // Extract session ID if provided. distinct_id is the client's persistent
+    // portfolio_visitor_id, so server-side generations stitch to the same PostHog
+    // person as the client-side events.
     sessionId = context?.sessionId || req.headers['x-session-id'] as string;
+    const distinctId =
+      (typeof distinctIdFromBody === 'string' && distinctIdFromBody) || sessionId;
 
     console.log(`[Chat] Query: "${message.substring(0, 100)}..."`);
 
@@ -94,7 +105,7 @@ export default async function handler(
     console.log(`[Chat] Routed to: ${agentType}`);
 
     // Track agent usage
-    await trackAgentUsage(agentType, sessionId);
+    await trackAgentUsage(agentType, distinctId, traceId);
 
     // Process query with selected agent
     const result = await agentFactory.processQuery(agentType, message, context);
@@ -103,17 +114,26 @@ export default async function handler(
     const responseTime = Date.now() - startTime;
     result.processing_time = responseTime;
 
-    // Track query for analytics
-    await trackAIQuery({
-      sessionId,
-      query: message,
+    await trackAIGeneration({
+      distinctId,
+      traceId,
+      model: result.llm?.model ?? GEMINI_MODEL,
+      provider: result.llm?.provider ?? GEMINI_PROVIDER,
+      // Prefer the measured LLM latency; fall back to whole-request time.
+      latencyMs: result.llm?.latencyMs ?? responseTime,
+      inputTokens: result.llm?.inputTokens,
+      outputTokens: result.llm?.outputTokens,
+      input: message,
+      output: result.response,
       agent: agentType,
-      responseTime,
-      cached: result.cached,
-      error: result.error
+      isError: Boolean(result.error),
+      errorMessage: result.error,
+      degraded: Boolean(result.degraded),
     });
 
-    console.log(`[Chat] Response generated in ${responseTime}ms`);
+    console.log(
+      `[Chat] Response generated in ${responseTime}ms${result.degraded ? ' (DEGRADED)' : ''}`
+    );
 
     // Return response
     return res.status(200).json(result);
@@ -124,12 +144,17 @@ export default async function handler(
     const responseTime = Date.now() - startTime;
 
     // Track error
-    await trackAIQuery({
-      sessionId,
-      query: req.body?.message || 'unknown',
+    await trackAIGeneration({
+      distinctId: sessionId,
+      traceId,
+      model: GEMINI_MODEL,
+      provider: GEMINI_PROVIDER,
+      latencyMs: responseTime,
+      input: typeof req.body?.message === 'string' ? req.body.message : undefined,
       agent: 'error',
-      responseTime,
-      error: error.message
+      isError: true,
+      errorMessage: error?.message,
+      degraded: true,
     });
 
     return res.status(500).json({
@@ -137,8 +162,14 @@ export default async function handler(
       message: 'An error occurred processing your request',
       response: "I'm experiencing technical difficulties. Please try again in a moment.",
       agent_used: 'Error Handler',
+      degraded: true,
+      error_kind: 'handler_exception',
       processing_time: responseTime,
       timestamp: new Date().toISOString()
     });
+  } finally {
+    // Vercel freezes the process as soon as the response is sent, so buffered
+    // events are lost unless they are flushed here, on both paths.
+    await shutdownAnalytics();
   }
 }
