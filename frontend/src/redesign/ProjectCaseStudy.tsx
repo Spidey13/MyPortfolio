@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { PROJECTS } from "../data/projects";
 import { ProjectVisual } from "./ProjectVisual";
 import { getProjectMeta, getProjectNumber, sortProjects } from "./projectMeta";
@@ -28,16 +28,12 @@ function TechnicalNotes({ title, children }: { title: string; children: ReactNod
 export default function ProjectCaseStudy() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const projects = useMemo(() => sortProjects(PROJECTS), []);
   const project = projects.find((candidate) => candidate.id === id);
   const [activeScene, setActiveScene] = useState("outcome");
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, [id]);
-
-  useEffect(() => {
+    const scrollRoot = document.querySelector<HTMLElement>(".document-pane");
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -45,7 +41,7 @@ export default function ProjectCaseStudy() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target.id) setActiveScene(visible.target.id);
       },
-      { rootMargin: "-25% 0px -55% 0px", threshold: [0.1, 0.35, 0.6] },
+      { root: scrollRoot, rootMargin: "-25% 0px -55% 0px", threshold: [0.1, 0.35, 0.6] },
     );
     document.querySelectorAll<HTMLElement>("[data-case-scene]").forEach((scene) => observer.observe(scene));
     return () => observer.disconnect();
@@ -65,46 +61,31 @@ export default function ProjectCaseStudy() {
   const currentIndex = projects.findIndex((candidate) => candidate.id === project.id);
   const previous = projects[(currentIndex - 1 + projects.length) % projects.length];
   const next = projects[(currentIndex + 1) % projects.length];
-  const routeState = location.state as { fromWork?: boolean; scrollY?: number } | null;
-
-  const goBack = () => {
-    if (routeState?.fromWork) {
-      navigate(-1);
-    } else {
-      navigate("/", { state: { restore: true, scrollY: routeState?.scrollY ?? 0 } });
-    }
-  };
+  const goBack = () => navigate("/");
 
   return (
     <div className={`rp-case rp-case--${meta.tone}`}>
-      <a className="rp-skip-link" href="#case-content">Skip to case study</a>
-      <aside className="rp-case-rail" aria-label="Case study navigation">
+      <header className="project-document__header">
         <button type="button" onClick={goBack} className="rp-back-link">← Back to all work</button>
-        <div className="rp-case-identity">
+        <div className="project-document__identity">
           <span className="rp-kicker">{String(getProjectNumber(project)).padStart(2, "0")} / 10</span>
           <strong>{meta.shortName}</strong>
           <span>{meta.label}</span>
         </div>
-        <nav aria-label="Case study chapters">
+        <nav className="project-document__chapters" aria-label="Case study chapters">
           {SCENES.map((scene, index) => (
             <a key={scene.id} href={`#${scene.id}`} aria-current={activeScene === scene.id ? "location" : undefined}>
               <span>{String(index + 1).padStart(2, "0")}</span>{scene.label}
             </a>
           ))}
         </nav>
-        <div className="rp-case-links">
+        <div className="project-document__links">
           <a href={project.github_url} target="_blank" rel="noreferrer">Repository ↗</a>
           {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer">{project.video ? "Demo" : "Live project"} ↗</a> : null}
         </div>
-      </aside>
-
-      <header className="rp-case-mobile-bar">
-        <button type="button" onClick={goBack}>← Work</button>
-        <span>{meta.shortName} · {String(getProjectNumber(project)).padStart(2, "0")} / 10</span>
-        <a href={project.github_url} target="_blank" rel="noreferrer">Repo ↗</a>
       </header>
 
-      <main className="rp-case-main" id="case-content">
+      <div className="rp-case-main" id="case-content">
         <section className="rp-case-scene rp-outcome-scene" id="outcome" data-case-scene>
           <div className="rp-scene-heading">
             <span className="rp-kicker">OUTCOME · {meta.date}</span>
@@ -161,7 +142,7 @@ export default function ProjectCaseStudy() {
             <Link to={`/project/${next.id}`}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }

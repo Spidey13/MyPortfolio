@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import PortfolioHome from "./redesign/PortfolioHome";
-import ProjectCaseStudy from "./redesign/ProjectCaseStudy";
+import PortfolioShell from "./redesign/PortfolioShell";
 import { trackPageView } from "./utils/analytics";
 import "./redesign/redesign.css";
 
@@ -17,10 +16,10 @@ function App() {
   return (
     <Suspense fallback={<div className="rp-route-loading">Loading the work…</div>}>
       <Routes>
-        <Route path="/" element={<PortfolioHome />} />
-        <Route path="/project/:id" element={<ProjectCaseStudy />} />
-        <Route path="/projects" element={<Navigate to="/#work" replace />} />
-        <Route path="/experience/:id" element={<Navigate to="/#record" replace />} />
+        <Route path="/" element={<PortfolioShell />} />
+        <Route path="/project/:id" element={<PortfolioShell />} />
+        <Route path="/projects" element={<Navigate to="/" replace />} />
+        <Route path="/experience/:id" element={<Navigate to="/#experience" replace />} />
         <Route path="/demo/diagnostiq" element={<DiagnostiqDemo />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
