@@ -26,6 +26,12 @@ export interface Education {
   coursework: string[];
 }
 
+export const RAIL_IDENTITY = {
+  nameLines: ["Prathamesh", "More"],
+  role: "AI Engineer",
+  availability: "Open for work",
+} as const;
+
 export const PROFILE: Profile = {
   name: "Prathamesh Pravin More",
   title: "AI Engineer · Full Stack · RAG & Agentic Systems",

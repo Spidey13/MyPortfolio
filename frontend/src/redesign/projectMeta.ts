@@ -15,6 +15,7 @@ export type ArtifactKind =
 export interface ProjectVisualMeta {
   shortName: string;
   label: string;
+  railLabel: string;
   date: string;
   artifact: ArtifactKind;
   tone: string;
@@ -37,6 +38,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p1: {
     shortName: "Research Agent",
     label: "Scientific discovery system",
+    railLabel: "Scientific discovery",
     date: "November 2025",
     artifact: "research",
     tone: "lime",
@@ -56,6 +58,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p2: {
     shortName: "ReMind",
     label: "Memory-aware retrieval",
+    railLabel: "Memory-aware retrieval",
     date: "December 2025",
     artifact: "memory",
     tone: "cyan",
@@ -75,6 +78,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p3: {
     shortName: "StratSim",
     label: "F1 race strategy simulator",
+    railLabel: "F1 strategy simulation",
     date: "June 2025",
     artifact: "race",
     tone: "coral",
@@ -94,6 +98,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p4: {
     shortName: "Wafer Defects",
     label: "Cluster-conditioned ML pipeline",
+    railLabel: "Applied machine learning",
     date: "2025",
     artifact: "wafer",
     tone: "violet",
@@ -113,6 +118,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p5: {
     shortName: "Prompt Optimization",
     label: "Healthcare NLP evaluation",
+    railLabel: "NLP evaluation",
     date: "2025",
     artifact: "evaluation",
     tone: "amber",
@@ -132,6 +138,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p6: {
     shortName: "Codiey",
     label: "Voice-first coding partner",
+    railLabel: "Voice-first coding",
     date: "March 2026",
     artifact: "voice",
     tone: "blue",
@@ -151,6 +158,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p7: {
     shortName: "Audio–Lyric",
     label: "Cross-modal emotional alignment",
+    railLabel: "Audio–lyric alignment",
     date: "2025",
     artifact: "audio",
     tone: "pink",
@@ -170,6 +178,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p8: {
     shortName: "Diagnostiq",
     label: "AI technical support agent",
+    railLabel: "Technical support AI",
     date: "May 2026",
     artifact: "diagnostic",
     tone: "orange",
@@ -189,6 +198,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p9: {
     shortName: "Queue Whisperer",
     label: "Human-approved GitHub agent",
+    railLabel: "GitHub automation",
     date: "July 2026",
     artifact: "approval",
     tone: "green",
@@ -208,6 +218,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p10: {
     shortName: "cachefault",
     label: "Prefix-cache miss attribution",
+    railLabel: "Cache diagnostics",
     date: "August 2026",
     artifact: "cache",
     tone: "lime",

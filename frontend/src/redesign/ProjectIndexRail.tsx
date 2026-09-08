@@ -1,27 +1,19 @@
 import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { PROJECTS } from "../data";
-import { ProjectVisual } from "./ProjectVisual";
+import { PROJECTS, RAIL_IDENTITY } from "../data";
+import { ProjectRailThumbnail } from "./ProjectRailThumbnail";
 import { getProjectMeta, sortHomeProjects } from "./projectMeta";
+import { RailContactLinks, RailMasthead } from "./RailMasthead";
 
 const HOME_PROJECTS = sortHomeProjects(PROJECTS);
 const FOCUSABLE_SELECTOR = "a[href], button:not([disabled]), [tabindex]:not([tabindex=\"-1\"])";
 
 function ProjectLinks({ onNavigate }: { onNavigate?: () => void }) {
   const location = useLocation();
-  const aboutActive = location.pathname === "/";
 
   return (
-    <nav className="project-index" aria-label="Project index">
-      <Link
-        className={`project-index__link project-index__link--about${aboutActive ? " is-active" : ""}`}
-        to="/"
-        aria-current={aboutActive ? "page" : undefined}
-        onClick={onNavigate}
-      >
-        <span className="project-index__about-label">About</span>
-      </Link>
-
+    <nav className="project-index" aria-label="Projects">
       {HOME_PROJECTS.map((project) => {
         const meta = getProjectMeta(project.id);
         const active = location.pathname === `/project/${project.id}`;
@@ -31,29 +23,42 @@ function ProjectLinks({ onNavigate }: { onNavigate?: () => void }) {
             className={`project-index__link${active ? " is-active" : ""}`}
             to={`/project/${project.id}`}
             aria-current={active ? "page" : undefined}
-            aria-label={`Open ${meta.shortName}: ${meta.home.thesis}`}
+            aria-label={`Open ${meta.shortName}: ${meta.railLabel}`}
             onClick={onNavigate}
             key={project.id}
           >
             <span className="project-index__thumb" aria-hidden="true">
-              <ProjectVisual project={project} active={false} />
+              <ProjectRailThumbnail project={project} />
             </span>
             <span className="project-index__copy">
               <span className="project-index__title">{meta.shortName}</span>
-              <span className="project-index__thesis">{meta.home.thesis}</span>
+              <span className="project-index__thesis">{meta.railLabel}</span>
             </span>
+            <ArrowUpRight
+              className="project-index__arrow"
+              aria-hidden="true"
+              focusable="false"
+              size={16}
+              strokeWidth={1.5}
+            />
           </Link>
         );
       })}
+      <span className="project-index__deck" aria-hidden="true">
+        <span />
+        <span />
+      </span>
     </nav>
   );
 }
 
 export default function ProjectIndexRail() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
   const projectsButtonRef = useRef<HTMLButtonElement>(null);
   const mobileDialogRef = useRef<HTMLDivElement>(null);
-  const profileName = "Prathamesh More";
+  const profileName = RAIL_IDENTITY.nameLines.join(" ");
+  const aboutActive = location.pathname === "/";
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -116,17 +121,9 @@ export default function ProjectIndexRail() {
       </div>
 
       <aside className="project-rail" aria-label="Portfolio navigation">
+        <RailMasthead projectCount={HOME_PROJECTS.length} />
         <div className="project-rail__scroller">
-          <div className="identity-block">
-            <Link to="/" className="identity-block__name">{profileName}</Link>
-            <p>I turn ambiguous ideas into dependable AI systems people can actually use.</p>
-          </div>
           <ProjectLinks />
-        </div>
-        <div className="contact-dock">
-          <Link to="/#contact" state={{ focusContact: true }} aria-label="Contact Prathamesh More">
-            Contact ↗
-          </Link>
         </div>
       </aside>
 
@@ -147,6 +144,18 @@ export default function ProjectIndexRail() {
             <div className="mobile-index-dialog__header">
               <h2 id="mobile-project-index-title">Projects</h2>
               <button type="button" onClick={closeMobileIndex}>Close</button>
+            </div>
+            <div className="mobile-index-dialog__navigation">
+              <Link
+                className="mobile-index-dialog__about"
+                to="/"
+                aria-current={aboutActive ? "page" : undefined}
+                onClick={closeMobileIndex}
+              >
+                <span>About</span>
+                <ArrowUpRight aria-hidden="true" focusable="false" size={15} strokeWidth={1.5} />
+              </Link>
+              <RailContactLinks className="mobile-index-dialog__contacts" />
             </div>
             <ProjectLinks onNavigate={closeMobileIndex} />
           </div>
