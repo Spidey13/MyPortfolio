@@ -4,6 +4,7 @@ import { PROJECTS } from "../data/projects";
 import AboutDocument from "./AboutDocument";
 import ProjectCaseStudy from "./ProjectCaseStudy";
 import ProjectIndexRail from "./ProjectIndexRail";
+import { useProjectRailLayout } from "./useProjectRailLayout";
 
 const PROJECT_IDS = new Set(PROJECTS.map((project) => project.id));
 
@@ -15,6 +16,8 @@ export default function PortfolioShell() {
   const location = useLocation();
   const { id } = useParams();
   const documentPaneRef = useRef<HTMLElement>(null);
+  const projectRailViewportRef = useRef<HTMLDivElement>(null);
+  const projectRailTrackRef = useRef<HTMLElement>(null);
   const [entering, setEntering] = useState(false);
   const isProjectRoute = location.pathname.startsWith("/project/");
   const hasUnknownProject = isProjectRoute && (!id || !PROJECT_IDS.has(id));
@@ -57,6 +60,11 @@ export default function PortfolioShell() {
     return () => cancelAnimationFrame(frame);
   }, [isProjectRoute, location.hash, location.key, routeState?.focusContact]);
 
+  useProjectRailLayout({
+    railTrackRef: projectRailTrackRef,
+    railViewportRef: projectRailViewportRef,
+  });
+
   if (hasUnknownProject) return <Navigate to="/" replace />;
 
   const documentKey = isProjectRoute ? `project-${id}` : "about";
@@ -64,7 +72,10 @@ export default function PortfolioShell() {
   return (
     <div className="portfolio-shell">
       <a className="portfolio-skip-link" href="#main-content">Skip to content</a>
-      <ProjectIndexRail />
+      <ProjectIndexRail
+        desktopScrollerRef={projectRailViewportRef}
+        desktopTrackRef={projectRailTrackRef}
+      />
       <main className="document-pane" id="main-content" ref={documentPaneRef} tabIndex={-1}>
         <div className={`document-pane__transition${entering ? " is-entering" : ""}`} key={documentKey}>
           {isProjectRoute ? <ProjectCaseStudy /> : <AboutDocument />}

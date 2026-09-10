@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { PROJECTS, RAIL_IDENTITY } from "../data";
@@ -9,11 +9,21 @@ import { RailContactLinks, RailMasthead } from "./RailMasthead";
 const HOME_PROJECTS = sortHomeProjects(PROJECTS);
 const FOCUSABLE_SELECTOR = "a[href], button:not([disabled]), [tabindex]:not([tabindex=\"-1\"])";
 
-function ProjectLinks({ onNavigate }: { onNavigate?: () => void }) {
+interface ProjectLinksProps {
+  onNavigate?: () => void;
+  trackRef?: RefObject<HTMLElement | null>;
+}
+
+interface ProjectIndexRailProps {
+  desktopScrollerRef: RefObject<HTMLDivElement | null>;
+  desktopTrackRef: RefObject<HTMLElement | null>;
+}
+
+function ProjectLinks({ onNavigate, trackRef }: ProjectLinksProps) {
   const location = useLocation();
 
   return (
-    <nav className="project-index" aria-label="Projects">
+    <nav className="project-index" aria-label="Projects" ref={trackRef}>
       {HOME_PROJECTS.map((project) => {
         const meta = getProjectMeta(project.id);
         const active = location.pathname === `/project/${project.id}`;
@@ -24,6 +34,7 @@ function ProjectLinks({ onNavigate }: { onNavigate?: () => void }) {
             to={`/project/${project.id}`}
             aria-current={active ? "page" : undefined}
             aria-label={`Open ${meta.shortName}: ${meta.railLabel}`}
+            data-project-id={project.id}
             onClick={onNavigate}
             key={project.id}
           >
@@ -44,15 +55,14 @@ function ProjectLinks({ onNavigate }: { onNavigate?: () => void }) {
           </Link>
         );
       })}
-      <span className="project-index__deck" aria-hidden="true">
-        <span />
-        <span />
-      </span>
     </nav>
   );
 }
 
-export default function ProjectIndexRail() {
+export default function ProjectIndexRail({
+  desktopScrollerRef,
+  desktopTrackRef,
+}: ProjectIndexRailProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const projectsButtonRef = useRef<HTMLButtonElement>(null);
@@ -122,8 +132,10 @@ export default function ProjectIndexRail() {
 
       <aside className="project-rail" aria-label="Portfolio navigation">
         <RailMasthead projectCount={HOME_PROJECTS.length} />
-        <div className="project-rail__scroller">
-          <ProjectLinks />
+        <div className="project-rail__viewport">
+          <div className="project-rail__scroller" ref={desktopScrollerRef}>
+            <ProjectLinks trackRef={desktopTrackRef} />
+          </div>
         </div>
       </aside>
 
