@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { isProductPremiereId, PRODUCT_PREMIERES } from "../data/productPremieres";
 import { PROJECTS } from "../data/projects";
+import ProductPremiere from "./ProductPremiere";
 import { ProjectVisual } from "./ProjectVisual";
 import { getProjectMeta, getProjectNumber, sortProjects } from "./projectMeta";
 
@@ -62,6 +64,17 @@ export default function ProjectCaseStudy() {
   const previous = projects[(currentIndex - 1 + projects.length) % projects.length];
   const next = projects[(currentIndex + 1) % projects.length];
   const goBack = () => navigate("/");
+
+  if (isProductPremiereId(project.id)) {
+    return (
+      <ProductPremiere
+        project={project}
+        premiere={PRODUCT_PREMIERES[project.id]}
+        previous={previous}
+        next={next}
+      />
+    );
+  }
 
   return (
     <div className={`rp-case rp-case--${meta.tone}`}>

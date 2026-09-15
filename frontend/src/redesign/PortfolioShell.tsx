@@ -43,6 +43,14 @@ export default function PortfolioShell() {
         }
       };
 
+      if (isProjectRoute && location.hash) {
+        const section = document.getElementById(location.hash.slice(1));
+        if (section instanceof HTMLElement && pane.contains(section)) {
+          section.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
+        }
+        return;
+      }
+
       scrollToTop();
 
       if (!isProjectRoute && location.hash === "#contact") {
