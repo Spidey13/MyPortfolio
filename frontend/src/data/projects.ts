@@ -201,46 +201,24 @@ export const PROJECTS: Project[] = [
     title: "Semiconductor Defect Detection System",
     github_url: "https://github.com/Spidey13/Wafer-Fault-Detection",
     star: {
-      situation:
-        "Wafer defect detection from the SECOM dataset (591 sensors) is a common imbalanced-classification benchmark with significant missing-data and validation challenges.",
-      task: "Build an end-to-end ML pipeline with schema validation, missing-value handling, dual model comparison, and a serving layer that can be inspected and re-trained.",
-      action:
-        "Built an end-to-end pipeline in Python/Flask handling schema validation, missing-value imputation (KNN), and a K-Means clustering step that segments wafers before training a per-cluster classifier — comparing XGBoost vs Random Forest with GridSearchCV on ROC-AUC. Validated all incoming payloads with Pydantic schemas at the Flask boundary. Added Pytest coverage for the preprocessing, training, and prediction paths. Wrapped the training and prediction flows behind Flask endpoints with model persistence and re-training hooks.",
-      result:
-        "End-to-end pipeline running training and prediction over 591-dimensional sensor inputs with cluster-conditioned classification, automated hyperparameter search, and a working web interface for model management.",
-      impact:
-        "A reference implementation of a structured ML pipeline (schema → cleaning → clustering → classification → serving) over a high-dimensional imbalanced dataset.",
-      architecture:
-        "K-Means cluster assignment (elbow method) followed by per-cluster classifier comparison (XGBoost vs Random Forest) with GridSearchCV on ROC-AUC. Validation pipeline with Pydantic schemas, schema checks, KNN imputation, and feature selection. Flask REST endpoints for training and prediction with model persistence. Dockerized Flask serving layer; GitHub Actions training job triggered on data refresh. Pytest covering the preprocessing, training, and prediction paths.",
+      situation: "This archival wafer-defect prototype uses a schema with 590 sensor fields, a wafer ID, and an output label.",
+      task: "Explore missing-value handling, clustering, and per-cluster model selection while keeping the inference limitation visible.",
+      action: "The training code imputes missing values with KNN, removes zero-variance columns, clusters rows with K-Means, then compares Random Forest and XGBoost for each cluster. The prediction loop loses its cluster subset.",
+      result: "An inspectable training path; reliable cluster-conditioned inference is not demonstrated by the current prediction code.",
+      impact: "An archival example of pipeline decomposition, not a production defect-detection result.",
+      architecture: "Schema checks, KNN imputation, zero-variance removal, K-Means clustering, and per-cluster Random Forest/XGBoost selection. The inference loop replaces its filtered subset with the full table before prediction.",
     },
-    technologies: [
-      "Python",
-      "Flask",
-      "XGBoost",
-      "Random Forest",
-      "K-Means Clustering",
-      "GridSearchCV",
-      "ROC AUC",
-      "Pydantic",
-      "Pytest",
-      "Docker",
-      "GitHub Actions",
-      "REST API",
-    ],
+    technologies: ["Python", "Flask", "XGBoost", "Random Forest", "K-Means Clustering", "KNN Imputation"],
     featured: true,
     modalPreview: {
-      hook: "End-to-end ML pipeline on SECOM wafer data: cluster-conditioned XGBoost vs Random Forest",
-      problemTeaser:
-        "591-sensor wafer defect detection with schema validation, KNN imputation, K-Means segmentation, and per-cluster classifier comparison.",
-      heroMetric: {
-        label: "Input Dim",
-        value: "591 sensors",
-      },
+      hook: "An inspectable wafer training pipeline with an unfinished inference contract",
+      problemTeaser: "590 sensor fields feed imputation, clustering, and per-cluster model selection; prediction still needs repair.",
+      heroMetric: { label: "Input Dim", value: "590 sensors" },
     },
     metrics: [
       { label: "Models", value: "XGBoost + RF" },
-      { label: "Input Dim", value: "591 sensors" },
-      { label: "Pipeline", value: "Cluster-conditioned" },
+      { label: "Input Dim", value: "590 sensors" },
+      { label: "Status", value: "Training path inspectable" },
     ],
   },
   {
@@ -248,45 +226,24 @@ export const PROJECTS: Project[] = [
     title: "Prompt Optimization for Healthcare NLP",
     github_url: "https://github.com/Spidey13/Perspective-aware-summarization",
     star: {
-      situation:
-        "Healthcare Q&A summarization is a perspective-heavy task — answers blend information, suggestion, experience, cause, and question. Manual prompt engineering doesn't scale across perspectives.",
-      task: "Apply automatic prompt optimization (DSPy MIPROv2) to a perspective-aware summarization pipeline and compare against parameter-efficient fine-tuning on the same dataset.",
-      action:
-        "Built a dual pipeline: (1) DSPy MIPROv2 programmatic prompt optimization with Chain-of-Thought, optimizing a multi-objective loss combining perspective classification, start-phrase matching, and tone alignment; (2) PEFT Prefix Tuning as a fine-tuning baseline. Evaluated both with ROUGE, BLEU, METEOR, BertScore, and a custom SemanticF1. Integrated BERTopic for seed-topic guided content modeling. Logged every optimization run to Weights & Biases for head-to-head comparison of MIPROv2 and PEFT variants on the same held-out set under one report.",
-      result:
-        "DSPy MIPROv2 pipeline produced competitive summaries on the perspective-aware benchmark without weight updates, evaluated head-to-head against PEFT fine-tuning across five metrics. Working evaluation framework with custom SemanticF1.",
-      impact:
-        "A practical comparison of programmatic prompt optimization vs parameter-efficient fine-tuning for domain summarization — useful when fine-tuning compute is constrained.",
-      architecture:
-        "Dual pipeline (DSPy MIPROv2 + PEFT Prefix Tuning). Multi-objective loss combining perspective classification, start-phrase matching, and tone alignment. Multi-metric evaluation harness (ROUGE, BLEU, METEOR, BertScore, custom SemanticF1) so both variants compare on the same held-out set. BERTopic for seed-topic content modeling. Weights & Biases for run tracking and side-by-side comparison.",
+      situation: "Healthcare Q&A summarization can foreground information, suggestion, experience, cause, or question.",
+      task: "Test DSPy MIPROv2 prompt candidates against a default perspective-aware summarization program; inspect PEFT code without asserting a final head-to-head result.",
+      action: "Defined a DSPy task signature and evaluated MIPROv2 prompt candidates with a SemanticF1-style metric. PEFT prefix-tuning code also exists, but the repository does not record a comparable final score.",
+      result: "In the notebook's 80-example internal full evaluation, the default scored 61.23 and evaluated candidates scored 53.33, 53.31, and 55.69. The optimizer retained the default.",
+      impact: "A useful negative result: candidate selection can retain a baseline when evaluated alternatives do worse. This is not an external clinical benchmark.",
+      architecture: "DSPy task signature, MIPROv2 candidate search, and an internal SemanticF1-style evaluation. A separate PEFT prefix-tuning path exists without a defensible numerical comparison.",
     },
-    technologies: [
-      "DSPy",
-      "MIPROv2",
-      "Hugging Face Transformers",
-      "PyTorch",
-      "PEFT",
-      "BERTopic",
-      "ROUGE",
-      "BertScore",
-      "NLTK",
-      "Sentence Transformers",
-      "Weights & Biases",
-    ],
+    technologies: ["DSPy", "MIPROv2", "Hugging Face Transformers", "PyTorch", "PEFT", "SemanticF1"],
     featured: true,
     modalPreview: {
-      hook: "DSPy MIPROv2 prompt optimization vs PEFT fine-tuning on perspective-aware healthcare summarization",
-      problemTeaser:
-        "Head-to-head comparison of programmatic prompt optimization and parameter-efficient fine-tuning on a five-perspective medical Q&A task.",
-      heroMetric: {
-        label: "Optimization",
-        value: "DSPy MIPROv2",
-      },
+      hook: "The recorded prompt-optimization run retained its default program",
+      problemTeaser: "MIPROv2 candidates did not beat the default in the notebook's 80-example internal evaluation; PEFT remains an adjacent code path.",
+      heroMetric: { label: "Selection", value: "Default retained" },
     },
     metrics: [
-      { label: "Optimization", value: "MIPROv2 vs PEFT" },
-      { label: "Fine-tuning", value: "PEFT Prefix Tuning" },
-      { label: "Eval Harness", value: "5-metric (ROUGE/BLEU/METEOR/BertScore/SemanticF1)" },
+      { label: "Default", value: "61.23" },
+      { label: "Best candidate", value: "55.69" },
+      { label: "Selection", value: "Default retained" },
     ],
   },
   {
@@ -294,45 +251,24 @@ export const PROJECTS: Project[] = [
     title: "Audio-Lyric Emotional Alignment",
     github_url: "https://github.com/Ranvirsv/Emotion_Analysis_Music-Lyrics",
     star: {
-      situation:
-        "Quantifying emotional congruence between music audio and lyrics requires aligning representations from two different modalities.",
-      task: "Build a pipeline that produces a comparable embedding for music and for lyrics, then measure cross-modal similarity over a fixed segment set.",
-      action:
-        "Used OpenL3 for music-specific audio embeddings and Sentence Transformers for lyric embeddings. Projected both into a shared space via PCA and computed cosine similarity. Built the data pipeline end-to-end: audio segmentation, lyric retrieval via Genius API, ACRCloud/AudD for track identification, preprocessing, and emotion classification with transformer models. Ran the analysis over 712 segment-lyric pairs.",
-      result:
-        "Across 712 audio-lyric segment pairs, mean cosine similarity in the shared PCA space was ~63%. Working cross-modal pipeline with multi-API data collection and clustering for pattern inspection.",
-      impact:
-        "An end-to-end exploration of joint audio-text embeddings for emotion analysis. Surfaced where audio and lyric emotional signals agree and where they diverge.",
-      architecture:
-        "OpenL3 audio embeddings + Sentence Transformers text embeddings projected into a shared PCA space. Cosine similarity for cross-modal comparison. Pipeline: audio segmentation, Genius API lyric retrieval, ACRCloud/AudD for track ID, transformer emotion classification, clustering for pattern analysis.",
+      situation: "The team explored whether audio and lyric representations could distinguish matched from mismatched pairs.",
+      task: "Test a cross-modal comparison while checking whether the saved similarity readout supports an alignment claim.",
+      action: "The team prepared audio and lyric inputs, instantiated MuLan-style encoders, and compared resulting vectors. The script does not load trained joint weights, and later emotion labels rely on heuristics.",
+      result: "The saved readout rounds both matched and unmatched mean similarities to −0.115, with reported separation of 0.039 standard deviations above random.",
+      impact: "An exploratory team experiment whose comparison did not support an emotion-alignment claim.",
+      architecture: "Parallel audio and lyric preprocessing, encoder instantiation, and cosine-similarity comparison. No trained joint checkpoint is loaded into the MuLan-style encoders.",
     },
-    technologies: [
-      "OpenL3",
-      "Sentence Transformers",
-      "PyTorch",
-      "Transformers",
-      "Librosa",
-      "NumPy",
-      "Pandas",
-      "Python",
-      "ACRCloud API",
-      "Genius API",
-      "Scikit-learn",
-    ],
+    technologies: ["Python", "PyTorch", "Transformers", "Librosa", "NumPy", "Pandas"],
     featured: true,
     modalPreview: {
-      hook: "Joint audio-lyric embeddings for cross-modal emotion analysis across 712 segments",
-      problemTeaser:
-        "OpenL3 audio embeddings + Sentence Transformers lyric embeddings projected into a shared PCA space, with cosine similarity measured over a fixed segment set.",
-      heroMetric: {
-        label: "Mean Cosine Similarity",
-        value: "~63%",
-      },
+      hook: "Matched and mismatched audio–lyric pairs barely separated",
+      problemTeaser: "A team experiment in cross-modal comparison; the saved matched and unmatched means both round to −0.115.",
+      heroMetric: { label: "Separation", value: "0.039σ" },
     },
     metrics: [
-      { label: "Mean Cosine Similarity", value: "~63%" },
-      { label: "Segments", value: "712 pairs" },
-      { label: "Modalities", value: "Audio + Text" },
+      { label: "Matched mean", value: "−0.115" },
+      { label: "Unmatched mean", value: "−0.115" },
+      { label: "Separation", value: "0.039σ" },
     ],
   },
   {
@@ -340,47 +276,24 @@ export const PROJECTS: Project[] = [
     title: "Autonomous Research Agent (Scientific Discovery System)",
     github_url: "https://github.com/YASHY2K/scientific-discovery-agent",
     star: {
-      situation:
-        "Cross-domain literature reviews take researchers weeks of manual searching and synthesis, with inconsistent coverage and citation quality.",
-      task: "Co-developed with a teammate. Build a multi-agent system that searches across academic sources, analyzes papers, critiques its own output, and produces a structured report with verified citations.",
-      action:
-        "Co-developed an autonomous research assistant on AWS Strands Agents and Amazon Bedrock. Designed a hierarchical five-agent architecture (Research Planner, Paper Searcher, Paper Analyzer, Research Critique, Report Generator) and a five-phase workflow (Planning → Search → Analysis → Critique → Reporting). The Critique agent acts as an automated eval layer over the Analyzer's output — checking citation grounding and flagging unsupported claims, equivalent to a custom RAGAS-style faithfulness check before report generation. Exposed arXiv and Semantic Scholar integrations as MCP servers so the Paper Searcher consumes them through a uniform tool interface, decoupling source-specific auth and rate-limiting from agent logic. Traced every agent run with LangSmith to inspect tool-call sequences, token usage, and failure modes — used those traces to tune the Critique agent's threshold for flagging unsupported claims. Built a 'Glass Box' Streamlit dashboard streaming each agent's decisions in real time.",
-      result:
-        "Working multi-agent pipeline that produces structured literature reviews in minutes, with a critique pass that flags and removes unverifiable citations before final report generation.",
-      impact:
-        "Demonstrated hierarchical agent orchestration with a self-critique loop for citation grounding — a pattern that translates directly to other knowledge-synthesis workflows where source verification matters.",
-      architecture:
-        "Hierarchical multi-agent system on AWS Strands Agents + Amazon Bedrock. Five specialist agents (Planner, Searcher, Analyzer, Critique, Reporter) over a five-phase workflow with a self-critique step. Source integrations (arXiv, Semantic Scholar) wrapped as MCP servers for uniform tool access. LangSmith for run traces and eval. Pydantic schemas for inter-agent message contracts. Pytest for the eval harness. Streamlit dashboard with real-time activity streams and phase tracking. Containerized dashboard with Docker.",
+      situation: "Research synthesis needs a way to revisit weak analysis before report generation; this prototype encodes a critique-and-revision gate.",
+      task: "As a team, design a route from planning and paper search through analysis, critique, and report generation.",
+      action: "The team implemented five-stage orchestration. The critique tool parses a model-issued verdict: REVISE stores pending revisions, while APPROVED sets a quality state before report generation. Source integrations include arXiv and Semantic Scholar.",
+      result: "The source demonstrates the critique state branch. No saved end-to-end report or independent citation-accuracy evaluation is presented here.",
+      impact: "An inspectable research workflow design, not proof of verified citations or research speed.",
+      architecture: "Five phases—plan, search, analyze, critique, report—with a model-issued critique verdict parsed into pending_revisions or quality_validated state. Code and a synthetic fixture are available; saved report evidence is not.",
     },
-    technologies: [
-      "AWS Strands Agents",
-      "Amazon Bedrock",
-      "Python",
-      "Streamlit",
-      "Multi-Agent Systems",
-      "MCP",
-      "LangSmith",
-      "Pydantic",
-      "Pytest",
-      "Docker",
-      "LLM Evaluation",
-      "arXiv API",
-      "Semantic Scholar API",
-    ],
+    technologies: ["AWS Strands Agents", "Amazon Bedrock", "Python", "Streamlit", "Multi-Agent Systems", "MCP", "arXiv API", "Semantic Scholar API"],
     featured: true,
     modalPreview: {
-      hook: "Five-agent literature review pipeline with a self-critique loop that flags unverifiable citations",
-      problemTeaser:
-        "Planner → Searcher → Analyzer → Critique → Reporter, on AWS Strands + Bedrock. The critique pass re-validates sources before the final report is generated.",
-      heroMetric: {
-        label: "Specialist Agents",
-        value: "5",
-      },
+      hook: "A team-built research workflow with an explicit critique-and-revision gate",
+      problemTeaser: "Plan → search → analyze → critique → report. The model-issued verdict changes workflow state; citation accuracy has not been independently verified.",
+      heroMetric: { label: "Workflow", value: "5 stages" },
     },
     metrics: [
-      { label: "Specialist Agents", value: "5" },
+      { label: "Workflow", value: "5 stages" },
       { label: "Sources", value: "arXiv + Semantic Scholar (via MCP)" },
-      { label: "Self-Critique", value: "Citation Validation Loop" },
+      { label: "Decision", value: "Critique gate" },
     ],
   },
   {

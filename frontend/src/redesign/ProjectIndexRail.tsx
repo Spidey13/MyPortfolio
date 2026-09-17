@@ -67,6 +67,7 @@ export default function ProjectIndexRail({
   const location = useLocation();
   const projectsButtonRef = useRef<HTMLButtonElement>(null);
   const mobileDialogRef = useRef<HTMLDivElement>(null);
+  const closingForNavigationRef = useRef(false);
   const profileName = RAIL_IDENTITY.nameLines.join(" ");
   const aboutActive = location.pathname === "/";
 
@@ -105,11 +106,16 @@ export default function ProjectIndexRail({
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousBodyOverflow;
-      projectsButton?.focus();
+      if (!closingForNavigationRef.current) projectsButton?.focus();
+      closingForNavigationRef.current = false;
     };
   }, [mobileOpen]);
 
   const closeMobileIndex = () => setMobileOpen(false);
+  const navigateFromMobileIndex = () => {
+    closingForNavigationRef.current = true;
+    setMobileOpen(false);
+  };
 
   return (
     <>
@@ -169,7 +175,7 @@ export default function ProjectIndexRail({
               </Link>
               <RailContactLinks className="mobile-index-dialog__contacts" />
             </div>
-            <ProjectLinks onNavigate={closeMobileIndex} />
+            <ProjectLinks onNavigate={navigateFromMobileIndex} />
           </div>
         </div>
       ) : null}

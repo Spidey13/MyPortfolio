@@ -18,6 +18,7 @@ export default function PortfolioShell() {
   const documentPaneRef = useRef<HTMLElement>(null);
   const projectRailViewportRef = useRef<HTMLDivElement>(null);
   const projectRailTrackRef = useRef<HTMLElement>(null);
+  const previousPathRef = useRef(location.pathname);
   const [entering, setEntering] = useState(false);
   const isProjectRoute = location.pathname.startsWith("/project/");
   const hasUnknownProject = isProjectRoute && (!id || !PROJECT_IDS.has(id));
@@ -67,6 +68,13 @@ export default function PortfolioShell() {
 
     return () => cancelAnimationFrame(frame);
   }, [isProjectRoute, location.hash, location.key, routeState?.focusContact]);
+
+  useEffect(() => {
+    if (previousPathRef.current === location.pathname) return;
+    previousPathRef.current = location.pathname;
+    const frame = requestAnimationFrame(() => documentPaneRef.current?.focus({ preventScroll: true }));
+    return () => cancelAnimationFrame(frame);
+  }, [location.pathname]);
 
   useProjectRailLayout({
     railTrackRef: projectRailTrackRef,
