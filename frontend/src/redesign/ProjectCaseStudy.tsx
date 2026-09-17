@@ -1,8 +1,15 @@
 import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { isProductPremiereId } from "../data/productPremieres";
 import { PROJECTS } from "../data/projects";
+import ProductPremiere from "./ProductPremiere";
 import { ProjectVisual } from "./ProjectVisual";
 import { getProjectMeta, getProjectNumber, sortProjects } from "./projectMeta";
+import StratSimFieldNote from "./StratSimFieldNote";
+import ResearchFieldNote from "./fieldnotes/ResearchFieldNote";
+import WaferFieldNote from "./fieldnotes/WaferFieldNote";
+import PromptFieldNote from "./fieldnotes/PromptFieldNote";
+import AudioFieldNote from "./fieldnotes/AudioFieldNote";
 
 const SCENES = [
   { id: "outcome", label: "Outcome" },
@@ -62,6 +69,25 @@ export default function ProjectCaseStudy() {
   const previous = projects[(currentIndex - 1 + projects.length) % projects.length];
   const next = projects[(currentIndex + 1) % projects.length];
   const goBack = () => navigate("/");
+
+  if (isProductPremiereId(project.id)) {
+    return (
+      <ProductPremiere
+        project={project}
+        previous={previous}
+        next={next}
+      />
+    );
+  }
+
+  if (project.id === "p3") {
+    return <StratSimFieldNote project={project} previous={previous} next={next} />;
+  }
+
+  if (project.id === "p1") return <ResearchFieldNote project={project} previous={previous} next={next} />;
+  if (project.id === "p4") return <WaferFieldNote project={project} previous={previous} next={next} />;
+  if (project.id === "p5") return <PromptFieldNote project={project} previous={previous} next={next} />;
+  if (project.id === "p7") return <AudioFieldNote project={project} previous={previous} next={next} />;
 
   return (
     <div className={`rp-case rp-case--${meta.tone}`}>

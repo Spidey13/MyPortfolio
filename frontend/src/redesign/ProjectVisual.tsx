@@ -71,7 +71,7 @@ export function ProjectVisual({ project, active = false, expanded = false }: Pro
             <div className={`rp-trace-node ${index === 3 ? "is-critical" : ""}`} key={step}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <strong>{step}</strong>
-              {index === 3 ? <small>CITATION CHECK</small> : null}
+              {index === 3 ? <small>CRITIQUE GATE</small> : null}
             </div>
           ))}
           <div className="rp-trace-line" aria-hidden="true" />
@@ -101,34 +101,28 @@ export function ProjectVisual({ project, active = false, expanded = false }: Pro
         <div className="rp-race-board">
           <div className="rp-race-track" aria-hidden="true"><i /><b /></div>
           <div className="rp-race-timeline">
-            {["L18", "L23", "L31", "L42", "L56"].map((lap, index) => (
-              <span key={lap} className={index === 2 ? "is-pit" : ""}>{lap}</span>
+            {["L01", "L30", "L32", "L41", "L50"].map((lap, index) => (
+              <span key={lap} className={index === 3 ? "is-pit" : ""}>{lap}</span>
             ))}
           </div>
-          <div className="rp-race-decision"><span>PIT WINDOW</span><strong>LAP 31</strong><small>6 AGENTS AGREE</small></div>
+          <div className="rp-race-decision"><span>SAVED RUN / PIT STOP</span><strong>LAP 41</strong><small>MEDIUM → HARD</small></div>
         </div>
       ) : null}
 
       {meta.artifact === "wafer" ? (
-        <div className="rp-wafer-flow">
-          <div className="rp-sensor-field">
-            {Array.from({ length: 64 }, (_, index) => <span key={index} data-hot={index % 11 === 0} />)}
-          </div>
-          <div className="rp-wafer-arrow">591 SENSORS</div>
-          <div className="rp-clusters">
-            <span>C1</span><span>C2</span><span className="is-selected">C3</span>
-          </div>
-          <div className="rp-model-verdict"><small>MODEL SELECTED</small><strong>XGBOOST</strong></div>
+        <div className="rp-archive-specimen">
+          <small>SCHEMA EXCERPT / TRAINING PATH</small>
+          <div className="rp-archive-specimen__table"><span>Wafer</span><span>Sensor 1</span><span>Sensor 2</span><span>…</span><span>Sensor 590</span><span>Output</span></div>
+          <p>IMPUTE → CLUSTER → SELECT MODEL</p>
+          <strong>Inference contract unfinished</strong>
         </div>
       ) : null}
 
       {meta.artifact === "evaluation" ? (
         <div className="rp-evaluation-split">
-          <div><small>PROGRAMMATIC</small><strong>MIPROv2</strong><span>Prompt stays editable</span></div>
-          <div><small>PARAMETER-EFFICIENT</small><strong>PEFT</strong><span>Weights adapt</span></div>
-          <div className="rp-eval-metrics">
-            {['ROUGE','BLEU','METEOR','BERT','SEM F1'].map((metric) => <span key={metric}>{metric}</span>)}
-          </div>
+          <div><small>DEFAULT / 80 EXAMPLES</small><strong>61.23</strong><span>Baseline retained</span></div>
+          <div><small>BEST EVALUATED CANDIDATE</small><strong>55.69</strong><span>SemanticF1-style metric</span></div>
+          <div className="rp-eval-metrics"><span>DSPy candidate search</span><span>PEFT code path · no final head-to-head</span></div>
         </div>
       ) : null}
 
@@ -138,9 +132,8 @@ export function ProjectVisual({ project, active = false, expanded = false }: Pro
 
       {meta.artifact === "audio" ? (
         <div className="rp-audio-align">
-          <Waveform count={42} />
-          <div className="rp-lyric-lines"><span>the rhythm keeps moving</span><strong>emotion aligned</strong><span>across the same moment</span></div>
-          <div className="rp-similarity"><small>MEAN COSINE SIMILARITY</small><strong>~63%</strong><span>712 PAIRS</span></div>
+          <div className="rp-audio-lanes"><div><span>AUDIO</span><i />ENCODE → COMPARE</div><div><span>LYRICS</span><i />ENCODE → COMPARE</div></div>
+          <div className="rp-similarity"><small>SAVED COMPARISON</small><strong>−0.115 ≈ −0.115</strong><span>MATCHED ≈ UNMATCHED</span></div>
         </div>
       ) : null}
 

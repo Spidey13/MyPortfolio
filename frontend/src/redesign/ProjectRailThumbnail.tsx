@@ -1,5 +1,5 @@
 import type { Project } from "../data/projects";
-import { ProjectVisual } from "./ProjectVisual";
+import { getProjectMeta, getProjectNumber } from "./projectMeta";
 
 const RAIL_THUMBNAILS: Record<string, string> = {
   p10: "/images/rail/cachefault.webp",
@@ -25,5 +25,6 @@ export function ProjectRailThumbnail({ project }: { project: Project }) {
     );
   }
 
-  return <ProjectVisual project={project} active={false} />;
+  const meta = getProjectMeta(project.id);
+  return <span className={`project-index__thumb-type project-index__thumb-type--${meta.tone}`} aria-hidden="true"><small>{meta.artifact}</small><strong>{String(getProjectNumber(project)).padStart(2, "0")}</strong></span>;
 }
