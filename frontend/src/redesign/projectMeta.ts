@@ -183,7 +183,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "May 2026",
     artifact: "diagnostic",
     tone: "orange",
-    home: { order: 2, mode: "visual", thesis: "Turning equipment faults into cited, actionable repair plans." },
+    home: { order: 2, mode: "visual", thesis: "Turning equipment faults into repair plans backed by manual citations." },
     architecture: ["Fault", "Retrieve", "Cite", "Branch", "Artifact"],
     decision: {
       rejected: "One embedding model and credential path at runtime",

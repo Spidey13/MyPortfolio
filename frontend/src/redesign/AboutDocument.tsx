@@ -1,204 +1,135 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { EDUCATION, EXPERIENCE, PROFILE, PUBLICATIONS } from "../data";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { ArrowUpRight, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ABOUT, EXPERIENCE_NOTES } from "../data/about";
+import { EDUCATION, PROFILE } from "../data/profile";
+import { EXPERIENCE } from "../data/experience";
+import { PUBLICATIONS } from "../data/publications";
+import "./about.css";
 
-const ASK_SUGGESTIONS = [
-  "Which project shows evaluation design?",
-  "Where is human approval enforced?",
-  "What did Prathamesh build in Go?",
-];
+const LINKS = Object.fromEntries(PROFILE.links.map((link) => [link.type, link.url]));
 
-const profileLinks = Object.fromEntries(PROFILE.links.map((link) => [link.type, link.url]));
-
-const firstSentence = (text: string) => {
-  const match = text.match(/^.*?[.!?](?:\s|$)/);
-  return match?.[0]?.trim() || text;
-};
-
-interface AskDrawerProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const CURATED_ANSWERS: Record<string, string> = {
-  evaluation:
-    "Prompt Optimization compares MIPROv2 and PEFT under one five-metric harness. cachefault validates against both Anthropic’s diagnostics oracle and a real vLLM server.",
-  approval:
-    "Queue Whisperer enforces human approval structurally: the model can stage a proposal, but the GitHub write tools are imported only by the Slack approval handler.",
-  go: "cachefault is the Go project. It ships as a static binary containing the capture proxy, order-preserving diff, classifier, CLI and block simulator.",
-};
-
-function getCuratedAnswer(query: string) {
-  const normalized = query.toLowerCase();
-  if (normalized.includes("evaluation")) return CURATED_ANSWERS.evaluation;
-  if (normalized.includes("approval") || normalized.includes("human")) return CURATED_ANSWERS.approval;
-  if (normalized.includes(" go") || normalized.includes("golang")) return CURATED_ANSWERS.go;
-  return "I can point you to a project, decision or piece of evidence. Try asking about evaluation design, human approval, retrieval, voice interfaces or Go.";
-}
-
-function AskDrawer({ open, onClose }: AskDrawerProps) {
+function AskDialog({ onClose }: { onClose: () => void }) {
+  const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
+  const request = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    if (!open) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+    const element = dialog.current;
+    const trigger = document.activeElement;
+    element?.showModal();
+    return () => {
+      request.current?.abort();
+      element?.close();
+      if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus({ preventScroll: true });
     };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open, onClose]);
+  }, []);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    const prompt = query.trim();
-    if (!prompt || loading) return;
+    if (!query.trim() || loading) return;
     setLoading(true);
     setAnswer("");
-
+    request.current?.abort();
+    const controller = new AbortController();
+    request.current = controller;
     try {
       const { chatWithAI } = await import("../utils/backendConnection");
-      const response = await chatWithAI(prompt);
-      setAnswer(response.response || getCuratedAnswer(prompt));
+      const result = await chatWithAI(query.trim(), controller.signal);
+      if (!controller.signal.aborted) setAnswer(result.response || "Try asking about a specific project in the index.");
     } catch {
-      setAnswer(getCuratedAnswer(prompt));
+      if (!controller.signal.aborted) setAnswer("I couldn’t reach the portfolio assistant. You can explore the projects in the index or email me directly.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (!open) return null;
-
   return (
-    <div className="rp-ask-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <dialog open className="rp-ask-drawer" aria-modal="true" aria-labelledby="ask-title">
-        <div className="rp-ask-header">
-          <div>
-            <span className="rp-kicker">SECONDARY NAVIGATION</span>
-            <h2 id="ask-title">Ask about the work</h2>
-          </div>
-          <button type="button" className="rp-icon-button" onClick={onClose} aria-label="Close Ask about the work">Close</button>
-        </div>
-        <p className="rp-ask-intro">Use the portfolio as the source. Answers should take you back to inspectable evidence.</p>
-        <div className="rp-suggestions">
-          {ASK_SUGGESTIONS.map((suggestion) => (
-            <button type="button" key={suggestion} onClick={() => setQuery(suggestion)}>{suggestion}</button>
-          ))}
-        </div>
-        <form onSubmit={submit} className="rp-ask-form">
-          <label htmlFor="portfolio-question">Question</label>
-          <textarea id="portfolio-question" name="portfolio-question" autoComplete="off" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Ask about a system, decision or result…" rows={4} />
-          <button type="submit" disabled={!query.trim() || loading}>{loading ? "Looking through the work…" : "Ask"}</button>
+    <dialog className="folio-dialog" ref={dialog} onCancel={onClose} aria-labelledby="folio-ask-title">
+      <div className="folio-dialog__body">
+        <button className="folio-dialog__close" onClick={onClose} type="button" aria-label="Close portfolio assistant"><X size={22} /></button>
+        <span className="folio-label">Portfolio assistant</span>
+        <h2 id="folio-ask-title">Ask about the work.</h2>
+        <p>Ask about a project or a design decision.</p>
+        <form onSubmit={submit}>
+          <label htmlFor="folio-question">Your question</label>
+          <textarea id="folio-question" value={query} onChange={(event) => setQuery(event.target.value)} rows={3} placeholder="Which project shows evaluation design?" required />
+          <button className="folio-solid-button" type="submit" disabled={loading || !query.trim()}>{loading ? "Looking through the work…" : "Ask the portfolio"}<ArrowUpRight size={18} /></button>
         </form>
-        <div className="rp-ask-answer" aria-live="polite">
-          {answer ? <><span className="rp-kicker">ANSWER</span><p>{answer}</p></> : null}
-        </div>
-      </dialog>
-    </div>
+        <div className="folio-dialog__answer" aria-live="polite">{answer}</div>
+      </div>
+    </dialog>
   );
 }
 
 export default function AboutDocument() {
+  const publications = useRef<HTMLDivElement>(null);
   const [askOpen, setAskOpen] = useState(false);
 
+  useEffect(() => {
+    const track = publications.current;
+    if (!track) return;
+    // Keep native touch, keyboard and trackpad scrolling. Translate a vertical
+    // mouse wheel only while this strip has room; release it at either edge.
+    const onWheel = (event: WheelEvent) => {
+      if (event.ctrlKey || event.shiftKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+      const end = track.scrollWidth - track.clientWidth;
+      if (end < 1 || (event.deltaY < 0 && track.scrollLeft <= 1) || (event.deltaY > 0 && track.scrollLeft >= end - 1)) return;
+      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? track.clientWidth : 1);
+      event.preventDefault();
+      track.scrollLeft = Math.max(0, Math.min(end, track.scrollLeft + delta));
+    };
+    track.addEventListener("wheel", onWheel, { passive: false });
+    return () => track.removeEventListener("wheel", onWheel);
+  }, []);
+
   return (
-    <article className="about-document">
-      <section className="about-document__section about-document__opening" aria-labelledby="about-opening-title">
-        <span className="about-document__kicker">AI ENGINEER · FULL STACK · RAG & AGENTIC SYSTEMS</span>
-        <h1 id="about-opening-title">{PROFILE.name}</h1>
-        <p className="about-document__title">{PROFILE.title}</p>
+    <article className="folio-home">
+      <section className="folio-hero" aria-labelledby="folio-title">
+        <header className="folio-topline">
+          <span className="folio-label">About</span>
+          <nav aria-label="About page"><Link to="/#experience">Experience</Link><Link to="/#publications">Publications</Link><Link to="/#contact">Contact <ArrowUpRight size={13} /></Link></nav>
+        </header>
+        <h1 id="folio-title"><span className="folio-title-line">Engineering</span><span className="folio-title-line folio-title-accent">intelligence.</span></h1>
+        <div className="folio-hero__bottom"><span className="folio-label"><span>AI engineer</span><span>Research → systems</span></span><p>{ABOUT.intro}</p></div>
       </section>
 
-      <section className="about-document__section" id="what-i-work-on" aria-labelledby="what-i-work-on-title">
-        <span className="about-document__kicker">01 · POSITIONING</span>
-        <h2 id="what-i-work-on-title">What I work on</h2>
-        <p className="about-document__lead">{PROFILE.summary}</p>
+      <section className="folio-experience" id="experience" aria-labelledby="folio-experience-title">
+        <div className="folio-experience__heading"><span className="folio-label">Experience</span><h2 id="folio-experience-title" tabIndex={-1}>Where I’ve <br />been.</h2><a className="folio-text-link" href={LINKS.resume} target="_blank" rel="noreferrer">Full résumé <ArrowUpRight size={15} /></a></div>
+        <div className="folio-jobs">{EXPERIENCE.map((entry) => (
+          <article className="folio-job" key={entry.id}>
+            <div className="folio-job__meta"><p className="folio-job__company">{entry.company}</p><time>{entry.duration.replace(" to ", " – ")}</time></div>
+            <h3>{entry.role}</h3>
+            <p className="folio-job__result">{EXPERIENCE_NOTES[entry.id] || entry.star.result}</p>
+          </article>
+        ))}</div>
+        <div className="folio-education"><span className="folio-label">Education</span><p><strong>{EDUCATION.degree}</strong><span>{EDUCATION.university} · {EDUCATION.graduation}</span></p></div>
       </section>
 
-      <section className="about-document__section" id="experience" aria-labelledby="experience-title">
-        <div className="about-document__section-heading">
-          <span className="about-document__kicker">02 · PROFESSIONAL RECORD</span>
-          <h2 id="experience-title">Experience</h2>
-        </div>
-        <div className="about-document__records">
-          {EXPERIENCE.map((entry) => (
-            <article className="about-document__record" key={entry.id}>
-              <div>
-                <h3>{entry.role}</h3>
-                <p>{entry.company}</p>
-              </div>
-              <time>{entry.duration}</time>
-              <p className="about-document__result">{firstSentence(entry.star.result)}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="about-document__section" id="education" aria-labelledby="education-title">
-        <div className="about-document__section-heading">
-          <span className="about-document__kicker">03 · EDUCATION</span>
-          <h2 id="education-title">Education</h2>
-        </div>
-        <div className="about-document__education">
-          <h3>{EDUCATION.degree}</h3>
-          <p>{EDUCATION.university}</p>
-          <time>{EDUCATION.graduation}</time>
-          <p>GPA {EDUCATION.gpa}</p>
-          <ul>
-            {EDUCATION.coursework.map((course) => <li key={course}>{course}</li>)}
-          </ul>
-        </div>
-      </section>
-
-      <section className="about-document__section" id="publications" aria-labelledby="publications-title">
-        <div className="about-document__section-heading">
-          <span className="about-document__kicker">04 · PEER-REVIEWED</span>
-          <h2 id="publications-title">Publications</h2>
-        </div>
-        <div className="about-document__publications">
+      <section className="folio-research" id="publications" aria-labelledby="folio-research-title">
+        <div className="folio-section-heading"><h2 id="folio-research-title" tabIndex={-1}>Research, in print.<span className="folio-count">({String(PUBLICATIONS.length).padStart(2, "0")})</span></h2><span className="folio-label folio-scroll-hint">Scroll to explore ↔</span></div>
+        <div className="folio-publication-track" ref={publications} role="region" aria-label="Publications. Scroll horizontally or use the arrow keys to explore." tabIndex={0}>
           {PUBLICATIONS.map((publication) => (
-            <a href={publication.url} target="_blank" rel="noreferrer" key={publication.id}>
-              <strong>{publication.title}</strong>
-              <span>{publication.outlet}</span>
-              <time>{publication.date}</time>
-              <b aria-hidden="true">↗</b>
+            <a className="folio-publication" key={publication.id} href={publication.url} target="_blank" rel="noreferrer">
+              <div className="folio-publication__meta"><span className="folio-label">Research paper</span><time>{publication.date}</time></div>
+              <h3>{publication.title}</h3>
+              <div className="folio-publication__bottom"><p>{publication.outlet}</p><span className="folio-publication__read">Read paper <ArrowUpRight size={20} strokeWidth={1.5} /></span></div>
             </a>
           ))}
         </div>
       </section>
 
-      <section className="about-document__section about-document__interests" id="interests" aria-labelledby="interests-title">
-        <div className="about-document__section-heading">
-          <span className="about-document__kicker">05 · OUTSIDE ENGINEERING</span>
-          <h2 id="interests-title">Interests</h2>
-        </div>
-        <div>
-          <p>I enjoy entering unfamiliar domains, learning how the people and systems inside them actually work, and building from that understanding.</p>
-          <p>Outside engineering, football is the constant. I also play badminton, follow sports communities, watch anime, play League of Legends and sketch.</p>
-          <p className="about-document__interest-line" aria-label="Personal interests">Football · Competition · Anime · Games · Sketching</p>
-        </div>
-      </section>
-
-      <section className="about-document__section about-document__contact" id="contact" aria-labelledby="contact-title">
-        <span className="about-document__kicker">06 · CONTACT</span>
-        <h2 id="contact-title" tabIndex={-1}>Contact</h2>
-        <p className="about-document__lead">Have an ambitious AI problem or a role where this kind of work matters?</p>
-        <div className="about-document__contact-links">
-          <a className="about-document__email" href={`mailto:${PROFILE.email}`}>{PROFILE.email} ↗</a>
-          <a href={profileLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
-          <a href={profileLinks.github} target="_blank" rel="noreferrer">GitHub ↗</a>
-          <a href={profileLinks.publications} target="_blank" rel="noreferrer">Publications ↗</a>
-          <a href={profileLinks.resume} target="_blank" rel="noreferrer">Résumé ↗</a>
-        </div>
-        <button className="about-document__ask" type="button" onClick={() => setAskOpen(true)}>
-          Not sure where to start? <span>Ask about the work ↗</span>
-        </button>
-        <footer>© {new Date().getFullYear()} Prathamesh More</footer>
-      </section>
-
-      <AskDrawer open={askOpen} onClose={() => setAskOpen(false)} />
+      <div className="folio-finale">
+        <section className="folio-personal" id="off-clock" aria-labelledby="folio-personal-title"><h2 id="folio-personal-title" tabIndex={-1}>Off the clock</h2><div><p>{ABOUT.personal}</p><p>{ABOUT.invitation}</p></div></section>
+        <section className="folio-contact" id="contact" aria-labelledby="folio-contact-title">
+          <a className="folio-contact__main" href={`mailto:${PROFILE.email}`}><h2 id="folio-contact-title" tabIndex={-1}>Let’s build.</h2><ArrowUpRight aria-hidden="true" strokeWidth={1.1} /></a>
+          <div className="folio-contact__links"><a className="folio-contact__email" href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a><a href={LINKS.linkedin} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight size={13} /></a><a href={LINKS.github} target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={13} /></a><button type="button" onClick={() => setAskOpen(true)}>Ask about the work <ArrowUpRight size={13} /></button></div>
+        </section>
+        <footer className="folio-footer"><span>© {new Date().getFullYear()} {PROFILE.name.replace(" Pravin", "")}</span><span>Open for work</span></footer>
+      </div>
+      {askOpen ? <AskDialog onClose={() => setAskOpen(false)} /> : null}
     </article>
   );
 }

@@ -49,7 +49,7 @@ export const ACTIVITIES: Activity[] = [
     category: "Research",
     title: "RAG and Forgetting Curve",
     description:
-      'Shared "Beyond RAG" work: RAG shouldn\'t be a static archive—it needs a forgetting curve. Explored dynamic memory and retrieval.',
+      'Shared "Beyond RAG" work: RAG shouldn\'t be a static archive. It needs a forgetting curve. Explored dynamic memory and retrieval.',
     type: "milestone",
   },
   {

@@ -4,7 +4,7 @@ import { isProductPremiereId } from "../data/productPremieres";
 import { PROJECTS } from "../data/projects";
 import ProductPremiere from "./ProductPremiere";
 import { ProjectVisual } from "./ProjectVisual";
-import { getProjectMeta, getProjectNumber, sortProjects } from "./projectMeta";
+import { getProjectMeta, sortProjects } from "./projectMeta";
 import StratSimFieldNote from "./StratSimFieldNote";
 import ResearchFieldNote from "./fieldnotes/ResearchFieldNote";
 import WaferFieldNote from "./fieldnotes/WaferFieldNote";
@@ -94,7 +94,7 @@ export default function ProjectCaseStudy() {
       <header className="project-document__header">
         <button type="button" onClick={goBack} className="rp-back-link">← Back to all work</button>
         <div className="project-document__identity">
-          <span className="rp-kicker">{String(getProjectNumber(project)).padStart(2, "0")} / 10</span>
+          <span className="rp-kicker">{meta.date}</span>
           <strong>{meta.shortName}</strong>
           <span>{meta.label}</span>
         </div>

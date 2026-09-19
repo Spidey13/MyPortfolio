@@ -44,26 +44,18 @@ export default function PortfolioShell() {
         }
       };
 
-      if (isProjectRoute && location.hash) {
+      if (location.hash) {
         const section = document.getElementById(location.hash.slice(1));
         if (section instanceof HTMLElement && pane.contains(section)) {
-          section.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
+          const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          section.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start", inline: "nearest" });
+          if (!isProjectRoute) section.querySelector<HTMLElement>("h2")?.focus({ preventScroll: true });
         }
         return;
       }
 
       scrollToTop();
 
-      if (!isProjectRoute && location.hash === "#contact") {
-        const contact = pane.querySelector<HTMLElement>("#contact");
-        if (!contact) return;
-
-        contact.scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
-
-        if (routeState?.focusContact) {
-          contact.querySelector<HTMLElement>("h2")?.focus({ preventScroll: true });
-        }
-      }
     });
 
     return () => cancelAnimationFrame(frame);

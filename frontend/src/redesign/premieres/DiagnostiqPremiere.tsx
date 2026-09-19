@@ -18,8 +18,12 @@ export default function DiagnostiqPremiere(props: PremierePageProps) {
 
       <section className="diagnostiq-evidence" aria-labelledby="diagnostiq-evidence-title">
         <div className="diagnostiq-evidence__intro"><p className="premiere-eyebrow">01 / Find the evidence</p><h2 id="diagnostiq-evidence-title">The answer stays attached to the page that supports it.</h2><p>The serving path retrieves the relevant manual, exposes the page, and preserves the source beside the recommended check.</p></div>
-        <PremiereMedia asset={assets.diagnostiqManual} />
-        <aside className="diagnostiq-citation"><span>Trane service manual · §4.2</span><strong>Fault 33 — supply air sensor circuit</strong><p>Inspect the sensor connection and resistance before replacing the controller.</p><b>Source located / page evidence retained</b></aside>
+        <figure className="diagnostiq-manual" aria-label="Illustrated manual evidence for fault 33">
+          <figcaption><span>Trane service manual</span><b>§4.2 · page evidence</b></figcaption>
+          <div><span>RTU fault reference</span><strong>Fault 33</strong><p>Supply air sensor circuit</p><mark>Inspect the sensor connection and resistance before replacing the controller.</mark></div>
+          <small>Highlighted source retained with the answer</small>
+        </figure>
+        <aside className="diagnostiq-citation"><span>Trane service manual · §4.2</span><strong>Fault 33: supply air sensor circuit</strong><p>Inspect the sensor connection and resistance before replacing the controller.</p><b>Source located / page evidence retained</b></aside>
       </section>
 
       <section className="diagnostiq-procedure" aria-labelledby="diagnostiq-procedure-title">
@@ -33,7 +37,12 @@ export default function DiagnostiqPremiere(props: PremierePageProps) {
 
       <section className="diagnostiq-artifact" aria-labelledby="diagnostiq-artifact-title">
         <div><p className="premiere-eyebrow">03 / Leave with an artifact</p><h2 id="diagnostiq-artifact-title">The work survives beyond the conversation.</h2><p>The resolved branch becomes a printable checklist or service report, while the original citation remains available for verification.</p><dl><div><dt>Fault</dt><dd>33</dd></div><div><dt>Evidence</dt><dd>Manual §4.2</dd></div><div><dt>Next action</dt><dd>Replace + verify</dd></div></dl></div>
-        <PremiereMedia asset={assets.diagnostiqArtifact} />
+        <figure className="diagnostiq-job-card" aria-label="Illustrated field job card for unit RTU-04">
+          <figcaption><span>Field job card</span><b>RTU-04</b></figcaption>
+          <div><span>Fault 33</span><h3>Supply air sensor circuit</h3></div>
+          <ol><li>Isolate power and inspect the sensor connection.</li><li>Measure resistance against the manual range.</li><li>Replace the sensor, restore power, and verify the reading.</li></ol>
+          <footer><span>Status</span><strong>Ready for technician verification</strong></footer>
+        </figure>
       </section>
 
       <BehindTheProduct>

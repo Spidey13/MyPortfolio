@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import type { PremiereAsset } from "../../data/productPremiereAssets";
 import type { Project } from "../../data/projects";
-import { getProjectMeta, getProjectNumber } from "../projectMeta";
+import { getProjectMeta } from "../projectMeta";
 
 export interface PremierePageProps {
   project: Project;
@@ -14,7 +14,7 @@ export function PremiereEyebrow({ project, children }: { project: Project; child
   const meta = getProjectMeta(project.id);
   return (
     <p className="premiere-eyebrow">
-      {String(getProjectNumber(project)).padStart(2, "0")} / 10 · {children ?? "Product premiere"} · {meta.date}
+      {children ?? meta.label} · {meta.date}
     </p>
   );
 }
@@ -54,7 +54,7 @@ export function PremiereMedia({ asset, className = "" }: { asset: PremiereAsset;
     };
     return (
       <div className={`premiere-placeholder premiere-placeholder--${placeholder.ratio} ${className}`} ref={frameRef} role="img" aria-label={`${placeholder.label}. ${placeholder.brief}`}>
-        <span>Asset / pending</span>
+        <span>Media fallback</span>
         <strong>{placeholder.label}</strong>
         <p>{placeholder.brief}</p>
       </div>

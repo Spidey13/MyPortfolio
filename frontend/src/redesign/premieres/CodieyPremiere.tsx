@@ -2,6 +2,11 @@ import { PRODUCT_PREMIERE_ASSETS as assets } from "../../data/productPremiereAss
 import { BehindTheProduct, PremiereEyebrow, PremiereFooter, PremiereLinks, PremiereMedia, type PremierePageProps } from "./PremiereShared";
 
 const graphNodes = ["main.py", "audio.py", "tools.py", "graph.py", "session.py", "vad.ts", "app.ts"];
+const inspectionSteps = [
+  { tool: "search_symbols()", detail: "Locate the ranking entry points" },
+  { tool: "read_file()", detail: "Open the connected implementation" },
+  { tool: "rank_repository()", detail: "Reorder context around the active symbol" },
+];
 
 export default function CodieyPremiere(props: PremierePageProps) {
   const { project } = props;
@@ -34,8 +39,20 @@ export default function CodieyPremiere(props: PremierePageProps) {
 
       <section className="codiey-intelligence" aria-labelledby="codiey-graph-title">
         <div><p className="premiere-eyebrow">Repository intelligence</p><h2 id="codiey-graph-title">The answer starts with structure, not a blind search.</h2><p>Tree-sitter extracts imports and symbols across Python, JavaScript, and TypeScript. A dependency graph ranks the repository and the active files pulse as Codiey inspects them.</p></div>
-        <PremiereMedia asset={assets.codieyGraph} />
-        <PremiereMedia asset={assets.codieyToolState} />
+        <figure className="codiey-graph-card" aria-label="Illustrated repository dependency graph">
+          <figcaption><span>Dependency graph</span><b>Illustrated system model</b></figcaption>
+          <div className="codiey-graph-card__nodes">
+            {graphNodes.map((node, index) => <span key={node} className={index === 2 || index === 3 ? "is-active" : undefined}>{node}</span>)}
+          </div>
+          <p>Imports connect the files. Active symbols determine which paths receive more weight.</p>
+        </figure>
+        <figure className="codiey-inspection-card" aria-label="Illustrated repository inspection flow">
+          <figcaption><span>Tool trace</span><b>Illustrated inspection flow</b></figcaption>
+          <ol>
+            {inspectionSteps.map((step, index) => <li key={step.tool}><span>{String(index + 1).padStart(2, "0")}</span><div><code>{step.tool}</code><p>{step.detail}</p></div></li>)}
+          </ol>
+          <div className="codiey-inspection-card__result"><span>Context returned</span><strong>tools.py · graph.py · session.py</strong></div>
+        </figure>
       </section>
 
       <BehindTheProduct>

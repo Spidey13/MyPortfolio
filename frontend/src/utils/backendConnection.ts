@@ -65,7 +65,7 @@ ${jobDescription}`;
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorData.error || errorMessage;
-      } catch (e) {
+      } catch {
         // Ignore JSON parse error
       }
       throw new Error(errorMessage);
@@ -112,7 +112,7 @@ ${jobDescription}`;
   }
 };
 
-export const chatWithAI = async (message: string) => {
+export const chatWithAI = async (message: string, signal?: AbortSignal) => {
   try {
     // OPTIMIZED: Removed portfolioData param - backend already has it
     const response = await fetch(`${BACKEND_URL}/chat`, {
@@ -124,7 +124,8 @@ export const chatWithAI = async (message: string) => {
         message,
         distinct_id: getSessionId()
         // REMOVED: context: { portfolioData } - backend loads data dynamically
-      })
+      }),
+      signal,
     });
     
     if (!response.ok) {
@@ -132,7 +133,7 @@ export const chatWithAI = async (message: string) => {
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorData.error || errorMessage;
-      } catch (e) {
+      } catch {
         // Ignore JSON parse error
       }
       throw new Error(errorMessage);

@@ -22,13 +22,13 @@ export default function QueueWhispererPremiere(props: PremierePageProps) {
         <div className="queue-approval__context"><p className="premiere-eyebrow">02 / Proposal, not mutation</p><h2 id="queue-approval-title">Nothing crosses automatically.</h2><p>The demo below is local to this portfolio. It explains the transaction without calling Slack or GitHub.</p></div>
         <div className="queue-slack-card" aria-live="polite">
           <span>Queue Whisperer · GitHub #10</span><h3>Add label <code>priority-high</code>?</h3><p>Proposed from the cited issue context. The write handler has not run.</p>
-          {approval === "pending" ? <div><button type="button" onClick={() => setApproval("approved")}>Approve</button><button type="button" onClick={() => setApproval("rejected")}>Reject</button></div> : <div className={`queue-result is-${approval}`}><strong>{approval === "approved" ? "Approved and committed by @you" : "Rejected — repository unchanged"}</strong><button type="button" onClick={() => setApproval("pending")}>Reset demo</button></div>}
+          {approval === "pending" ? <div><button type="button" onClick={() => setApproval("approved")}>Approve</button><button type="button" onClick={() => setApproval("rejected")}>Reject</button></div> : <div className={`queue-result is-${approval}`}><strong>{approval === "approved" ? "Approved and committed by @you" : "Rejected. Repository unchanged"}</strong><button type="button" onClick={() => setApproval("pending")}>Reset demo</button></div>}
         </div>
         <div className="queue-model-stop"><span>Read tools</span><span>proposeLabel()</span><b>Model stops here</b><span>Compare-and-set</span><span>GitHub write</span></div>
       </section>
 
       <BehindTheProduct>
-        <div className="queue-code-split"><div><span>Model imports</span><strong>Read tools<br />proposeLabel<br />proposeReply</strong><p>No write capability exists in the model loop.</p></div><div><span>Approval handler imports</span><strong>Authentication<br />compare-and-set<br />GitHub mutation</strong><p>The click—not the model output—starts the write.</p></div></div>
+        <div className="queue-code-split"><div><span>Model imports</span><strong>Read tools<br />proposeLabel<br />proposeReply</strong><p>No write capability exists in the model loop.</p></div><div><span>Approval handler imports</span><strong>Authentication<br />compare-and-set<br />GitHub mutation</strong><p>The approval click starts the write.</p></div></div>
         <ul className="queue-safeguards"><li>5 tool-step limit</li><li>90 second abort</li><li>Grounded-or-decline pass</li><li>Escaped issue content</li><li>GitHub App tokens</li></ul>
       </BehindTheProduct>
 

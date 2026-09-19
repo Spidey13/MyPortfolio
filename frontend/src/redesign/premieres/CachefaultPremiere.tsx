@@ -25,7 +25,7 @@ export default function CachefaultPremiere(props: PremierePageProps) {
 
       <BehindTheProduct>
         <div className="cache-architecture"><strong>One static Go binary</strong><span>Capture proxy</span><span>Provider adapters</span><span>Evidence classifier</span><span>CLI + block simulator</span></div>
-        <div className="cache-limits"><span>Honest limits</span><p>Anthropic and OpenAI adapters only. The OpenAI adapter is not live validated. This is post-hoc diagnosis—not production monitoring. Python is used only for optional self-hosted rendering and tokenization.</p></div>
+        <div className="cache-limits"><span>Honest limits</span><p>Anthropic and OpenAI adapters only. The OpenAI adapter is not live validated. This is post-hoc diagnosis, not production monitoring. Python is used only for optional self-hosted rendering and tokenization.</p></div>
       </BehindTheProduct>
 
       <PremiereFooter {...props} note="Read the implementation, reproduce the miss, and follow the evidence." />
