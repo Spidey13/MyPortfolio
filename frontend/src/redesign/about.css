@@ -69,10 +69,11 @@
 .folio-publication__read { display: inline-flex; align-items: center; gap: 14px; flex-shrink: 0; font-size: 12px; }
 .folio-publication:hover h3 { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; }
 .folio-finale { padding: 26px var(--folio-pad) 0; background: var(--folio-blue); color: #fff; }
-.folio-personal { display: grid; grid-template-columns: 1fr 2.35fr; gap: 24px; padding-bottom: 24px; }
+.folio-personal { display: grid; grid-template-columns: 1fr minmax(0, 2.35fr) minmax(64px, .32fr); gap: 24px; padding-bottom: 24px; }
 .folio-personal h2 { font-size: clamp(21px, 2.7cqi, 30px); letter-spacing: -.04em; line-height: 1.15; }
 .folio-personal p { max-width: 62ch; font-size: 13px; line-height: 1.6; text-wrap: pretty; }
 .folio-personal p + p { margin-top: 8px; color: #d8dfff; }
+.folio-personal__mark { display: block; align-self: end; justify-self: end; width: clamp(64px, 6cqi, 88px); height: auto; margin-top: 16px; }
 .folio-contact { border-top: 1px solid #ffffff65; padding-top: 22px; }
 .folio-contact__main { display: flex; align-items: center; justify-content: space-between; gap: 25px; }
 .folio-contact h2 { font-size: clamp(50px, 10.3cqi, 119px); letter-spacing: -.075em; line-height: 1.05; }
@@ -114,6 +115,7 @@
   .folio-publication__read { margin-left: auto; }
   .folio-personal { grid-template-columns: 1fr; gap: 13px; }
   .folio-personal h2 { font-size: 23px; }
+  .folio-personal__mark { width: 64px; margin-top: 14px; }
   .folio-contact__links .folio-contact__email { flex-basis: 100%; }
   .folio-footer { font-size: 9px; }
 }

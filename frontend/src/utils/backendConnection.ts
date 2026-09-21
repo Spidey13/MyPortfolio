@@ -1,6 +1,5 @@
 // Backend connection utilities
 import { log, withPerformance } from './logger';
-import { getSessionId } from './analytics';
 
 // Vercel serverless functions are at /api
 export const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || '/api';
@@ -52,10 +51,7 @@ ${jobDescription}`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: analysisPrompt,
-        // Lets the server attribute its $ai_generation events to the same PostHog
-        // person as the client-side events.
-        distinct_id: getSessionId()
+        message: analysisPrompt
         // REMOVED: context: { portfolioData } - backend loads data dynamically
       })
     });
@@ -121,8 +117,7 @@ export const chatWithAI = async (message: string, signal?: AbortSignal) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message,
-        distinct_id: getSessionId()
+        message
         // REMOVED: context: { portfolioData } - backend loads data dynamically
       }),
       signal,

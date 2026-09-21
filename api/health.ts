@@ -22,7 +22,7 @@ export default async function handler(
       version: '2.0.0',
       ai: {
         gemini: !!process.env.GEMINI_API_KEY,
-        posthog: !!process.env.POSTHOG_API_KEY
+        posthog: !!process.env.POSTHOG_PROJECT_TOKEN
       },
       uptime: process.uptime(),
       memory: process.memoryUsage()

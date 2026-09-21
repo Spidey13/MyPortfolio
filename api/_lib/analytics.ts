@@ -1,142 +1,96 @@
-/**
- * Server-side analytics for AI queries and agent usage.
- *
- * This file used to be a no-op stub, which is why PostHog reported zero
- * `$ai_generation` events for the lifetime of the project: the API had never sent
- * anything. "Nobody uses the AI feature" and "the AI feature is not instrumented"
- * look identical from the dashboard, so treat this as the source of truth for usage.
- *
- * Serverless notes: the client is configured to flush on every event, and
- * `shutdownAnalytics()` MUST be awaited before the handler returns. Vercel freezes
- * the process the moment the response is sent, so anything still buffered is lost.
- */
+import { randomUUID } from "node:crypto";
+import { PostHog } from "posthog-node";
 
-import { PostHog } from 'posthog-node';
-
-const POSTHOG_DEFAULT_HOST = 'https://us.i.posthog.com';
+const DEFAULT_POSTHOG_HOST = "https://us.i.posthog.com";
 
 let client: PostHog | null = null;
-let clientUnavailable = false;
+let warnedAboutMissingToken = false;
 
 function getClient(): PostHog | null {
-  if (clientUnavailable) return null;
   if (client) return client;
 
-  const apiKey = process.env.POSTHOG_API_KEY;
-  if (!apiKey) {
-    // Warn exactly once. Analytics must never break the chat endpoint.
-    console.warn('[Analytics] POSTHOG_API_KEY not set — server-side LLM events disabled');
-    clientUnavailable = true;
+  const projectToken = process.env.POSTHOG_PROJECT_TOKEN;
+  if (!projectToken) {
+    if (!warnedAboutMissingToken) {
+      console.warn(
+        "[Analytics] POSTHOG_PROJECT_TOKEN is missing; server-side AI analytics are disabled.",
+      );
+      warnedAboutMissingToken = true;
+    }
     return null;
   }
 
-  client = new PostHog(apiKey, {
-    host: process.env.POSTHOG_HOST || POSTHOG_DEFAULT_HOST,
+  client = new PostHog(projectToken, {
+    host: process.env.POSTHOG_HOST || DEFAULT_POSTHOG_HOST,
     flushAt: 1,
     flushInterval: 0,
   });
+
   return client;
 }
 
-/** Groups every event from one chat request under a single trace. */
 export function newTraceId(): string {
-  return `trace_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+  return randomUUID();
 }
 
 export interface AIGenerationEvent {
-  /** The client's portfolio_visitor_id, so server events stitch to client events. */
   distinctId?: string;
+  sessionId?: string;
   traceId: string;
   model: string;
   provider: string;
   latencyMs: number;
   inputTokens?: number;
   outputTokens?: number;
-  input?: string;
-  output?: string;
+  inputLength?: number;
+  outputLength?: number;
   agent?: string;
   routingTier?: string;
   isError?: boolean;
   errorMessage?: string;
-  /** True when the user was served a canned fallback instead of a real answer. */
   degraded?: boolean;
 }
 
-export async function trackAIGeneration(event: AIGenerationEvent): Promise<void> {
-  const ph = getClient();
-  if (!ph) return;
-
-  // Without a client id the event is still worth having, but it must not spawn a
-  // junk person profile for every anonymous request.
-  const isAnonymous = !event.distinctId;
-  const distinctId = event.distinctId || `anon_${event.traceId}`;
+export function trackAIGeneration(event: AIGenerationEvent): void {
+  const posthog = getClient();
+  if (!posthog) return;
 
   try {
-    ph.capture({
-      distinctId,
-      event: '$ai_generation',
+    posthog.capture({
+      distinctId: event.distinctId || `anonymous-${event.traceId}`,
+      event: "$ai_generation",
       properties: {
+        $process_person_profile: false,
+        $session_id: event.sessionId,
         $ai_trace_id: event.traceId,
         $ai_model: event.model,
         $ai_provider: event.provider,
-        // PostHog expects seconds, not milliseconds.
-        $ai_latency: event.latencyMs / 1000,
-        $ai_input: event.input ? [{ role: 'user', content: event.input }] : undefined,
-        $ai_output_choices: event.output
-          ? [{ role: 'assistant', content: event.output }]
-          : undefined,
+        $ai_latency: event.latencyMs / 1_000,
         $ai_input_tokens: event.inputTokens,
         $ai_output_tokens: event.outputTokens,
         $ai_is_error: event.isError ?? false,
         $ai_error: event.errorMessage,
         $ai_span_name: event.agent,
-        // Own properties, not part of the $ai_* contract.
+        analytics_schema_version: 2,
         agent_used: event.agent,
         routing_tier: event.routingTier,
         degraded: event.degraded ?? false,
-        ...(isAnonymous ? { $process_person_profile: false } : {}),
+        input_length: event.inputLength,
+        output_length: event.outputLength,
       },
     });
   } catch (error) {
-    console.error('[Analytics] Failed to capture $ai_generation:', error);
+    console.error("[Analytics] Failed to capture server event:", error);
   }
 }
 
-export async function trackAgentUsage(
-  agentType: string,
-  distinctId?: string,
-  traceId?: string
-): Promise<void> {
-  const ph = getClient();
-  if (!ph) return;
-
-  const isAnonymous = !distinctId;
-
-  try {
-    ph.capture({
-      distinctId: distinctId || `anon_${traceId ?? newTraceId()}`,
-      event: 'ai_agent_routed',
-      properties: {
-        agent_type: agentType,
-        $ai_trace_id: traceId,
-        ...(isAnonymous ? { $process_person_profile: false } : {}),
-      },
-    });
-  } catch (error) {
-    console.error('[Analytics] Failed to capture ai_agent_routed:', error);
-  }
-}
-
-/**
- * Flush and close. Await this before the serverless handler returns, on both the
- * success and error paths, or buffered events die with the frozen process.
- */
 export async function shutdownAnalytics(): Promise<void> {
   if (!client) return;
+
   try {
     await client.shutdown();
   } catch (error) {
-    console.error('[Analytics] Shutdown failed:', error);
+    console.error("[Analytics] Failed to flush server events:", error);
   } finally {
     client = null;
   }

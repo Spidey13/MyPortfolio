@@ -3,7 +3,7 @@ import { BehindTheProduct, PremiereEyebrow, PremiereFooter, PremiereLinks, type 
 export default function CachefaultPremiere(props: PremierePageProps) {
   const { project } = props;
   return (
-    <article className="premiere premiere-cachefault">
+    <article className="premiere premiere-cachefault" data-project-document>
       <section className="cache-hero" aria-labelledby="cache-title">
         <div className="cache-hero__copy"><PremiereEyebrow project={project} /><h1 id="cache-title">Your provider says the prompt changed.<br /><em>cachefault names the field.</em></h1><PremiereLinks project={project} /></div>
         <div className="cache-terminal" role="img" aria-label="cachefault CLI locating a prefix divergence at tools zero input schema"><span>$ cachefault analyze demo/demo-session.jsonl</span><p>PREFIX_DIVERGENCE · turn 02</p><strong>tools[0].input_schema</strong><code>KEY_REORDERED</code><small>system[0].text remained stable<br />17 / 18 turns recomputed</small></div>

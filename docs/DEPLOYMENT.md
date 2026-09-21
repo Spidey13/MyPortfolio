@@ -58,9 +58,10 @@ TURSO_AUTH_TOKEN=your_turso_token
 
 **Optional (Analytics):**
 ```
-POSTHOG_API_KEY=phc_your_key
-POSTHOG_ENABLED=true
-VITE_POSTHOG_API_KEY=phc_your_key
+POSTHOG_PROJECT_TOKEN=phc_your_project_token
+POSTHOG_HOST=https://us.i.posthog.com
+VITE_POSTHOG_PROJECT_TOKEN=phc_your_project_token
+VITE_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 **CORS (Update after first deploy):**
@@ -73,7 +74,7 @@ CORS_ORIGIN=https://your-portfolio.vercel.app
 After first deployment, update `frontend/.env`:
 ```env
 VITE_API_BASE_URL=https://your-portfolio.vercel.app
-VITE_POSTHOG_API_KEY=phc_your_key
+VITE_POSTHOG_PROJECT_TOKEN=phc_your_project_token
 ```
 
 ---

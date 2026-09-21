@@ -1,13 +1,25 @@
 import { useState } from "react";
+import { usePostHog } from "@posthog/react";
+import { captureInteractiveDemo } from "../../analytics/events";
 import { BehindTheProduct, PremiereEyebrow, PremiereFooter, PremiereLinks, type PremierePageProps } from "./PremiereShared";
 
 type ApprovalState = "pending" | "approved" | "rejected";
 
 export default function QueueWhispererPremiere(props: PremierePageProps) {
   const { project } = props;
+  const posthog = usePostHog();
   const [approval, setApproval] = useState<ApprovalState>("pending");
+  const chooseApproval = (result: ApprovalState) => {
+    setApproval(result);
+    captureInteractiveDemo(posthog, {
+      projectId: project.id,
+      demoId: "approval_boundary",
+      interaction: result === "pending" ? "demo_reset" : "approval_decided",
+      result,
+    });
+  };
   return (
-    <article className="premiere premiere-queue">
+    <article className="premiere premiere-queue" data-project-document>
       <section className="queue-hero" aria-labelledby="queue-title">
         <div className="queue-hero__copy"><PremiereEyebrow project={project} /><h1 id="queue-title">The model never gets <em>the keys.</em></h1><p>Queue Whisperer can inspect an issue queue, cite its evidence, and propose a change. Only a human-approved handler can commit it.</p><PremiereLinks project={project} /></div>
         <div className="queue-boundary-hero" aria-label="Model and human permission boundary"><div><span>Model side</span><strong>Read · cite · propose</strong></div><b>Model stops here</b><div><span>Human side</span><strong>Approve · authenticate · write</strong></div></div>
@@ -22,7 +34,7 @@ export default function QueueWhispererPremiere(props: PremierePageProps) {
         <div className="queue-approval__context"><p className="premiere-eyebrow">02 / Proposal, not mutation</p><h2 id="queue-approval-title">Nothing crosses automatically.</h2><p>The demo below is local to this portfolio. It explains the transaction without calling Slack or GitHub.</p></div>
         <div className="queue-slack-card" aria-live="polite">
           <span>Queue Whisperer · GitHub #10</span><h3>Add label <code>priority-high</code>?</h3><p>Proposed from the cited issue context. The write handler has not run.</p>
-          {approval === "pending" ? <div><button type="button" onClick={() => setApproval("approved")}>Approve</button><button type="button" onClick={() => setApproval("rejected")}>Reject</button></div> : <div className={`queue-result is-${approval}`}><strong>{approval === "approved" ? "Approved and committed by @you" : "Rejected. Repository unchanged"}</strong><button type="button" onClick={() => setApproval("pending")}>Reset demo</button></div>}
+          {approval === "pending" ? <div><button type="button" onClick={() => chooseApproval("approved")}>Approve</button><button type="button" onClick={() => chooseApproval("rejected")}>Reject</button></div> : <div className={`queue-result is-${approval}`}><strong>{approval === "approved" ? "Approved and committed by @you" : "Rejected. Repository unchanged"}</strong><button type="button" onClick={() => chooseApproval("pending")}>Reset demo</button></div>}
         </div>
         <div className="queue-model-stop"><span>Read tools</span><span>proposeLabel()</span><b>Model stops here</b><span>Compare-and-set</span><span>GitHub write</span></div>
       </section>

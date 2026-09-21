@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import { PROJECTS } from "../data/projects";
+import { useSectionEngagement } from "../analytics/useSectionEngagement";
 import AboutDocument from "./AboutDocument";
 import ProjectCaseStudy from "./ProjectCaseStudy";
 import ProjectIndexRail from "./ProjectIndexRail";
@@ -73,6 +74,8 @@ export default function PortfolioShell() {
     railViewportRef: projectRailViewportRef,
   });
 
+  useSectionEngagement(documentPaneRef, location.pathname);
+
   if (hasUnknownProject) return <Navigate to="/" replace />;
 
   const documentKey = isProjectRoute ? `project-${id}` : "about";
@@ -85,7 +88,11 @@ export default function PortfolioShell() {
         desktopTrackRef={projectRailTrackRef}
       />
       <main className="document-pane" id="main-content" ref={documentPaneRef} tabIndex={-1}>
-        <div className={`document-pane__transition${entering ? " is-entering" : ""}`} key={documentKey}>
+        <div
+          className={`document-pane__transition${entering ? " is-entering" : ""}`}
+          data-project-id={isProjectRoute ? id : undefined}
+          key={documentKey}
+        >
           {isProjectRoute ? <ProjectCaseStudy /> : <AboutDocument />}
         </div>
       </main>

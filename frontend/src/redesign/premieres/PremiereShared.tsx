@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import type { PremiereAsset } from "../../data/productPremiereAssets";
 import type { Project } from "../../data/projects";
 import { getProjectMeta } from "../projectMeta";
+import { captureAttributes } from "../../analytics/attributes";
 
 export interface PremierePageProps {
   project: Project;
@@ -22,9 +23,9 @@ export function PremiereEyebrow({ project, children }: { project: Project; child
 export function PremiereLinks({ project }: { project: Project }) {
   return (
     <div className="premiere-links" aria-label="Project links">
-      <a href={project.github_url} target="_blank" rel="noreferrer">Repository ↗</a>
-      {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer">Live project ↗</a> : null}
-      {project.video ? <a href={project.video} target="_blank" rel="noreferrer">Full demo ↗</a> : null}
+      <a href={project.github_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "repository_open", location: "project_evidence", projectId: project.id })}>Repository ↗</a>
+      {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "live_demo_open", location: "project_evidence", projectId: project.id })}>Live project ↗</a> : null}
+      {project.video ? <a href={project.video} target="_blank" rel="noreferrer" {...captureAttributes({ action: "recorded_demo_open", location: "project_evidence", projectId: project.id })}>Full demo ↗</a> : null}
     </div>
   );
 }
@@ -88,9 +89,9 @@ export function PremiereFooter({ project, previous, next, note }: PremierePagePr
         <PremiereLinks project={project} />
       </div>
       <nav aria-label="Adjacent projects" className="premiere-footer__nav">
-        <Link to={`/project/${previous.id}`}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
-        <Link to="/"><span>Index</span><strong>All work</strong></Link>
-        <Link to={`/project/${next.id}`}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
+        <Link to={`/project/${previous.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: previous.id, navigationSource: "previous" })}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
+        <Link to="/" {...captureAttributes({ action: "project_navigation", location: "project_footer", navigationSource: "index" })}><span>Index</span><strong>All work</strong></Link>
+        <Link to={`/project/${next.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: next.id, navigationSource: "next" })}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
       </nav>
     </footer>
   );

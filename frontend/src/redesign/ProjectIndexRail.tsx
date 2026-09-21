@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { PROJECTS, RAIL_IDENTITY } from "../data";
+import { captureAttributes, type ActionLocation } from "../analytics/attributes";
 import { ProjectRailThumbnail } from "./ProjectRailThumbnail";
 import { getProjectMeta, sortHomeProjects } from "./projectMeta";
 import { RailContactLinks, RailMasthead } from "./RailMasthead";
@@ -12,6 +13,7 @@ const FOCUSABLE_SELECTOR = "a[href], button:not([disabled]), [tabindex]:not([tab
 interface ProjectLinksProps {
   onNavigate?: () => void;
   trackRef?: RefObject<HTMLElement | null>;
+  location: ActionLocation;
 }
 
 interface ProjectIndexRailProps {
@@ -19,7 +21,7 @@ interface ProjectIndexRailProps {
   desktopTrackRef: RefObject<HTMLElement | null>;
 }
 
-function ProjectLinks({ onNavigate, trackRef }: ProjectLinksProps) {
+function ProjectLinks({ onNavigate, trackRef, location: actionLocation }: ProjectLinksProps) {
   const location = useLocation();
 
   return (
@@ -35,6 +37,12 @@ function ProjectLinks({ onNavigate, trackRef }: ProjectLinksProps) {
             aria-current={active ? "page" : undefined}
             aria-label={`Open ${meta.shortName}: ${meta.railLabel}`}
             data-project-id={project.id}
+            {...captureAttributes({
+              action: "project_open",
+              location: actionLocation,
+              projectId: project.id,
+              navigationSource: active ? "active_project" : "project_index",
+            })}
             onClick={onNavigate}
             key={project.id}
           >
@@ -120,7 +128,7 @@ export default function ProjectIndexRail({
   return (
     <>
       <div className="mobile-project-bar">
-        <Link to="/" className="mobile-project-bar__name">{profileName}</Link>
+        <Link to="/" className="mobile-project-bar__name" {...captureAttributes({ action: "project_navigation", location: "mobile_navigation", navigationSource: "about" })}>{profileName}</Link>
         <button
           type="button"
           ref={projectsButtonRef}
@@ -131,7 +139,7 @@ export default function ProjectIndexRail({
         >
           Projects
         </button>
-        <Link to="/#contact" state={{ focusContact: true }} className="mobile-project-bar__contact">
+        <Link to="/#contact" state={{ focusContact: true }} className="mobile-project-bar__contact" {...captureAttributes({ action: "project_navigation", location: "mobile_navigation", navigationSource: "contact" })}>
           Contact ↗
         </Link>
       </div>
@@ -140,7 +148,7 @@ export default function ProjectIndexRail({
         <RailMasthead projectCount={HOME_PROJECTS.length} />
         <div className="project-rail__viewport">
           <div className="project-rail__scroller" ref={desktopScrollerRef}>
-            <ProjectLinks trackRef={desktopTrackRef} />
+            <ProjectLinks trackRef={desktopTrackRef} location="project_rail" />
           </div>
         </div>
       </aside>
@@ -169,13 +177,14 @@ export default function ProjectIndexRail({
                 to="/"
                 aria-current={aboutActive ? "page" : undefined}
                 onClick={closeMobileIndex}
+                {...captureAttributes({ action: "project_navigation", location: "mobile_navigation", navigationSource: "about" })}
               >
                 <span>About</span>
                 <ArrowUpRight aria-hidden="true" focusable="false" size={15} strokeWidth={1.5} />
               </Link>
-              <RailContactLinks className="mobile-index-dialog__contacts" />
+              <RailContactLinks className="mobile-index-dialog__contacts" location="mobile_navigation" />
             </div>
-            <ProjectLinks onNavigate={navigateFromMobileIndex} />
+            <ProjectLinks onNavigate={navigateFromMobileIndex} location="mobile_navigation" />
           </div>
         </div>
       ) : null}

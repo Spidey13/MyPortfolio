@@ -9,7 +9,7 @@ interface LogContext {
   requestId?: string;
   component?: string;
   action?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface LogEntry {
@@ -133,7 +133,7 @@ class Logger {
     try {
       const recentLogs = this.logs.slice(-100); // Keep last 100 logs in localStorage
       localStorage.setItem('portfolio_logs', JSON.stringify(recentLogs));
-    } catch (e) {
+    } catch {
       // localStorage full or not available
     }
   }
@@ -201,7 +201,7 @@ class Logger {
   }
 
   // User interaction tracking
-  userAction(action: string, component: string, details?: Record<string, any>): void {
+  userAction(action: string, component: string, details?: Record<string, unknown>): void {
     this.info(`User action: ${action}`, {
       component,
       action,
@@ -225,7 +225,7 @@ class Logger {
   }
 
   // Component lifecycle logging
-  componentMount(componentName: string, props?: Record<string, any>): void {
+  componentMount(componentName: string, props?: Record<string, unknown>): void {
     this.debug(`Component mounted: ${componentName}`, {
       component: componentName,
       lifecycle: 'mount',
@@ -297,7 +297,7 @@ class Logger {
           }
         });
         observer.observe({ entryTypes: ['measure', 'navigation'] });
-      } catch (e) {
+      } catch {
         // PerformanceObserver not supported
       }
     }
@@ -314,9 +314,9 @@ export const log = {
   warn: (message: string, context?: LogContext) => logger.warn(message, context),
   error: (message: string, error?: Error, context?: LogContext) => logger.error(message, error, context),
   performance: (operation: string, duration: number, context?: LogContext) => logger.performance(operation, duration, context),
-  userAction: (action: string, component: string, details?: Record<string, any>) => logger.userAction(action, component, details),
+  userAction: (action: string, component: string, details?: Record<string, unknown>) => logger.userAction(action, component, details),
   apiCall: (method: string, url: string, duration: number, status: number, error?: Error) => logger.apiCall(method, url, duration, status, error),
-  componentMount: (componentName: string, props?: Record<string, any>) => logger.componentMount(componentName, props),
+  componentMount: (componentName: string, props?: Record<string, unknown>) => logger.componentMount(componentName, props),
   componentUnmount: (componentName: string) => logger.componentUnmount(componentName),
 };
 

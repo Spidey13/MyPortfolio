@@ -4,7 +4,7 @@ import { BehindTheProduct, PremiereEyebrow, PremiereFooter, PremiereLinks, Premi
 export default function DiagnostiqPremiere(props: PremierePageProps) {
   const { project } = props;
   return (
-    <article className="premiere premiere-diagnostiq">
+    <article className="premiere premiere-diagnostiq" data-project-document>
       <section className="diagnostiq-hero" aria-labelledby="diagnostiq-title">
         <div className="diagnostiq-hero__copy">
           <PremiereEyebrow project={project} />

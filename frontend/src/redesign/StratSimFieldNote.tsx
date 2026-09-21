@@ -23,7 +23,7 @@ export default function StratSimFieldNote({ project, previous, next }: StratSimF
   const meta = getProjectMeta(project.id);
 
   return (
-    <article className="field-note field-note--stratsim">
+    <article className="field-note field-note--stratsim" data-project-document>
       <section className="stratsim-cover" aria-labelledby="stratsim-title">
         <div className="stratsim-cover__heading">
           <p className="field-note__eyebrow">StratSim / F1 strategy simulation · {meta.date}</p>

@@ -9,7 +9,6 @@ import { routeQuery } from './_lib/router';
 import { AgentFactory } from './_lib/agents';
 import {
   trackAIGeneration,
-  trackAgentUsage,
   shutdownAnalytics,
   newTraceId,
 } from './_lib/analytics';
@@ -17,6 +16,11 @@ import { GEMINI_MODEL, GEMINI_PROVIDER } from './_lib/gemini';
 import { checkRateLimit } from './_lib/rateLimit';
 
 const agentFactory = new AgentFactory();
+
+function getHeader(req: VercelRequest, name: string): string | undefined {
+  const value = req.headers[name];
+  return Array.isArray(value) ? value[0] : value;
+}
 
 export default async function handler(
   req: VercelRequest,
@@ -32,7 +36,10 @@ export default async function handler(
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, X-PostHog-Distinct-ID, X-PostHog-Session-ID'
+  );
 
   // Rate limiting check
   const xForwardedFor = req.headers['x-forwarded-for'];
@@ -61,11 +68,12 @@ export default async function handler(
 
   const startTime = Date.now();
   const traceId = newTraceId();
-  let sessionId: string | undefined;
+  const distinctId = getHeader(req, 'x-posthog-distinct-id');
+  const sessionId = getHeader(req, 'x-posthog-session-id');
 
   try {
     // Parse request body
-    const { message, context, distinct_id: distinctIdFromBody } = req.body;
+    const { message, context } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({
@@ -91,21 +99,11 @@ export default async function handler(
       });
     }
 
-    // Extract session ID if provided. distinct_id is the client's persistent
-    // portfolio_visitor_id, so server-side generations stitch to the same PostHog
-    // person as the client-side events.
-    sessionId = context?.sessionId || req.headers['x-session-id'] as string;
-    const distinctId =
-      (typeof distinctIdFromBody === 'string' && distinctIdFromBody) || sessionId;
-
     console.log(`[Chat] Query: "${message.substring(0, 100)}..."`);
 
     // Route query to appropriate agent
     const agentType = await routeQuery(message);
     console.log(`[Chat] Routed to: ${agentType}`);
-
-    // Track agent usage
-    await trackAgentUsage(agentType, distinctId, traceId);
 
     // Process query with selected agent
     const result = await agentFactory.processQuery(agentType, message, context);
@@ -114,8 +112,9 @@ export default async function handler(
     const responseTime = Date.now() - startTime;
     result.processing_time = responseTime;
 
-    await trackAIGeneration({
+    trackAIGeneration({
       distinctId,
+      sessionId,
       traceId,
       model: result.llm?.model ?? GEMINI_MODEL,
       provider: result.llm?.provider ?? GEMINI_PROVIDER,
@@ -123,8 +122,8 @@ export default async function handler(
       latencyMs: result.llm?.latencyMs ?? responseTime,
       inputTokens: result.llm?.inputTokens,
       outputTokens: result.llm?.outputTokens,
-      input: message,
-      output: result.response,
+      inputLength: message.length,
+      outputLength: result.response?.length,
       agent: agentType,
       isError: Boolean(result.error),
       errorMessage: result.error,
@@ -144,13 +143,15 @@ export default async function handler(
     const responseTime = Date.now() - startTime;
 
     // Track error
-    await trackAIGeneration({
-      distinctId: sessionId,
+    trackAIGeneration({
+      distinctId,
+      sessionId,
       traceId,
       model: GEMINI_MODEL,
       provider: GEMINI_PROVIDER,
       latencyMs: responseTime,
-      input: typeof req.body?.message === 'string' ? req.body.message : undefined,
+      inputLength:
+        typeof req.body?.message === 'string' ? req.body.message.length : undefined,
       agent: 'error',
       isError: true,
       errorMessage: error?.message,

@@ -10,7 +10,10 @@ import React, {
   useCallback,
   useReducer,
 } from "react";
+import { usePostHog } from "@posthog/react";
 import { Link } from "react-router-dom";
+import { captureInteractiveDemo } from "../analytics/events";
+import { captureAttributes } from "../analytics/attributes";
 
 // ─── Palette (matches Diagnostiq exactly) ────────────────────────────────────
 const C = {
@@ -565,7 +568,9 @@ function BranchModal({ type, step, onConfirm, onDismiss }: {
 
 // ─── Job Card Panel ───────────────────────────────────────────────────────────
 function JobCardPanel({ onClose }: { onClose: () => void }) {
+  const posthog = usePostHog();
   const [state, dispatch] = useReducer(jcReducer, initialJCState);
+  const previousStatus = useRef<JCStatus>(initialJCState.status);
   const rootRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLDivElement>(null);
@@ -590,6 +595,25 @@ function JobCardPanel({ onClose }: { onClose: () => void }) {
 
   // Auto-focus for keyboard
   useEffect(() => { rootRef.current?.focus(); }, []);
+
+  useEffect(() => {
+    if (state.status === previousStatus.current) return;
+    previousStatus.current = state.status;
+    if (state.status === "active") {
+      captureInteractiveDemo(posthog, {
+        projectId: "p8",
+        demoId: "diagnostiq_job_card",
+        interaction: "job_card_opened",
+      });
+    } else if (state.status === "complete" || state.status === "escalated") {
+      captureInteractiveDemo(posthog, {
+        projectId: "p8",
+        demoId: "diagnostiq_job_card",
+        interaction: "job_card_completed",
+        result: state.status,
+      });
+    }
+  }, [posthog, state.status]);
 
   // Center swipe handle when step changes
   useEffect(() => {
@@ -893,6 +917,7 @@ function JobCardPanel({ onClose }: { onClose: () => void }) {
 
 // ─── Main Demo Page ───────────────────────────────────────────────────────────
 export default function DiagnostiqDemo() {
+  const posthog = usePostHog();
   const [phase, setPhase] = useState<Phase>("idle");
   const [displayedText, setDisplayedText] = useState("");
   const [showJobCard, setShowJobCard] = useState(false);
@@ -908,6 +933,11 @@ export default function DiagnostiqDemo() {
 
   const startDemo = useCallback(() => {
     if (submitted) return;
+    captureInteractiveDemo(posthog, {
+      projectId: "p8",
+      demoId: "diagnostiq_demo",
+      interaction: "analysis_started",
+    });
     setSubmitted(true);
     setPhase("thinking");
 
@@ -922,12 +952,17 @@ export default function DiagnostiqDemo() {
         if (i >= words.length) {
           clearInterval(interval);
           setPhase("done");
+          captureInteractiveDemo(posthog, {
+            projectId: "p8",
+            demoId: "diagnostiq_demo",
+            interaction: "analysis_completed",
+          });
           // Open job card after a beat
           setTimeout(() => setShowJobCard(true), 700);
         }
       }, 40);
     }, 1200);
-  }, [submitted]);
+  }, [posthog, submitted]);
 
   const handleSuggestion = useCallback((s: string) => {
     setInputText(s);
@@ -965,7 +1000,7 @@ export default function DiagnostiqDemo() {
             height: 48, display: "flex", alignItems: "center", justifyContent: "space-between",
             fontFamily: "'Geist Mono', monospace", fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase",
           }}>
-            <Link to="/project/p8" style={{ color: C.ink3, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}>
+            <Link to="/project/p8" {...captureAttributes({ action: "project_open", location: "project_navigation", projectId: "p8", navigationSource: "diagnostiq_demo" })} style={{ color: C.ink3, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}>
               <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M16 10H4M8 5L3 10l5 5"/>
               </svg>

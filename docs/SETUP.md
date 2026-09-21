@@ -53,7 +53,7 @@ TURSO_AUTH_TOKEN=eyJ[your-auth-token]
 ### 2.3 Save API Key
 Add to your environment files:
 ```
-POSTHOG_API_KEY=phc_[your-api-key]
+POSTHOG_PROJECT_TOKEN=phc_[your-project-token]
 ```
 
 ## Step 3: Update Environment Files
@@ -68,14 +68,15 @@ TURSO_DATABASE_URL=libsql://[your-database-url].turso.io
 TURSO_AUTH_TOKEN=eyJ[your-auth-token]
 
 # New PostHog variables
-POSTHOG_API_KEY=phc_[your-api-key]
-POSTHOG_ENABLED=true
+POSTHOG_PROJECT_TOKEN=phc_[your-project-token]
+POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 Create `frontend/.env`:
 ```env
 # New PostHog variable
-VITE_POSTHOG_API_KEY=phc_[your-api-key]
+VITE_POSTHOG_PROJECT_TOKEN=phc_[your-project-token]
+VITE_POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 ## Step 4: Run Migration
@@ -134,7 +135,7 @@ npm run dev
 ### PostHog Not Tracking
 - Verify API key in browser console
 - Check PostHog dashboard for "Live Events"
-- Ensure `VITE_POSTHOG_API_KEY` is set in frontend
+- Ensure `VITE_POSTHOG_PROJECT_TOKEN` is set in the production frontend environment
 
 ### Migration Errors
 - Check backend logs for specific error messages

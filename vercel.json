@@ -9,7 +9,9 @@
       "maxDuration": 30
     }
   },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/projects", "destination": "/", "permanent": true },
+    { "source": "/experience/:id", "destination": "/#experience", "permanent": true }
   ]
 }

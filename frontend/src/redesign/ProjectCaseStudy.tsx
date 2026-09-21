@@ -10,6 +10,7 @@ import ResearchFieldNote from "./fieldnotes/ResearchFieldNote";
 import WaferFieldNote from "./fieldnotes/WaferFieldNote";
 import PromptFieldNote from "./fieldnotes/PromptFieldNote";
 import AudioFieldNote from "./fieldnotes/AudioFieldNote";
+import { captureAttributes } from "../analytics/attributes";
 
 const SCENES = [
   { id: "outcome", label: "Outcome" },
@@ -23,10 +24,10 @@ const firstSentence = (text: string) => {
   return match?.[0]?.trim() || text;
 };
 
-function TechnicalNotes({ title, children }: { title: string; children: ReactNode }) {
+function TechnicalNotes({ title, projectId, children }: { title: string; projectId: string; children: ReactNode }) {
   return (
     <details className="rp-technical-notes">
-      <summary><span>Technical notes</span><strong>{title}</strong><i>+</i></summary>
+      <summary {...captureAttributes({ action: "technical_notes_open", location: "project_body", projectId })}><span>Technical notes</span><strong>{title}</strong><i>+</i></summary>
       <div>{children}</div>
     </details>
   );
@@ -90,7 +91,7 @@ export default function ProjectCaseStudy() {
   if (project.id === "p7") return <AudioFieldNote project={project} previous={previous} next={next} />;
 
   return (
-    <div className={`rp-case rp-case--${meta.tone}`}>
+    <div className={`rp-case rp-case--${meta.tone}`} data-project-id={project.id}>
       <header className="project-document__header">
         <button type="button" onClick={goBack} className="rp-back-link">← Back to all work</button>
         <div className="project-document__identity">
@@ -106,13 +107,13 @@ export default function ProjectCaseStudy() {
           ))}
         </nav>
         <div className="project-document__links">
-          <a href={project.github_url} target="_blank" rel="noreferrer">Repository ↗</a>
-          {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer">{project.video ? "Demo" : "Live project"} ↗</a> : null}
+          <a href={project.github_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "repository_open", location: "project_header", projectId: project.id })}>Repository ↗</a>
+          {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: project.video ? "interactive_demo_open" : "live_demo_open", location: "project_header", projectId: project.id })}>{project.video ? "Demo" : "Live project"} ↗</a> : null}
         </div>
       </header>
 
       <div className="rp-case-main" id="case-content">
-        <section className="rp-case-scene rp-outcome-scene" id="outcome" data-case-scene>
+        <section className="rp-case-scene rp-outcome-scene" id="outcome" data-case-scene data-analytics-section data-section-id="outcome" data-section-type="outcome">
           <div className="rp-scene-heading">
             <span className="rp-kicker">OUTCOME · {meta.date}</span>
             <h1>{meta.shortName}</h1>
@@ -124,20 +125,20 @@ export default function ProjectCaseStudy() {
             <div><span>OWNED</span><strong>{firstSentence(project.star.task)}</strong></div>
             {project.metrics.slice(0, 2).map((metric) => <div key={metric.label}><span>{metric.label}</span><strong>{metric.value}</strong></div>)}
           </div>
-          <TechnicalNotes title="Scope and result"><p>{project.star.situation}</p><p>{project.star.result}</p></TechnicalNotes>
+          <TechnicalNotes title="Scope and result" projectId={project.id}><p>{project.star.situation}</p><p>{project.star.result}</p></TechnicalNotes>
         </section>
 
-        <section className="rp-case-scene rp-system-scene" id="how-it-works" data-case-scene>
+        <section className="rp-case-scene rp-system-scene" id="how-it-works" data-case-scene data-analytics-section data-section-id="how_it_works" data-section-type="architecture">
           <div className="rp-scene-heading"><span className="rp-kicker">01 · HOW IT WORKS</span><h2>The request moves through a system you can inspect.</h2><p>{firstSentence(project.star.architecture)}</p></div>
           <div className="rp-architecture-flow" aria-label={`${meta.shortName} architecture flow`}>
             {meta.architecture.map((step, index) => (
               <div key={step}><span>{String(index + 1).padStart(2, "0")}</span><strong>{step}</strong>{index < meta.architecture.length - 1 ? <i>→</i> : null}</div>
             ))}
           </div>
-          <TechnicalNotes title="Problem context and data flow"><p>{project.star.situation}</p><p>{project.star.architecture}</p></TechnicalNotes>
+          <TechnicalNotes title="Problem context and data flow" projectId={project.id}><p>{project.star.situation}</p><p>{project.star.architecture}</p></TechnicalNotes>
         </section>
 
-        <section className="rp-case-scene rp-decision-scene" id="key-decision" data-case-scene>
+        <section className="rp-case-scene rp-decision-scene" id="key-decision" data-case-scene data-analytics-section data-section-id="key_decision" data-section-type="decision">
           <div className="rp-scene-heading"><span className="rp-kicker">02 · KEY DECISION</span><h2>{meta.decision.reason}</h2><p>{firstSentence(project.star.action)}</p></div>
           <div className="rp-decision-compare">
             <div className="is-rejected"><span>REJECTED</span><strong>{meta.decision.rejected}</strong><i>×</i></div>
@@ -146,10 +147,10 @@ export default function ProjectCaseStudy() {
           <div className="rp-trust-boundaries">
             {meta.trust.map((boundary, index) => <div key={boundary}><span>{String(index + 1).padStart(2, "0")}</span><p>{boundary}</p><i /></div>)}
           </div>
-          <TechnicalNotes title="Implementation decision"><p>{project.star.action}</p></TechnicalNotes>
+          <TechnicalNotes title="Implementation decision" projectId={project.id}><p>{project.star.action}</p></TechnicalNotes>
         </section>
 
-        <section className="rp-case-scene rp-evidence-scene" id="evidence" data-case-scene>
+        <section className="rp-case-scene rp-evidence-scene" id="evidence" data-case-scene data-analytics-section data-section-id="evidence" data-section-type="evidence">
           <div className="rp-scene-heading"><span className="rp-kicker">03 · EVIDENCE</span><h2>The proof keeps its scope attached.</h2><p>{firstSentence(project.star.result)}</p></div>
           <div className="rp-evaluation-board">
             {project.metrics.map((metric, index) => (
@@ -157,15 +158,15 @@ export default function ProjectCaseStudy() {
             ))}
           </div>
           <div className="rp-evidence-actions">
-            <a href={project.github_url} target="_blank" rel="noreferrer"><span>Repository</span><strong>Read the implementation</strong><b>↗</b></a>
-            {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer"><span>{project.video ? "Demo" : "Live project"}</span><strong>Inspect the working surface</strong><b>↗</b></a> : null}
-            {project.video ? <a href={project.video} target="_blank" rel="noreferrer"><span>Recorded evidence</span><strong>Watch the system run</strong><b>↗</b></a> : null}
+            <a href={project.github_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "repository_open", location: "project_evidence", projectId: project.id })}><span>Repository</span><strong>Read the implementation</strong><b>↗</b></a>
+            {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: project.video ? "interactive_demo_open" : "live_demo_open", location: "project_evidence", projectId: project.id })}><span>{project.video ? "Demo" : "Live project"}</span><strong>Inspect the working surface</strong><b>↗</b></a> : null}
+            {project.video ? <a href={project.video} target="_blank" rel="noreferrer" {...captureAttributes({ action: "recorded_demo_open", location: "project_evidence", projectId: project.id })}><span>Recorded evidence</span><strong>Watch the system run</strong><b>↗</b></a> : null}
           </div>
-          <TechnicalNotes title="Technology and complete scope"><p>{project.technologies.join(" · ")}</p><p>{project.star.impact}</p></TechnicalNotes>
+          <TechnicalNotes title="Technology and complete scope" projectId={project.id}><p>{project.technologies.join(" · ")}</p><p>{project.star.impact}</p></TechnicalNotes>
           <div className="rp-case-next">
-            <Link to={`/project/${previous.id}`}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
+            <Link to={`/project/${previous.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: previous.id, navigationSource: "previous" })}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
             <button type="button" onClick={goBack}>Back to all work</button>
-            <Link to={`/project/${next.id}`}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
+            <Link to={`/project/${next.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: next.id, navigationSource: "next" })}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
           </div>
         </section>
       </div>

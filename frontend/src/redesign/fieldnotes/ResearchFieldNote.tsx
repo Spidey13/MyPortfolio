@@ -5,7 +5,7 @@ const steps = ["PLAN", "SEARCH", "ANALYZE", "CRITIQUE", "REPORT"];
 
 export default function ResearchFieldNote(props: FieldNoteProps) {
   const source = sources.p1;
-  return <article className="field-note fn fn--research">
+  return <article className="field-note fn fn--research" data-project-document>
     <section className="fn-cover" aria-labelledby="fn-research-title">
       <div className="fn-cover__copy"><p className="field-note__eyebrow">Research Agent / team-built system · Nov 2025</p><h1 id="fn-research-title">Before the report, a critique.</h1><p className="fn-dek">A research-agent prototype routes a question through planning, search, analysis, and a revision gate before report generation. This page traces the implemented path, not a captured research run.</p><a className="fn-cover__action" href={source.repository} target="_blank" rel="noreferrer">Explore the source <span aria-hidden="true">↗</span></a></div>
       <figure className="fn-folio research-console"><div className="research-console__bar"><span>RESEARCH AGENT</span><span>ORCHESTRATOR / 05 PHASES</span></div><div className="research-console__question"><small>Source fixture / example question</small><strong>{source.example}</strong></div><div className="fn-folio__steps">{steps.map((step, index) => <div key={step} className={step === "CRITIQUE" ? "is-accent" : ""}><span>0{index + 1}</span><strong>{step}</strong>{step === "CRITIQUE" ? <small>revision gate ↺</small> : null}</div>)}</div><figcaption>Workflow model from the <a href={source.orchestrator} target="_blank" rel="noreferrer">orchestrator source</a>. Not a captured run.</figcaption></figure>

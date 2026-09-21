@@ -11,7 +11,7 @@ const inspectionSteps = [
 export default function CodieyPremiere(props: PremierePageProps) {
   const { project } = props;
   return (
-    <article className="premiere premiere-codiey">
+    <article className="premiere premiere-codiey" data-project-document>
       <section className="codiey-hero" aria-labelledby="codiey-title">
         <div className="codiey-hero__copy">
           <PremiereEyebrow project={project} />
