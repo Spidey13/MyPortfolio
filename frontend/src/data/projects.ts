@@ -42,6 +42,27 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    id: "p12",
+    title: "Branch Voice",
+    github_url: "https://github.com/Spidey13/VapiHax",
+    featured: true,
+    technologies: ["TypeScript", "Node.js", "Express", "Vapi", "Deepgram", "Jev", "Claude"],
+    star: {
+      situation: "A voice planner that keeps each detour in its own thread.",
+      task: "Let travelers explore, correct, compare, and combine plans within one conversation.",
+      action: "Stored turns once, with branch-local history read through parent pointers and a turn boundary.",
+      result: "The recorded Japan merge reads four path turns and carries two source digests.",
+      impact: "The session report groups the original Hokkaido plan and its Furano correction under one topic.",
+      architecture: "Vapi and Deepgram handle speech, Jev scores routing, TypeScript applies changes to the tree, and Claude writes replies and summaries.",
+    },
+    modalPreview: {
+      hook: "Compare two plans without losing either thread.",
+      problemTeaser: "A detour should leave the original plan available to revisit.",
+      heroMetric: { label: "Recorded merge", value: "4 turns + 2 digests" },
+    },
+    metrics: [{ label: "Held-out routing", value: "50 of 54" }],
+  },
+  {
     id: "p6",
     title: "Codiey - Voice-First AI Coding Partner",
     github_url: "https://github.com/Spidey13/Codiey",

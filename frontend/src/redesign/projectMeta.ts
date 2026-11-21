@@ -35,10 +35,30 @@ export interface ProjectVisualMeta {
 }
 
 export const PROJECT_META: Record<string, ProjectVisualMeta> = {
+  p12: {
+    shortName: "Branch Voice",
+    label: "Branching voice planner",
+    railLabel: "Explore plans by voice",
+    date: "November 2026",
+    artifact: "audio",
+    tone: "violet",
+    home: { order: 2.6, mode: "quiet", keyword: "VOICE", thesis: "A voice planner that keeps each detour in its own thread." },
+    architecture: ["Voice", "Route", "Read history", "Reply", "Report"],
+    decision: {
+      rejected: "Duplicate turns when a conversation forks",
+      chosen: "Reference the parent branch and a turn boundary",
+      reason: "All branches read from a shared turn store.",
+    },
+    trust: [
+      "The edited desktop replay uses recorded state and shortened text. The mobile insert is staged.",
+      "The four-turn merge and its two digests come from one recorded session.",
+      "Router timings measure cached text routing.",
+    ],
+  },
   p1: {
     shortName: "Research Agent",
     label: "Scientific discovery system",
-    railLabel: "Scientific discovery",
+    railLabel: "Reviews research drafts",
     date: "November 2025",
     artifact: "research",
     tone: "lime",
@@ -59,7 +79,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p2: {
     shortName: "ReMind",
     label: "Memory-aware retrieval",
-    railLabel: "Memory-aware retrieval",
+    railLabel: "Ranks memories over time",
     date: "December 2025",
     artifact: "memory",
     tone: "cyan",
@@ -79,7 +99,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p3: {
     shortName: "StratSim",
     label: "F1 race strategy simulator",
-    railLabel: "F1 strategy simulation",
+    railLabel: "Simulates F1 pit strategy",
     date: "June 2025",
     artifact: "race",
     tone: "coral",
@@ -99,7 +119,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p4: {
     shortName: "Wafer Defects",
     label: "Cluster-conditioned ML pipeline",
-    railLabel: "Applied machine learning",
+    railLabel: "Trains wafer defect models",
     date: "2025",
     artifact: "wafer",
     tone: "violet",
@@ -119,7 +139,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p5: {
     shortName: "Prompt Optimization",
     label: "Healthcare NLP evaluation",
-    railLabel: "NLP evaluation",
+    railLabel: "Tests against a baseline",
     date: "2025",
     artifact: "evaluation",
     tone: "amber",
@@ -139,7 +159,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p6: {
     shortName: "Codiey",
     label: "Voice-first coding partner",
-    railLabel: "Voice-first coding",
+    railLabel: "Talk through a codebase",
     date: "March 2026",
     artifact: "voice",
     tone: "blue",
@@ -159,7 +179,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p7: {
     shortName: "Audio–Lyric",
     label: "Cross-modal comparison experiment",
-    railLabel: "Audio–lyric alignment",
+    railLabel: "Compares lyrics and audio",
     date: "2025",
     artifact: "audio",
     tone: "pink",
@@ -179,7 +199,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p8: {
     shortName: "Diagnostiq",
     label: "AI technical support agent",
-    railLabel: "Technical support AI",
+    railLabel: "Cites service manuals",
     date: "May 2026",
     artifact: "diagnostic",
     tone: "orange",
@@ -199,7 +219,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p9: {
     shortName: "Queue Whisperer",
     label: "Human-approved GitHub agent",
-    railLabel: "GitHub automation",
+    railLabel: "GitHub changes with approval",
     date: "July 2026",
     artifact: "approval",
     tone: "green",
@@ -219,7 +239,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p10: {
     shortName: "cachefault",
     label: "Prefix-cache miss attribution",
-    railLabel: "Cache diagnostics",
+    railLabel: "Finds prompt cache misses",
     date: "August 2026",
     artifact: "cache",
     tone: "lime",

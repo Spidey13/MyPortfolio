@@ -3911,7 +3911,7 @@
 
 /* Persistent portfolio shell. These rules are the single route-aware shell layer. */
 .portfolio-shell {
-  --portfolio-rail-width: clamp(340px, 30.5vw, 390px);
+  --portfolio-rail-width: clamp(340px, 28.5vw, 364px);
   display: grid;
   grid-template-columns: var(--portfolio-rail-width) minmax(0, 1fr);
   width: 100%;
@@ -4005,7 +4005,7 @@
   position: relative;
   z-index: 2;
   flex: 0 0 auto;
-  padding: 44px 28px 10px;
+  padding: 38px 25px 10px;
   color: var(--rail-ink);
   background: var(--rail-ground);
 }
@@ -4121,6 +4121,7 @@
 }
 
 .project-index {
+  --rail-thumb-width: 80px;
   position: relative;
   display: grid;
   padding-bottom: 20px;
@@ -4128,7 +4129,7 @@
 }
 
 .project-rail__scroller[data-deck-active="true"] .project-index {
-  padding-bottom: var(--rail-end-space, 42px);
+  padding-bottom: var(--rail-end-space, 38px);
 }
 
 .project-index__link {
@@ -4136,8 +4137,8 @@
   z-index: 1;
   display: grid;
   width: 100%;
-  min-height: 80px;
-  padding: 10px;
+  min-height: 72px;
+  padding: 8px 10px;
   overflow: hidden;
   border-radius: var(--rail-row-radius, 14px);
   color: var(--rail-ink, var(--rp-ink));
@@ -4147,14 +4148,14 @@
   transition:
     background-color 180ms cubic-bezier(0.22, 0.61, 0.36, 1),
     box-shadow 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
-  grid-template-columns: 88px minmax(0, 1fr) 16px;
+  grid-template-columns: var(--rail-thumb-width) minmax(0, 1fr) 16px;
   align-items: center;
   column-gap: 8px;
 }
 
 .project-rail__scroller[data-deck-active="true"] .project-index__link {
   z-index: 4;
-  height: var(--rail-card-height, 84px);
+  height: var(--rail-card-height, 72px);
   min-height: 0;
 }
 
@@ -4180,8 +4181,9 @@
 
 .project-index__thumb {
   display: block;
-  width: 88px;
-  height: 60px;
+  width: 100%;
+  aspect-ratio: 40 / 27;
+  max-height: calc(var(--rail-card-height, 72px) - 16px);
   min-width: 0;
   overflow: hidden;
   border-radius: var(--rail-thumb-radius, 8px);
@@ -4290,14 +4292,9 @@
   touch-action: manipulation;
 }
 
-@container rail (max-width: 359px) {
-  .project-index__link {
-    grid-template-columns: 76px minmax(0, 1fr) 16px;
-    column-gap: 8px;
-  }
-
-  .project-index__thumb {
-    width: 76px;
+@container rail (max-width: 340px) {
+  .project-index {
+    --rail-thumb-width: 72px;
   }
 
   .project-index__copy {
@@ -4949,13 +4946,8 @@
 }
 
 @media (max-width: 359px) {
-  .mobile-index-dialog .project-index__link {
-    grid-template-columns: 76px minmax(0, 1fr) 16px;
-    column-gap: 8px;
-  }
-
-  .mobile-index-dialog .project-index__thumb {
-    width: 76px;
+  .mobile-index-dialog .project-index {
+    --rail-thumb-width: 72px;
   }
 
   .mobile-index-dialog .project-index__copy {

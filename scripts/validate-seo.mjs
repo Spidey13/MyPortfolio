@@ -44,7 +44,9 @@ for (const field of ["title", "description", "canonical"]) {
 
 const sitemap = read("sitemap.xml");
 const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-if (sitemapUrls.length !== 11) fail(`sitemap contains ${sitemapUrls.length} URLs instead of 11`);
+if (sitemapUrls.length !== indexableFiles.length) {
+  fail(`sitemap contains ${sitemapUrls.length} URLs for ${indexableFiles.length} indexable HTML routes`);
+}
 if (new Set(sitemapUrls).size !== sitemapUrls.length) fail("sitemap contains duplicate URLs");
 for (const entry of metadata) {
   if (!sitemapUrls.includes(entry.canonical)) fail(`${entry.file} is missing from the sitemap`);

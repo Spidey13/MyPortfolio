@@ -1,4 +1,4 @@
-export const PRODUCT_PREMIERE_IDS = ["p2", "p6", "p8", "p9", "p10"] as const;
+export const PRODUCT_PREMIERE_IDS = ["p2", "p6", "p8", "p9", "p10", "p12"] as const;
 
 export type ProductPremiereId = (typeof PRODUCT_PREMIERE_IDS)[number];
 

@@ -88,11 +88,17 @@ export function PremiereFooter({ project, previous, next, note }: PremierePagePr
         <h2>{note}</h2>
         <PremiereLinks project={project} />
       </div>
-      <nav aria-label="Adjacent projects" className="premiere-footer__nav">
-        <Link to={`/project/${previous.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: previous.id, navigationSource: "previous" })}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
-        <Link to="/" {...captureAttributes({ action: "project_navigation", location: "project_footer", navigationSource: "index" })}><span>Index</span><strong>All work</strong></Link>
-        <Link to={`/project/${next.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: next.id, navigationSource: "next" })}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
-      </nav>
+      <PremiereProjectNavigation previous={previous} next={next} />
     </footer>
+  );
+}
+
+export function PremiereProjectNavigation({ previous, next }: Pick<PremierePageProps, "previous" | "next">) {
+  return (
+    <nav aria-label="Adjacent projects" className="premiere-footer__nav">
+      <Link to={`/project/${previous.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: previous.id, navigationSource: "previous" })}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
+      <Link to="/" {...captureAttributes({ action: "project_navigation", location: "project_footer", navigationSource: "index" })}><span>Index</span><strong>All work</strong></Link>
+      <Link to={`/project/${next.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: next.id, navigationSource: "next" })}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
+    </nav>
   );
 }
