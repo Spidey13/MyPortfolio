@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePostHog } from "@posthog/react";
-import { captureInteractiveDemo } from "../../analytics/events";
+import { captureInteractiveDemo } from "../../analytics/captureInteractiveDemo";
 import { BehindTheProduct, PremiereEyebrow, PremiereFooter, PremiereLinks, type PremierePageProps } from "./PremiereShared";
 
 type ApprovalState = "pending" | "approved" | "rejected";

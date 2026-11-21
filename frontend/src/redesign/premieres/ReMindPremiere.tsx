@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from "react";
 import { usePostHog } from "@posthog/react";
-import { captureInteractiveDemo } from "../../analytics/events";
+import { captureInteractiveDemo } from "../../analytics/captureInteractiveDemo";
 import { BehindTheProduct, PremiereEyebrow, PremiereFooter, PremiereLinks, type PremierePageProps } from "./PremiereShared";
 
 const QUERY_STATES = [

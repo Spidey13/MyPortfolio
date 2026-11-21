@@ -15,6 +15,8 @@
   --bv-control: #828a9c;
   --bv-focus: #344aa0;
   --bv-inset: clamp(16px, 3.1cqi, 36px);
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
   background: var(--bv-paper);
   color: var(--bv-ink);
@@ -23,8 +25,9 @@
 }
 
 .bv-content {
+  width: 100%;
   max-width: 1280px;
-  padding: clamp(21px, 2.6cqi, 32px) var(--bv-inset) 32px;
+  padding: clamp(21px, 2.6cqi, 32px) var(--bv-inset) 18px;
   margin-inline: auto;
 }
 
@@ -446,11 +449,18 @@
 .bv-metrics dd .bv-sources { font-weight: 400; }
 .bv-limits h3 { color: var(--bv-ink); margin-bottom: 4px; }
 
+.bv-footer {
+  margin-top: auto;
+  padding: 0 8px 8px;
+}
+
 .bv-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 24px;
-  margin-top: 18px;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: max(0px, calc(var(--bv-inset) - 8px));
   padding-block: 4px 10px;
   border-top: 1px solid var(--bv-rule);
 }

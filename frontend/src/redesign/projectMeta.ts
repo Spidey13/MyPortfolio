@@ -10,7 +10,9 @@ export type ArtifactKind =
   | "audio"
   | "diagnostic"
   | "approval"
-  | "cache";
+  | "cache"
+  | "fire"
+  | "incident";
 
 export interface ProjectVisualMeta {
   shortName: string;
@@ -35,6 +37,26 @@ export interface ProjectVisualMeta {
 }
 
 export const PROJECT_META: Record<string, ProjectVisualMeta> = {
+  p13: {
+    shortName: "Incident Lens",
+    label: "Public-record research",
+    railLabel: "Checks public records",
+    date: "October 2026",
+    artifact: "incident",
+    tone: "green",
+    home: { order: 2.5, mode: "quiet", keyword: "RECORDS", thesis: "Finds what was on the public record before an injury and what appeared later." },
+    architecture: ["Locate sources", "Save records", "Extract conditions", "Check", "Write packet"],
+    decision: {
+      rejected: "Collapse source disagreements into one answer",
+      chosen: "Keep each source and its checks in the packet",
+      reason: "An investigator can check the source wording and follow up on conclusions the records cannot settle.",
+    },
+    trust: [
+      "The walkthrough uses two saved hypothetical cases.",
+      "A 311 report marked Closed does not establish when or whether a repair happened.",
+      "The evaluation uses model-written labels adjudicated by the owner.",
+    ],
+  },
   p12: {
     shortName: "Branch Voice",
     label: "Branching voice planner",
@@ -62,7 +84,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "November 2025",
     artifact: "research",
     tone: "lime",
-    home: { order: 5, mode: "quiet", keyword: "RESEARCH", thesis: "A team-built research workflow with a visible critique-and-revision gate." },
+    home: { order: 6, mode: "quiet", keyword: "RESEARCH", thesis: "A team-built research workflow with a visible critique-and-revision gate." },
     architecture: ["Plan", "Search", "Analyze", "Critique", "Report"],
     decision: {
       rejected: "Generate directly from retrieved papers",
@@ -83,7 +105,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "December 2025",
     artifact: "memory",
     tone: "cyan",
-    home: { order: 8, mode: "quiet", keyword: "MEMORY", thesis: "Retrieval that remembers recency, repetition, and provenance." },
+    home: { order: 9, mode: "quiet", keyword: "MEMORY", thesis: "Retrieval that remembers recency, repetition, and provenance." },
     architecture: ["Retrieve", "Rerank", "Reinforce", "Score", "Explain"],
     decision: {
       rejected: "Semantic similarity alone",
@@ -103,7 +125,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "June 2025",
     artifact: "race",
     tone: "coral",
-    home: { order: 6, mode: "visual", thesis: "Six agents planning an F1 race as conditions change." },
+    home: { order: 7, mode: "visual", thesis: "Six agents planning an F1 race as conditions change." },
     architecture: ["Telemetry", "Tire model", "Six agents", "Lap forecast", "Pit decision"],
     decision: {
       rejected: "Constant-pace strategy baseline",
@@ -123,7 +145,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "2025",
     artifact: "wafer",
     tone: "violet",
-    home: { order: 7, mode: "visual", thesis: "A 590-sensor wafer training path, with an unfinished inference contract." },
+    home: { order: 8, mode: "visual", thesis: "A 590-sensor wafer training path, with an unfinished inference contract." },
     architecture: ["Schema", "KNN impute", "Zero-variance", "K-Means", "Model selection"],
     decision: {
       rejected: "One global classifier over every wafer",
@@ -143,7 +165,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "2025",
     artifact: "evaluation",
     tone: "amber",
-    home: { order: 9, mode: "quiet", keyword: "EVALUATION", thesis: "The prompt optimizer tested candidates and retained the default." },
+    home: { order: 10, mode: "quiet", keyword: "EVALUATION", thesis: "The prompt optimizer tested candidates and retained the default." },
     architecture: ["Task contract", "MIPROv2", "SemanticF1", "Evaluate", "Retain default"],
     decision: {
       rejected: "Assume an optimized candidate must improve the baseline",
@@ -163,7 +185,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "March 2026",
     artifact: "voice",
     tone: "blue",
-    home: { order: 3, mode: "visual", thesis: "A voice-first coding partner that understands the whole repository." },
+    home: { order: 4, mode: "visual", thesis: "A voice-first coding partner that understands the whole repository." },
     architecture: ["Voice", "Neural VAD", "Tool gate", "AST context", "Repo graph"],
     decision: {
       rejected: "Energy-threshold voice detection",
@@ -183,7 +205,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "2025",
     artifact: "audio",
     tone: "pink",
-    home: { order: 10, mode: "visual", thesis: "A team experiment where matched and unmatched pairs barely separated." },
+    home: { order: 11, mode: "visual", thesis: "A team experiment where matched and unmatched pairs barely separated." },
     architecture: ["Audio", "Lyrics", "Encode", "Compare", "Inspect overlap"],
     decision: {
       rejected: "Treat matching vector dimensions as semantic alignment",
@@ -223,7 +245,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
     date: "July 2026",
     artifact: "approval",
     tone: "green",
-    home: { order: 4, mode: "quiet", keyword: "APPROVAL", thesis: "A GitHub agent that cannot write without human approval." },
+    home: { order: 5, mode: "quiet", keyword: "APPROVAL", thesis: "A GitHub agent that cannot write without human approval." },
     architecture: ["Read", "Ground", "Propose", "Approve", "Commit"],
     decision: {
       rejected: "Give the model a write tool with a prompt rule",
@@ -254,6 +276,26 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
       "Identical bytes plus a miss resolves to PROVIDER_SIDE rather than an invented cause.",
       "The OpenAI adapter was not live-validated in the hosted matrix run.",
       "The tool performs post-hoc analysis rather than live monitoring.",
+    ],
+  },
+  p11: {
+    shortName: "FireTrace",
+    label: "Wildfire source mapping",
+    railLabel: "Wildfire source mapping",
+    date: "October 2026",
+    artifact: "fire",
+    tone: "lime",
+    home: { order: 3, mode: "visual", thesis: "Every source's fire outline, kept apart on its own clocks." },
+    architecture: ["Collect", "Normalize", "Gate", "Compare", "Map"],
+    decision: {
+      rejected: "Merge every source into one current fire polygon",
+      chosen: "Store each outline as its own observation with separate clocks",
+      reason: "A merged shape hides that the sources were observed hours apart and disagree.",
+    },
+    trust: [
+      "Only flights that pass a five-check comparability gate are compared; 4 of 26 were excluded, none deleted.",
+      "An official outline's observation time is inferred only at IoU 0.997 or higher; otherwise it stays unknown.",
+      "Detection accuracy and lead time have not been validated.",
     ],
   },
 };

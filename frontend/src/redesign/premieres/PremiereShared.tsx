@@ -23,7 +23,7 @@ export function PremiereEyebrow({ project, children }: { project: Project; child
 export function PremiereLinks({ project }: { project: Project }) {
   return (
     <div className="premiere-links" aria-label="Project links">
-      <a href={project.github_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "repository_open", location: "project_evidence", projectId: project.id })}>Repository ↗</a>
+      {project.github_url ? <a href={project.github_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "repository_open", location: "project_evidence", projectId: project.id })}>Repository ↗</a> : null}
       {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "live_demo_open", location: "project_evidence", projectId: project.id })}>Live project ↗</a> : null}
       {project.video ? <a href={project.video} target="_blank" rel="noreferrer" {...captureAttributes({ action: "recorded_demo_open", location: "project_evidence", projectId: project.id })}>Full demo ↗</a> : null}
     </div>

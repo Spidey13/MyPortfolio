@@ -2,7 +2,7 @@ import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { usePostHog } from "@posthog/react";
 import { useCallback, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { captureAttributes } from "../../analytics/attributes";
-import { captureInteractiveDemo } from "../../analytics/events";
+import { captureInteractiveDemo } from "../../analytics/captureInteractiveDemo";
 import {
   branchVoiceBranches, branchVoiceChapters, branchVoiceDefaultChapter, branchVoiceJumps, branchVoiceSources,
   replayClock, type BranchId, type BranchVoiceChapter,
@@ -162,7 +162,9 @@ export default function BranchVoicePremiere({ project, previous, next }: Premier
           <TurnLedger frame={chapter} selected={selection} onInspect={inspectLane} track={track} />
         </div>
         <p role="status" className="bv-sr-only">{announcement}</p>
-        <footer className="bv-info">
+      </div>
+      <footer className="bv-footer">
+        <div className="bv-info">
           <details>
             <summary>About the recording and credits</summary>
             <p>The desktop footage replays a recorded voice session with shortened dialogue and edited timing. “Hi. What are you thinking about?” is the only spoken line. The mobile insert stages the web app’s branch controls.</p>
@@ -175,9 +177,9 @@ export default function BranchVoicePremiere({ project, previous, next }: Premier
             <p>The product uses {project.technologies.join(", ")}, with browser JavaScript and CSS for the interface.</p>
             <EvidenceLinks sources={[branchVoiceSources.architecture]} claim="implementation" track={track} />
           </details>
-        </footer>
+        </div>
         <PremiereProjectNavigation previous={previous} next={next} />
-      </div>
+      </footer>
     </article>
   );
 }
