@@ -60,6 +60,17 @@ const SYMBOLS: Record<ArtifactKind, ReactNode> = {
     <path d="M12 21h7v18h-7z M23 10h7v40h-7z M34 17h7v26h-7z" />
     <path className="rail-symbol__accent" d="M48 12h27v8H48z M48 26h19v8H48z M48 40h27v8H48z" />
   </>,
+  fire: <>
+    <path className="rail-symbol__contour" d="M4 50c14-8 22-2 34-10s20-22 46-20 M4 36c12-6 20 0 30-8s16-20 34-22" />
+    <path className="rail-symbol__outline" d="M33 9c9-4 17 1 19 9 2 7 11 8 12 16 1 8-7 14-16 13-7-1-10 5-18 2-7-3-6-11-9-17-3-7 3-19 12-23z" />
+    <ellipse className="rail-symbol__accent-stroke rail-symbol__dashed" cx="45" cy="30" rx="31" ry="25" />
+  </>,
+  incident: <>
+    <path className="rail-symbol__paper" d="M18 10h40v37H18z" />
+    <path className="rail-symbol__surface" d="M25 16h27v3H25zm0 7h26v3H25zm0 7h16v3H25z" />
+    <circle className="rail-symbol__accent-stroke" cx="54" cy="34" r="10" />
+    <path className="rail-symbol__accent-stroke" d="m62 42 9 8" />
+  </>,
 };
 
 export function ProjectRailThumbnail({ project }: { project: Project }) {

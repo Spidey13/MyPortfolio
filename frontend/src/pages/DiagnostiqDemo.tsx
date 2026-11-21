@@ -12,7 +12,7 @@ import React, {
 } from "react";
 import { usePostHog } from "@posthog/react";
 import { Link } from "react-router-dom";
-import { captureInteractiveDemo } from "../analytics/events";
+import { captureInteractiveDemo } from "../analytics/captureInteractiveDemo";
 import { captureAttributes } from "../analytics/attributes";
 
 // ─── Palette (matches Diagnostiq exactly) ────────────────────────────────────

@@ -29,7 +29,8 @@ export interface ProjectMetric {
 export interface Project {
   id: string;
   title: string;
-  github_url: string;
+  /** Omitted while a project's code is not public. */
+  github_url?: string;
   deployed_url?: string;
   image?: string;
   video?: string;
@@ -41,6 +42,50 @@ export interface Project {
 }
 
 export const PROJECTS: Project[] = [
+  {
+    id: "p13",
+    title: "Incident Lens",
+    featured: true,
+    technologies: ["Python", "Claude", "Pydantic", "DuckDB"],
+    star: {
+      situation: "After an injury, public records may describe the product or the place at different dates.",
+      task: "Return a packet that separates earlier records, later records, and unresolved questions.",
+      action: "Saved official source bodies, used Claude to extract quoted recall conditions, and ran dates, serial ranges, and SF311 status notes through explicit code checks.",
+      result: "Two saved cases show why filing dates and status notes matter, and how conflicting recall ranges stay in the packet.",
+      impact: "Gives an investigator the source text and the questions that still need checking.",
+      architecture: "Python and Pydantic with Claude structured outputs for recall extraction and DuckDB for public-record snapshots.",
+    },
+    modalPreview: {
+      hook: "What was already on the public record, and what came later?",
+      problemTeaser: "A saved research packet keeps public records, dates, conflicting answers, and follow-up questions together.",
+      heroMetric: { label: "Identifiers found", value: "117 of 192" },
+    },
+    metrics: [
+      { label: "Identifiers found", value: "117 of 192" },
+      { label: "Quotes that hold the value", value: "98 of 106" },
+    ],
+  },
+  {
+    id: "p12",
+    title: "Branch Voice",
+    github_url: "https://github.com/Spidey13/VapiHax",
+    featured: true,
+    technologies: ["TypeScript", "Node.js", "Express", "Vapi", "Deepgram", "Jev", "Claude"],
+    star: {
+      situation: "A voice planner that keeps each detour in its own thread.",
+      task: "Let travelers explore, correct, compare, and combine plans within one conversation.",
+      action: "Stored turns once, with branch-local history read through parent pointers and a turn boundary.",
+      result: "The recorded Japan merge reads four path turns and carries two source digests.",
+      impact: "The session report groups the original Hokkaido plan and its Furano correction under one topic.",
+      architecture: "Vapi and Deepgram handle speech, Jev scores routing, TypeScript applies changes to the tree, and Claude writes replies and summaries.",
+    },
+    modalPreview: {
+      hook: "Compare two plans without losing either thread.",
+      problemTeaser: "A detour should leave the original plan available to revisit.",
+      heroMetric: { label: "Recorded merge", value: "4 turns + 2 digests" },
+    },
+    metrics: [{ label: "Held-out routing", value: "50 of 54" }],
+  },
   {
     id: "p6",
     title: "Codiey - Voice-First AI Coding Partner",
@@ -446,6 +491,44 @@ export const PROJECTS: Project[] = [
       { label: "Oracle Agreement", value: "9/9 Scored Rows" },
       { label: "Simulator vs Real vLLM", value: "47/47 Exact" },
       { label: "Attribution", value: "Field Path, Not Component" },
+    ],
+  },
+  {
+    id: "p11",
+    title: "FireTrace - Wildfire Outlines Kept Apart by Source",
+    star: {
+      situation:
+        "A California fire is mapped by several sources at once: airborne infrared flights, the official WFIGS perimeter and NASA's FEDS satellite model. Each is observed, published and edited at different times, and merging them into one current polygon hides both the timing and the disagreement.",
+      task: "Build a local map product that keeps every source's outline separate, on its own observed, published, edited and retrieved clocks, and shows whether a change between flights is growth or a redrawn edge.",
+      action:
+        "Stored each outline as an immutable, source-specific observation linked to an IRWIN incident, with full geometry and separate clocks in SQLite. Reprojected each infrared product from its embedded CRS and took observation time from the flight comment, cross-checked against the GDB. Inferred an official outline's observation time only when its geometry matched a published flight at IoU 0.997 or higher. Gated comparisons with a five-check comparability test and kept failing flights on the timeline with their reason. Loaded all coarse frames into one MapLibre source so stepping flips feature state instead of reloading geometry.",
+      result:
+        "On the Dome Fire, 22 of 26 archived infrared products passed the comparability gate and 4 were excluded, none deleted. Coarse steps rendered in a median 15 ms with 0 wrong or blank outlines in 2,412 samples. FEDS drew 55.103 km² against the flight's 27.47 km², and a 3.775 km² lobe more than a kilometre away is shown and labelled rather than explained away.",
+      impact:
+        "Shows where wildfire sources agree and disagree, and when each was actually observed, without treating any one of them as ground truth.",
+      architecture:
+        "Python 3.12 with Starlette and Uvicorn serving a no-build JavaScript and MapLibre frontend. SQLite observations table with incident, comparable series, observed, edited, published and retrieved times, area and full WKB geometry. Shapely and PyProj for reprojection, area and change computation. Recorded sources: NIFC incident IR, WFIGS, NASA FEDS and GOES-18; live collection adds NOAA NGFS, NASA FIRMS, CAL FIRE/FIRIS, InciWeb, ADS-B and GDELT.",
+    },
+    technologies: [
+      "Python",
+      "Starlette",
+      "SQLite",
+      "Shapely",
+      "PyProj",
+      "MapLibre GL",
+      "GeoJSON",
+    ],
+    featured: true,
+    modalPreview: {
+      hook: "Every source's fire outline, kept apart on its own clocks",
+      problemTeaser:
+        "FireTrace maps a California fire from airborne infrared, the official perimeter and a satellite model without merging them, so you can see where they disagree and whether a change is growth or a redrawn edge.",
+      heroMetric: { label: "Comparable flights", value: "22 of 26" },
+    },
+    metrics: [
+      { label: "Comparable flights", value: "22 of 26" },
+      { label: "Median step render", value: "15 ms" },
+      { label: "Wrong or blank outlines", value: "0 of 2,412" },
     ],
   },
 ];

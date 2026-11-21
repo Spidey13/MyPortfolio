@@ -23,7 +23,7 @@ export function PremiereEyebrow({ project, children }: { project: Project; child
 export function PremiereLinks({ project }: { project: Project }) {
   return (
     <div className="premiere-links" aria-label="Project links">
-      <a href={project.github_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "repository_open", location: "project_evidence", projectId: project.id })}>Repository ↗</a>
+      {project.github_url ? <a href={project.github_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "repository_open", location: "project_evidence", projectId: project.id })}>Repository ↗</a> : null}
       {project.deployed_url ? <a href={project.deployed_url} target="_blank" rel="noreferrer" {...captureAttributes({ action: "live_demo_open", location: "project_evidence", projectId: project.id })}>Live project ↗</a> : null}
       {project.video ? <a href={project.video} target="_blank" rel="noreferrer" {...captureAttributes({ action: "recorded_demo_open", location: "project_evidence", projectId: project.id })}>Full demo ↗</a> : null}
     </div>
@@ -88,11 +88,17 @@ export function PremiereFooter({ project, previous, next, note }: PremierePagePr
         <h2>{note}</h2>
         <PremiereLinks project={project} />
       </div>
-      <nav aria-label="Adjacent projects" className="premiere-footer__nav">
-        <Link to={`/project/${previous.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: previous.id, navigationSource: "previous" })}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
-        <Link to="/" {...captureAttributes({ action: "project_navigation", location: "project_footer", navigationSource: "index" })}><span>Index</span><strong>All work</strong></Link>
-        <Link to={`/project/${next.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: next.id, navigationSource: "next" })}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
-      </nav>
+      <PremiereProjectNavigation previous={previous} next={next} />
     </footer>
+  );
+}
+
+export function PremiereProjectNavigation({ previous, next }: Pick<PremierePageProps, "previous" | "next">) {
+  return (
+    <nav aria-label="Adjacent projects" className="premiere-footer__nav">
+      <Link to={`/project/${previous.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: previous.id, navigationSource: "previous" })}><span>Previous</span><strong>{getProjectMeta(previous.id).shortName}</strong></Link>
+      <Link to="/" {...captureAttributes({ action: "project_navigation", location: "project_footer", navigationSource: "index" })}><span>Index</span><strong>All work</strong></Link>
+      <Link to={`/project/${next.id}`} {...captureAttributes({ action: "project_open", location: "project_footer", projectId: next.id, navigationSource: "next" })}><span>Next</span><strong>{getProjectMeta(next.id).shortName}</strong></Link>
+    </nav>
   );
 }

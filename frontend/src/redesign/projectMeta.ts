@@ -10,7 +10,9 @@ export type ArtifactKind =
   | "audio"
   | "diagnostic"
   | "approval"
-  | "cache";
+  | "cache"
+  | "fire"
+  | "incident";
 
 export interface ProjectVisualMeta {
   shortName: string;
@@ -35,14 +37,54 @@ export interface ProjectVisualMeta {
 }
 
 export const PROJECT_META: Record<string, ProjectVisualMeta> = {
+  p13: {
+    shortName: "Incident Lens",
+    label: "Public-record research",
+    railLabel: "Checks public records",
+    date: "October 2026",
+    artifact: "incident",
+    tone: "green",
+    home: { order: 2.5, mode: "quiet", keyword: "RECORDS", thesis: "Finds what was on the public record before an injury and what appeared later." },
+    architecture: ["Locate sources", "Save records", "Extract conditions", "Check", "Write packet"],
+    decision: {
+      rejected: "Collapse source disagreements into one answer",
+      chosen: "Keep each source and its checks in the packet",
+      reason: "An investigator can check the source wording and follow up on conclusions the records cannot settle.",
+    },
+    trust: [
+      "The walkthrough uses two saved hypothetical cases.",
+      "A 311 report marked Closed does not establish when or whether a repair happened.",
+      "The evaluation uses model-written labels adjudicated by the owner.",
+    ],
+  },
+  p12: {
+    shortName: "Branch Voice",
+    label: "Branching voice planner",
+    railLabel: "Explore plans by voice",
+    date: "November 2026",
+    artifact: "audio",
+    tone: "violet",
+    home: { order: 2.6, mode: "quiet", keyword: "VOICE", thesis: "A voice planner that keeps each detour in its own thread." },
+    architecture: ["Voice", "Route", "Read history", "Reply", "Report"],
+    decision: {
+      rejected: "Duplicate turns when a conversation forks",
+      chosen: "Reference the parent branch and a turn boundary",
+      reason: "All branches read from a shared turn store.",
+    },
+    trust: [
+      "The edited desktop replay uses recorded state and shortened text. The mobile insert is staged.",
+      "The four-turn merge and its two digests come from one recorded session.",
+      "Router timings measure cached text routing.",
+    ],
+  },
   p1: {
     shortName: "Research Agent",
     label: "Scientific discovery system",
-    railLabel: "Scientific discovery",
+    railLabel: "Reviews research drafts",
     date: "November 2025",
     artifact: "research",
     tone: "lime",
-    home: { order: 5, mode: "quiet", keyword: "RESEARCH", thesis: "A team-built research workflow with a visible critique-and-revision gate." },
+    home: { order: 6, mode: "quiet", keyword: "RESEARCH", thesis: "A team-built research workflow with a visible critique-and-revision gate." },
     architecture: ["Plan", "Search", "Analyze", "Critique", "Report"],
     decision: {
       rejected: "Generate directly from retrieved papers",
@@ -59,11 +101,11 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p2: {
     shortName: "ReMind",
     label: "Memory-aware retrieval",
-    railLabel: "Memory-aware retrieval",
+    railLabel: "Ranks memories over time",
     date: "December 2025",
     artifact: "memory",
     tone: "cyan",
-    home: { order: 8, mode: "quiet", keyword: "MEMORY", thesis: "Retrieval that remembers recency, repetition, and provenance." },
+    home: { order: 9, mode: "quiet", keyword: "MEMORY", thesis: "Retrieval that remembers recency, repetition, and provenance." },
     architecture: ["Retrieve", "Rerank", "Reinforce", "Score", "Explain"],
     decision: {
       rejected: "Semantic similarity alone",
@@ -79,11 +121,11 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p3: {
     shortName: "StratSim",
     label: "F1 race strategy simulator",
-    railLabel: "F1 strategy simulation",
+    railLabel: "Simulates F1 pit strategy",
     date: "June 2025",
     artifact: "race",
     tone: "coral",
-    home: { order: 6, mode: "visual", thesis: "Six agents planning an F1 race as conditions change." },
+    home: { order: 7, mode: "visual", thesis: "Six agents planning an F1 race as conditions change." },
     architecture: ["Telemetry", "Tire model", "Six agents", "Lap forecast", "Pit decision"],
     decision: {
       rejected: "Constant-pace strategy baseline",
@@ -99,11 +141,11 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p4: {
     shortName: "Wafer Defects",
     label: "Cluster-conditioned ML pipeline",
-    railLabel: "Applied machine learning",
+    railLabel: "Trains wafer defect models",
     date: "2025",
     artifact: "wafer",
     tone: "violet",
-    home: { order: 7, mode: "visual", thesis: "A 590-sensor wafer training path, with an unfinished inference contract." },
+    home: { order: 8, mode: "visual", thesis: "A 590-sensor wafer training path, with an unfinished inference contract." },
     architecture: ["Schema", "KNN impute", "Zero-variance", "K-Means", "Model selection"],
     decision: {
       rejected: "One global classifier over every wafer",
@@ -119,11 +161,11 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p5: {
     shortName: "Prompt Optimization",
     label: "Healthcare NLP evaluation",
-    railLabel: "NLP evaluation",
+    railLabel: "Tests against a baseline",
     date: "2025",
     artifact: "evaluation",
     tone: "amber",
-    home: { order: 9, mode: "quiet", keyword: "EVALUATION", thesis: "The prompt optimizer tested candidates and retained the default." },
+    home: { order: 10, mode: "quiet", keyword: "EVALUATION", thesis: "The prompt optimizer tested candidates and retained the default." },
     architecture: ["Task contract", "MIPROv2", "SemanticF1", "Evaluate", "Retain default"],
     decision: {
       rejected: "Assume an optimized candidate must improve the baseline",
@@ -139,11 +181,11 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p6: {
     shortName: "Codiey",
     label: "Voice-first coding partner",
-    railLabel: "Voice-first coding",
+    railLabel: "Talk through a codebase",
     date: "March 2026",
     artifact: "voice",
     tone: "blue",
-    home: { order: 3, mode: "visual", thesis: "A voice-first coding partner that understands the whole repository." },
+    home: { order: 4, mode: "visual", thesis: "A voice-first coding partner that understands the whole repository." },
     architecture: ["Voice", "Neural VAD", "Tool gate", "AST context", "Repo graph"],
     decision: {
       rejected: "Energy-threshold voice detection",
@@ -159,11 +201,11 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p7: {
     shortName: "Audio–Lyric",
     label: "Cross-modal comparison experiment",
-    railLabel: "Audio–lyric alignment",
+    railLabel: "Compares lyrics and audio",
     date: "2025",
     artifact: "audio",
     tone: "pink",
-    home: { order: 10, mode: "visual", thesis: "A team experiment where matched and unmatched pairs barely separated." },
+    home: { order: 11, mode: "visual", thesis: "A team experiment where matched and unmatched pairs barely separated." },
     architecture: ["Audio", "Lyrics", "Encode", "Compare", "Inspect overlap"],
     decision: {
       rejected: "Treat matching vector dimensions as semantic alignment",
@@ -179,7 +221,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p8: {
     shortName: "Diagnostiq",
     label: "AI technical support agent",
-    railLabel: "Technical support AI",
+    railLabel: "Cites service manuals",
     date: "May 2026",
     artifact: "diagnostic",
     tone: "orange",
@@ -199,11 +241,11 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p9: {
     shortName: "Queue Whisperer",
     label: "Human-approved GitHub agent",
-    railLabel: "GitHub automation",
+    railLabel: "GitHub changes with approval",
     date: "July 2026",
     artifact: "approval",
     tone: "green",
-    home: { order: 4, mode: "quiet", keyword: "APPROVAL", thesis: "A GitHub agent that cannot write without human approval." },
+    home: { order: 5, mode: "quiet", keyword: "APPROVAL", thesis: "A GitHub agent that cannot write without human approval." },
     architecture: ["Read", "Ground", "Propose", "Approve", "Commit"],
     decision: {
       rejected: "Give the model a write tool with a prompt rule",
@@ -219,7 +261,7 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
   p10: {
     shortName: "cachefault",
     label: "Prefix-cache miss attribution",
-    railLabel: "Cache diagnostics",
+    railLabel: "Finds prompt cache misses",
     date: "August 2026",
     artifact: "cache",
     tone: "lime",
@@ -234,6 +276,26 @@ export const PROJECT_META: Record<string, ProjectVisualMeta> = {
       "Identical bytes plus a miss resolves to PROVIDER_SIDE rather than an invented cause.",
       "The OpenAI adapter was not live-validated in the hosted matrix run.",
       "The tool performs post-hoc analysis rather than live monitoring.",
+    ],
+  },
+  p11: {
+    shortName: "FireTrace",
+    label: "Wildfire source mapping",
+    railLabel: "Wildfire source mapping",
+    date: "October 2026",
+    artifact: "fire",
+    tone: "lime",
+    home: { order: 3, mode: "visual", thesis: "Every source's fire outline, kept apart on its own clocks." },
+    architecture: ["Collect", "Normalize", "Gate", "Compare", "Map"],
+    decision: {
+      rejected: "Merge every source into one current fire polygon",
+      chosen: "Store each outline as its own observation with separate clocks",
+      reason: "A merged shape hides that the sources were observed hours apart and disagree.",
+    },
+    trust: [
+      "Only flights that pass a five-check comparability gate are compared; 4 of 26 were excluded, none deleted.",
+      "An official outline's observation time is inferred only at IoU 0.997 or higher; otherwise it stays unknown.",
+      "Detection accuracy and lead time have not been validated.",
     ],
   },
 };

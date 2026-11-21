@@ -6,10 +6,10 @@ interface ProjectRailLayoutOptions {
 }
 
 const CARD_GAP = 8;
-const CARD_MAX_HEIGHT = 104;
-const CARD_MIN_HEIGHT = 72;
-const CARD_TARGET_HEIGHT = 84;
-const MAX_VISIBLE_CARDS = 7;
+const CARD_MAX_HEIGHT = 95;
+const CARD_MIN_HEIGHT = 64;
+const CARD_TARGET_HEIGHT = 72;
+const MAX_VISIBLE_CARDS = 8;
 const MIN_VISIBLE_CARDS = 3;
 const STACK_DEPTH_IN_PITCHES = 2.5;
 const STACK_TRANSLATE_IN_PITCHES = 2;

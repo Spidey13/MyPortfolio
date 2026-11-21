@@ -17,6 +17,8 @@
 .project-index__thumb .rail-symbol--wafer { --symbol-surface: #283e34; --symbol-ink: #f5f0e4; --symbol-accent: #f39465; }
 .project-index__thumb .rail-symbol--memory { --symbol-surface: #aebfd5; --symbol-ink: #20364e; --symbol-accent: #244bea; }
 .project-index__thumb .rail-symbol--evaluation { --symbol-surface: #e6d394; --symbol-ink: #493528; --symbol-accent: #244bea; }
+.project-index__thumb .rail-symbol--fire { --symbol-surface: #26352e; --symbol-ink: #efc2a3; --symbol-accent: #5fb3a0; }
+.project-index__thumb .rail-symbol--incident { --symbol-surface: #335a4c; --symbol-paper: #cddbba; --symbol-accent: #dbb385; }
 .project-index__thumb .rail-symbol--audio { --symbol-surface: #bbb0d6; --symbol-ink: #3d2c4d; --symbol-accent: #f5f0e4; }
 .rail-symbol__accent { fill: var(--symbol-accent); }
 .rail-symbol__paper { fill: var(--symbol-paper); }
@@ -27,5 +29,8 @@
 .rail-symbol__surface-stroke { stroke: var(--symbol-surface); stroke-width: 2; }
 .rail-symbol__paper-stroke { stroke: var(--symbol-paper); stroke-width: 2; }
 .rail-symbol__lane { stroke-width: 7; }
+.rail-symbol__contour { fill: none; stroke: #3c4d44; stroke-width: 2; }
+.rail-symbol__outline { stroke: #b8431f; stroke-width: 2; }
+.rail-symbol__dashed { stroke-width: 2.5; stroke-dasharray: 5 4; }
 /* Keep each identity's palette when selected; frame the active project in cobalt. */
 .project-index__link.is-active .project-index__thumb { box-shadow: 0 0 0 2px #8ea5ff; }
