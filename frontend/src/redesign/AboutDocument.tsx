@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowUpRight, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ABOUT, EXPERIENCE_NOTES } from "../data/about";
+import { ABOUT, ABOUT_EXPERIENCE } from "../data/about";
 import { EDUCATION, PROFILE } from "../data/profile";
-import { EXPERIENCE } from "../data/experience";
 import { PUBLICATIONS } from "../data/publications";
 import { captureAttributes } from "../analytics/attributes";
 import "./about.css";
@@ -93,17 +92,23 @@ export default function AboutDocument() {
           <span className="folio-label">About</span>
           <nav aria-label="About page"><Link to="/#experience" {...captureAttributes({ action: "project_navigation", location: "about_navigation", navigationSource: "experience" })}>Experience</Link><Link to="/#publications" {...captureAttributes({ action: "project_navigation", location: "about_navigation", navigationSource: "publications" })}>Publications</Link><Link to="/#contact" {...captureAttributes({ action: "project_navigation", location: "about_navigation", navigationSource: "contact" })}>Contact <ArrowUpRight size={13} /></Link></nav>
         </header>
-        <h1 id="folio-title"><span className="folio-title-line">Engineering</span><span className="folio-title-line folio-title-accent">intelligence.</span></h1>
+        <h1 id="folio-title">
+          <span className="folio-title-line">{ABOUT.headline.lead}</span>{" "}
+          <span className="folio-title-line folio-title-accent">{ABOUT.headline.accent}</span>
+        </h1>
         <div className="folio-hero__bottom"><span className="folio-label"><span>AI engineer</span><span>Research → systems</span></span><p>{ABOUT.intro}</p></div>
       </section>
 
       <section className="folio-experience" id="experience" aria-labelledby="folio-experience-title" data-analytics-section data-document-type="about" data-section-id="experience" data-section-type="career">
         <div className="folio-experience__heading"><span className="folio-label">Experience</span><h2 id="folio-experience-title" tabIndex={-1}>Where I’ve <br />been.</h2><a className="folio-text-link" href={LINKS.resume} target="_blank" rel="noreferrer" {...captureAttributes({ action: "resume_open", location: "experience" })}>Full résumé <ArrowUpRight size={15} /></a></div>
-        <div className="folio-jobs">{EXPERIENCE.map((entry) => (
+        <div className="folio-jobs">{ABOUT_EXPERIENCE.map((entry) => (
           <article className="folio-job" key={entry.id}>
-            <div className="folio-job__meta"><p className="folio-job__company">{entry.company}</p><time>{entry.duration.replace(" to ", " – ")}</time></div>
+            <div className="folio-job__meta">
+              <p className="folio-job__company">{entry.company}</p>
+              {entry.duration ? <time>{entry.duration}</time> : null}
+            </div>
             <h3>{entry.role}</h3>
-            <p className="folio-job__result">{EXPERIENCE_NOTES[entry.id] || entry.star.result}</p>
+            <p className="folio-job__result">{entry.description}</p>
           </article>
         ))}</div>
         <div className="folio-education"><span className="folio-label">Education</span><p><strong>{EDUCATION.degree}</strong><span>{EDUCATION.university} · {EDUCATION.graduation}</span></p></div>
